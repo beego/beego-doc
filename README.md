@@ -1,0 +1,2 @@
+# beego-doc
+beego documents
