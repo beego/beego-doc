@@ -1,0 +1,16 @@
+{
+  "name": "beego-doc",
+  "version": "2.0.1",
+  "description": "The new beego docs",
+  "main": "index.js",
+  "repository": "https://github.com/beego/beego-doc.git",
+  "author": "noreply@beego.com",
+  "license": "Apache 2.0",
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "devDependencies": {
+    "vuepress": "^1.7.1"
+  }
+}
