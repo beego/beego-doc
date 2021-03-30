@@ -2,13 +2,13 @@ module.exports = {
     locales: {
         '/': {
             lang: 'en-US',
-            title: 'VuePress',
-            description: 'Vue-powered Static Site Generator'
+            title: 'Beego',
+            description: 'The most easy use framework'
         },
         '/zh/': {
             lang: 'zh-CN',
-            title: 'VuePress',
-            description: 'Vue 驱动的静态网站生成器'
+            title: 'Beego',
+            description: '最简单的企业级应用框架'
         }
     },
     themeConfig: {
