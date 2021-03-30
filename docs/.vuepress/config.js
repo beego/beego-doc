@@ -19,8 +19,8 @@ module.exports = {
                         text: 'Version',
                         ariaLabel: 'Version',
                         items: [
-                            {text: 'v2.0.1', link: '/v2.0.1/'},
-                            {text: 'v2.0.2', link: '/v2.0.2/'}
+                            {text: 'developing', link: '/developing/'},
+                            {text: 'developing', link: '/developing/'}
                         ]
                     }
                 ],
@@ -31,8 +31,8 @@ module.exports = {
                         text: 'Version',
                         ariaLabel: 'Version',
                         items: [
-                            {text: 'v2.0.1', link: '/zh/v2.0.1/'},
-                            {text: 'v2.0.2', link: '/zh/v2.0.2/'}
+                            {text: 'developing', link: '/zh/developing/'},
+                            {text: 'developing', link: '/zh/developing/'}
                         ]
                     }
                 ],
