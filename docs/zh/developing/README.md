@@ -8,9 +8,13 @@ lang: zh
 
 如果你还没安装环境，请参考：
 
-[]
+[Windows 安装](install_go_windows.md)
+[Linux 安装](install_go_linux.md)
+[Mac 安装](install_go_mac.md)
 
+**请注意，在`Beego` V2 之后，我们要求使用`go mod`特性，请务必确保开启了`go mod`特性，即设置了`GO111MODULE=on`。
 
+更多信息请参考[Go module](go_mod.md)
 
 ## Mac or Linux
 

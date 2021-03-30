@@ -2,13 +2,13 @@ module.exports = {
     locales: {
         '/': {
             lang: 'en-US',
-            title: 'VuePress',
-            description: 'Vue-powered Static Site Generator'
+            title: 'Beego',
+            description: 'The most easy use framework'
         },
         '/zh/': {
             lang: 'zh-CN',
-            title: 'VuePress',
-            description: 'Vue 驱动的静态网站生成器'
+            title: 'Beego',
+            description: '最简单的企业级应用框架'
         }
     },
     themeConfig: {
@@ -19,8 +19,8 @@ module.exports = {
                         text: 'Version',
                         ariaLabel: 'Version',
                         items: [
-                            {text: 'v2.0.1', link: '/v2.0.1/'},
-                            {text: 'v2.0.2', link: '/v2.0.2/'}
+                            {text: 'developing', link: '/developing/'},
+                            {text: 'developing', link: '/developing/'}
                         ]
                     }
                 ],
@@ -31,8 +31,8 @@ module.exports = {
                         text: 'Version',
                         ariaLabel: 'Version',
                         items: [
-                            {text: 'v2.0.1', link: '/zh/v2.0.1/'},
-                            {text: 'v2.0.2', link: '/zh/v2.0.2/'}
+                            {text: 'developing', link: '/zh/developing/'},
+                            {text: 'developing', link: '/zh/developing/'}
                         ]
                     }
                 ],
