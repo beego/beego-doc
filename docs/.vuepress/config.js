@@ -1,5 +1,6 @@
 module.exports = {
     title: 'Beego',
+    base: '/beego/',
     toc: {
         includeLevel:[1, 2, 3, 4]
     },
@@ -28,7 +29,7 @@ module.exports = {
                         text: 'Version',
                         ariaLabel: 'Version',
                         items: [
-                            {text: 'developing', link: '/developing/'},
+                            {text: 'developing', link: '/en-US/developing/'},
                             // {text: 'developing', link: '/developing/'}
                         ]
                     }
@@ -47,36 +48,10 @@ module.exports = {
                 ],
                 sidebar: {
                     '/zh/developing/': buildVersionSideBar('developing'),
-                    '/zh/developing/qa/': buildQaSideBar()
                 }
             }
         },
     }
-}
-
-function buildQaSideBar() {
-    return [
-        // '/',
-        'failed_to_start_web_server/',
-        // 'bee/',
-        // 'config/',
-        // 'web/',
-        // {
-        //     title: 'Q & A',
-        //     collapsable: false,
-        //     sidebarDepth: 2,
-        //
-        //     children: [
-        //         ['qa/', '阅读之前'],
-        //         'qa/failed_to_start_web_server',
-        //         // 'writing-a-theme',
-        //         // 'option-api',
-        //         // 'default-theme-config',
-        //         // 'blog-theme',
-        //         // 'inheritance'
-        //     ]
-        // }
-    ]
 }
 
 function buildVersionSideBar(version) {
