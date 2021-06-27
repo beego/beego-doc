@@ -1,6 +1,7 @@
 ---
 title: Go Get 命令指南
 lang: zh
+sidebar: auto
 ---
 
 # Get 命令

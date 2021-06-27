@@ -1,6 +1,7 @@
 ---
-title: Go Get 命令指南
+title: Go Mod 命令指南
 lang: zh
+sidebar: auto
 ---
 
 `Beego`强依赖于`go mod`命令，这里我们简单介绍以下日常用的`go mod`命令。

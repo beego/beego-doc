@@ -1,6 +1,7 @@
 ---
 title: Web 模块
 lang: zh
+sidebar: auto
 ---
 
 # Web 模块

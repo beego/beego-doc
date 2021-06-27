@@ -10,13 +10,15 @@ lang: zh
 
 如果你还没安装环境，请参考：
 
-[Windows 安装](install_go_windows.md)
-[Linux 安装](install_go_linux.md)
-[Mac 安装](install_go_mac.md)
+[Windows 安装](environment/install_go_windows.md)
 
-**请注意，在`Beego` V2 之后，我们要求使用`go mod`特性，请务必确保开启了`go mod`特性，即设置了`GO111MODULE=on`。
+[Linux 安装](environment/install_go_linux.md)
 
-更多信息请参考[Go module](go_mod.md)
+[Mac 安装](environment/install_go_mac.md)
+
+**请注意，在`Beego` V2 之后，我们要求使用`go mod`特性，请务必确保开启了`go mod`特性，即设置了`GO111MODULE=on`**。
+
+更多信息请参考[Go module](environment/go_mod.md)
 
 同时，如果你是在中国大陆境内，我们建议你同时设置`GORPOXY`。在自己的环境变量里面设置：
 ```shell
@@ -61,7 +63,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/beego/beego-doc/main/scripts/
 
 ## 手动安装
 
-在这一章节，我们会使用到`go get`命令，如果你还不熟悉它，我们建议你可以先阅读[Go get](go_get_command.md)
+在这一章节，我们会使用到`go get`命令，如果你还不熟悉它，我们建议你可以先阅读[Go get](environment/go_get_command.md)
 
 千万记住，如果你遇到了网络问题，或者超时问题，请务必确保自己设定了`GOPROXY`代理。
 
@@ -106,7 +108,7 @@ bee new hello
 cd hello
 ```
 
-而后我们执行[go mod tidy](go_mod.md)命令，来生成`go.sum`文件。
+而后我们执行[go mod tidy](environment/go_mod.md)命令，来生成`go.sum`文件。
 
 ```shell
 go mod tidy

@@ -1,6 +1,7 @@
 ---
 title: 启动Web服务器失败
 lang: zh
+sidebarDepth: 2
 ---
 ## 为什么启动Web服务器失败
 
