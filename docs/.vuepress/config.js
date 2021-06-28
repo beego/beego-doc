@@ -54,7 +54,7 @@ module.exports = {
     }
 }
 
-function buildVersionSideBar(version) {
+function buildVersionSideBar() {
     return [
         'environment/',
         'bee/',

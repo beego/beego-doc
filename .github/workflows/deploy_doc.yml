@@ -19,5 +19,5 @@ jobs:
       - name: Config ossutil
         run: ./ossutil64 config -e oss-cn-shanghai.aliyuncs.com -i ${{ secrets.OSS_ACCESS_KEY_ID }} -k ${{ secrets.OSS_ACCESS_KEY_SECRET }}
       - name: Upload docs
-        run: ./ossutil64 config
+        run: ./ossutil64 cp -r -f ./docs/.vuepress/dist/ oss://gocn-beego-doc/beego/
 
