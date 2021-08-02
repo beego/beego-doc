@@ -52,7 +52,7 @@ TRACE => &[[/user/helloworld/* map[*:HelloWorld] main.UserController]]
 MOVE => &[[/user/helloworld/* map[*:HelloWorld] main.UserController]]
 ```
 
-我们用`POST => &[[/user/helloworld/* map[*:HelloWorld] main.UserController]]`来解读：
+我们用`POST => &[[/user/helloworld/* map[*:HelloWorld] main.UserController]]`作为例子来展示该如何解读：
 它表示的是，POST 方法访问 `/user/helloworld/*`这种模式的路径， 那么它会执行`main.UserController`里面的`HelloWorld`方法。
 
 ## 相关内容
