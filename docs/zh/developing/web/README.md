@@ -45,7 +45,7 @@ func main() {
 这是我们推荐的写法。
 
 ### 主机和端口
-一般我们不推荐这种写法，因为这看起来很奇诡，即：
+一般我们不推荐这种写法，因为这看起来没啥必要，即：
 ```go
 import (
     "github.com/beego/beego/v2/server/web"
@@ -74,5 +74,4 @@ func main() {
 ```
 
 ## 相关内容
-[Web Controller如何写？](controller.md)
 [如何注册路由？](router/README.md)

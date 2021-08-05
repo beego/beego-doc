@@ -11,7 +11,7 @@
     "docs:build": "vuepress build docs"
   },
   "devDependencies": {
-    "vuepress": "^1.7.1",
+    "vuepress": "^1.8.2",
     "vuepress-plugin-auto-sidebar": "^2.3.0"
   }
 }

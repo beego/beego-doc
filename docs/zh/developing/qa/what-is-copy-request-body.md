@@ -1,3 +1,8 @@
+---
+title: CopyRequestBody 参数
+lang: zh
+---
+
 # CopyRequestBody 参数
 
 在 Beego web 的配置中，有一个很让人困惑的参数，叫做`CopyRequestBody`。它是在结构体`web.Config`中。
@@ -13,7 +18,7 @@
 
 func main() {
 	web.BConfig.CopyRequestBody = true
-	web.RouterPost("/hello", (*MainController).ReadDataFromBody)
+	web.CtrlPost("/hello", (*MainController).ReadDataFromBody)
 	web.Run()
 }
 
@@ -40,7 +45,7 @@ func (m *MainController) ReadDataFromBody() {
 ```go
 func main() {
 	web.BConfig.CopyRequestBody = false
-	web.RouterPost("/hello", (*MainController).ReadDataFromBody)
+	web.CtrlPost("/hello", (*MainController).ReadDataFromBody)
 	web.Run()
 }
 
