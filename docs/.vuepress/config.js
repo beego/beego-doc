@@ -59,15 +59,32 @@ function buildVersionSideBar() {
         'environment/',
         'bee/',
         'config/',
-        'web/',
+        {
+            title: 'Web 模块',
+            collapsable: false,
+            sidebarDepth: 1,
+            children: [
+                ['web/router/', '概述'],
+                'web/router/router_tree',
+                'web/router/router_rule',
+                'web/router/best_practice',
+                'web/router/ctrl_style/',
+                'web/router/functional_style/'
+
+                // 'writing-a-theme',
+                // 'option-api',
+                // 'default-theme-config',
+                // 'blog-theme',
+                // 'inheritance'
+            ]
+        },
         {
             title: 'Q & A',
             collapsable: false,
-            sidebarDepth: 2,
-
+            sidebarDepth: 1,
             children: [
                 ['qa/', '阅读之前'],
-                'qa/failed_to_start_web_server',
+                'qa/failed_to_start_web_server'
                 // 'writing-a-theme',
                 // 'option-api',
                 // 'default-theme-config',
