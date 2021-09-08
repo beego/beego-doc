@@ -27,7 +27,7 @@ GOPROXY=https://goproxy.cn
 
 接下来，我们来尝试启动一个`hello world`的例子。在这个例子里面，我们将使用`Bee`工具来创建`hello world`项目。
 
-更多信息参考[Bee](bee)
+更多信息参考[Bee](./bee/README.md)
 
 ## 快速开始
 
