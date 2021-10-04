@@ -1,9 +1,19 @@
+const path = require('path')
 module.exports = {
     title: 'Beego',
     base: '/beego/',
     toc: {
         includeLevel:[1, 2, 3, 4]
     },
+    head: [
+        [
+            "meta",
+            {
+                name: "keywords",
+                content: "beego,Go框架,golang",
+            },
+        ],
+    ],
     locales: {
         '/': {
             lang: 'en-US',
@@ -16,6 +26,32 @@ module.exports = {
             description: '最简单的企业级应用框架',
             themeConfig: {
 
+            }
+        }
+    },
+    configureWebpack: () => {
+        const NODE_ENV = process.env.NODE_ENV
+        //判断是否是生产环境
+        if(NODE_ENV === 'production'){
+            return {
+                output: {
+                    publicPath: 'https://cdn.gocn.vip/ego/'
+                },
+                resolve: {
+                    //配置路径别名
+                    alias: {
+                        'public': path.resolve(__dirname, './public')
+                    }
+                }
+            }
+        }else{
+            return {
+                resolve: {
+                    //配置路径别名
+                    alias: {
+                        'public': path.resolve(__dirname, './public')
+                    }
+                }
             }
         }
     },
