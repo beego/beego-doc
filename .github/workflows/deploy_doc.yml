@@ -14,10 +14,9 @@ jobs:
         uses: actions/setup-node@v2
       - name: Build docs
         run: npm install && npm run docs:build
-      - name: Install ossutil
-        run: wget http://gosspublic.alicdn.com/ossutil/1.7.3/ossutil64 && chmod 755 ossutil64
-      - name: Config ossutil
-        run: ./ossutil64 config -e oss-cn-shanghai.aliyuncs.com -i ${{ secrets.OSS_ACCESS_KEY_ID }} -k ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+      - name: Install UploadCDN Client
+        run: wget https://github.91chifun.workers.dev/https://github.com//gotomicro/uploadcdn/releases/download/v0.1.0/uploadcdn-client.tar.gz && tar xvf uploadcdn-client.tar.gz && chmod 755 uploadcdn-client
       - name: Upload docs
-        run: ./ossutil64 cp -r -f ./docs/.vuepress/dist/ oss://gocn-beego-doc/beego/
+        run: export EGO_DEBUG=true && ./uploadcdn-client -id=${{ secrets.UPLOAD_CDN_CLIENT_ID }} -secret=${{ secrets.UPLOAD_CDN_CLIENT_SECRET }} -dir=./docs/.vuepress/dist
+
 
