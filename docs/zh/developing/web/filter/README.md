@@ -243,7 +243,126 @@ func (ctrl *MainController) Hello() {
 
 别忘了调用`opentracing`库的`SetGlobalTracer`方法，注入真正的`opentracing API`的实现。
 
-### 
+### Api Auth Filter
+
+鉴权过滤器用起来要理解两个点：
+- 如何接入这个过滤器
+- 如何生成正确的签名
+
+接入鉴权过滤器有两种做法，最基本的做法是：
+```go
+
+// import "github.com/beego/beego/v2/server/web/filter/apiauth"
+web.InsertFilter("/", web.BeforeRouter, apiauth.APIBasicAuth("myid", "mykey"))
+```
+其中`mykey`是用于校验签名的密钥，也是上游发起调用的时候需要用到的密钥。这种接入方案非常简单，`beego`内部实现会从请求参数里面读出`appid`，而后如果`appid`恰好是`myid`，则会用`mykey`来生成签名，和同样从参数里面读出来的签名进行比较。如果两者相等，则会处理请求，否则会拒绝请求，返回`403`错误。
+
+另外一种用法是自定义根据`appid`来查找密钥的方法。接入方式是：
+
+```go
+    // import "github.com/beego/beego/v2/server/web/filter/apiauth"
+	web.InsertFilter("/", web.BeforeRouter, apiauth.APISecretAuth(func(appid string) string {
+		// 这里是你定义的如何根据 app id 来查找密钥的方法
+		// 比如说这种简单的做法，生产勿用
+		return appid + "key"
+	}, 300))
+```
+
+注意，`300`代表的是超时时间。
+
+使用这个过滤器，要注意以下几点：
+- 过滤器依赖于从请求参数中读取`appid`，并且根据`appid`来查找密钥
+- 过滤器依赖于从请求参数中读取`timestamp`，即时间戳，它的时间格式是`2006-01-02 15:04:05`
+- 过滤器依赖于从请求参数中读取签名`signature`，并且`beego`会用读取到的签名和自己根据密钥生成的签名进行比较，也就是鉴权
+
+此外，作为调用方，可以直接使用`apiauth.Signature`方法来生成签名，放到请求参数里面去请求下游接口。
+
+注意，我们不建议在公共`API`上使用这个鉴权过滤器。因为该实现只具备基础的功能，并不具备很强的安全性——它极度依赖于密钥。如果自身的密钥暴露出去之后，那么攻击者可以轻易根据`beego`使用的加密方式，生成正确的密钥。具体的更高安全性的鉴权实现，已经脱离了`beego`的范畴，有需要的开发可以自行了解。
+
+### Auth Filter
+
+这个过滤器和前面的鉴权过滤器十分相像。但是两者的机制不同。`apiauth`使用的是签名机制，侧重于应用之间互相调用。而这个应该叫做认证过滤器，侧重的是身份识别，其内部机制是使用用户名和密码，类似于登录过程。
+
+该过滤器，会从请求头部`Authorization`里面读取`token`。目前来说，`beego`只支持`Basic`这一种加密方式。即请求的头部应该包含：
+```
+Authorization Basic your-token
+```
+`beego`内部读取这个`token`并且进行解码，得到携带的用户名和密码。`beego`会比较用户名和密码是否匹配，这个过程需要开发者在初始化过滤器的时候告诉`beego`如何匹配用户名和密码。
+
+初始化这个过滤器有两种方法，最基础的做法是：
+```go
+// import "github.com/beego/beego/v2/server/web/filter/auth"
+web.InsertFilter("/", web.BeforeRouter, auth.Basic("your username", "your pwd"))
+```
+那么`beego`会用`Basic`方法传入的账号密码和从`token`里面解析出来的值做比较，账号和密码同时相等的时候，请求才会被处理。
+
+也可以指定账号密码的匹配方式：
+```go
+	// import "github.com/beego/beego/v2/server/web/filter/auth"
+	web.InsertFilter("/", web.BeforeRouter, auth.NewBasicAuthenticator(func(username, pwd string) bool {
+		// 这里是你的校验逻辑。username, pwd 则是从请求头部解密出来的
+	}, "your-realm"))
+	web.Run()
+```
+其中`your-realm`只是在校验失败的时候作为一个错误信息放到响应头部。
+
+### Authz Filter
+
+这个过滤器同样是鉴权，而不是认证。它和前面两个过滤器比起来，它侧重的是**用户是否具有访问某个资源的权限**。它和`Auth Filter`一样，从`Authorization`的头部里面解析用户名，所不同的是，这个过滤器并不会理会密码。
+
+或者说，它应该叫做`Casbin`过滤器。具体的可以阅读[Casbin github](https://github.com/casbin/casbin)。注意，`beego`依旧使用的是它的`v1`版本，而目前来看，它们已经升级到了`v2`版本。
+
+之后，该过滤器会结合`http method`和请求路径，判断该用户是否权限。如果有权限，那么`beego`就会处理请求。
+
+使用该过滤器的方式是：
+```go
+// import "github.com/beego/beego/v2/server/web/filter/authz"
+web.InsertFilter("/", web.BeforeRouter, authz.NewAuthorizer(casbin.NewEnforcer("path/to/basic_model.conf", "path/to/basic_policy.csv")))	
+
+```
+关于更多的`Casbin`的信息，请参考[Casbin github](https://github.com/casbin/casbin)
+
+### CORS Filter
+
+解决跨域问题的过滤器。使用该过滤器非常简单：
+```go
+	// import "github.com/beego/beego/v2/server/web/filter/cors"
+	web.InsertFilter("/", web.BeforeRouter, cors.Allow(&cors.Options{
+		AllowAllOrigins: true,
+	}))
+```
+在这种设置之下，不管什么域名之下过来的请求，都是被允许的。如果想做精细化控制，可以调整`Options`的参数值。
+
+### Rate Limit Filter
+
+限流过滤器，使用的是令牌桶的实现。接入方式是：
+```go
+
+// import "github.com/beego/beego/v2/server/web/filter/ratelimit"
+web.InsertFilter("/", web.BeforeRouter, ratelimit.NewLimiter())
+
+```
+令牌桶算法主要受到两个参数的影响，一个是容量，一个是速率。默认情况下，容量被设置为`100`，而速率被设置为每十毫秒产生一个令牌。
+
+有很多选项可以控制这个过滤器的行为：
+- `WithCapacity`：控制容量
+- `WithRate`：速率控制
+- `WithRejectionResponse`：拒绝请求的响应
+- `WithSessionKey`：限流对象。例如如果相对某一个`API`限流，则可以返回该`API`的路由。在这种情况下，那么不能使用`web.BeforeRouter`，而应该使用`web.BeforeExec`
+
+### Session Filter
+
+这是一个试验性质，我们尝试支持在不同维度上控制`session`。所以引入了这个`filter`。
+
+```go
+	// "github.com/beego/beego/v2/server/web"
+	// "github.com/beego/beego/v2/server/web/filter/session"
+	// websession "github.com/beego/beego/v2/server/web/session"
+	web.InsertFilterChain("/need/session/path", session.Session(websession.ProviderMemory))
+```
+核心就是通过参数来控制使用什么类型的`session`。
+
+具体的细节可以参考[session](../session/README.md)
 
 ## 相关文档
 - [路由规则](./../router/router_rule.md)
