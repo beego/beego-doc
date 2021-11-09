@@ -1,5 +1,5 @@
 ---
-title: Web 注册控制器风格路由
+title: 注册控制器风格路由
 lang: zh
 ---
 

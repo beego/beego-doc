@@ -97,7 +97,7 @@ function buildVersionSideBar() {
         'config/',
         {
             title: 'Web 模块',
-            collapsable: false,
+            collapsable: true,
             sidebarDepth: 1,
             children: [
                 ['web/router/', '概述'],
@@ -105,7 +105,8 @@ function buildVersionSideBar() {
                 'web/router/router_rule',
                 'web/router/best_practice',
                 'web/router/ctrl_style/',
-                'web/router/functional_style/'
+                'web/router/functional_style/',
+                ['web/session/', 'Web Session']
 
                 // 'writing-a-theme',
                 // 'option-api',
@@ -116,7 +117,7 @@ function buildVersionSideBar() {
         },
         {
             title: 'Q & A',
-            collapsable: false,
+            collapsable: true,
             sidebarDepth: 1,
             children: [
                 ['qa/', '阅读之前'],
