@@ -98,14 +98,17 @@ function buildVersionSideBar() {
         {
             title: 'Web 模块',
             collapsable: true,
-            sidebarDepth: 1,
+            sidebarDepth: 0,
             children: [
+                
                 ['web/router/', '概述'],
                 'web/router/router_tree',
                 'web/router/router_rule',
-                'web/router/best_practice',
                 'web/router/ctrl_style/',
                 'web/router/functional_style/',
+                'web/router/best_practice',
+                'web/input/',
+                'web/file/',
                 ['web/session/', 'Web Session']
 
                 // 'writing-a-theme',
