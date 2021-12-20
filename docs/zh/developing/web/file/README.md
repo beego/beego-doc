@@ -1,9 +1,10 @@
 ---
-title: Web 文件上传
+title: Web 文件上传下载
 lang: zh
 ---
 
-# Web 文件上传
+# Web 文件上传下载
+## 文件上传
 
 在 Beego 中你可以很容易的处理文件上传，就是别忘记在你的表单中增加这个属性 `enctype="multipart/form-data"`，否则你的浏览器不会传输你的上传文件。
 
@@ -52,3 +53,21 @@ func (c *FormController) Post() {
 	c.SaveToFile("uploadname", "static/upload/" + h.Filename) // 保存位置在 static/upload, 没有文件夹要先创建
 }
 ```
+
+## 文件下载
+
+Beego 直接提供了一个下载文件的方法`Download`：
+```go
+func (output *BeegoOutput) Download(file string, filename ...string) {}
+```
+使用也很简单：
+```go
+func (ctrl *MainController) DownloadFile() {
+	// The file LICENSE is under root path.
+	// and the downloaded file name is license.txt
+	ctrl.Ctx.Output.Download("LICENSE", "license.txt")
+}
+```
+尤其要注意的是，`Download`方法的第一个参数，是文件路径，也就是要下载的文件；第二个参数是不定参数，代表的是用户保存到本地时候的文件名。
+
+如果第一个参数使用的是相对路径，那么它代表的是从当前工作目录开始计算的相对路径。
