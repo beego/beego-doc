@@ -330,5 +330,5 @@ func main() {
 [如何查看我注册的路由信息](../router_tree.md)
 
 [控制器方法该选择哪个接收器](../../../qa/choose_func_recever_for_web.md)
-
+[Controller API](controller.md)
 [路由规则——正确撰写路由](../router_rule.md)

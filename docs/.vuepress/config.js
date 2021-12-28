@@ -100,16 +100,24 @@ function buildVersionSideBar() {
             collapsable: true,
             sidebarDepth: 0,
             children: [
-                
-                ['web/router/', '概述'],
-                'web/router/router_tree',
-                'web/router/router_rule',
-                'web/router/ctrl_style/',
-                'web/router/functional_style/',
-                'web/router/best_practice',
+                {
+                    title: '路由',
+                    collapsable: true,
+                    sidebarDepth: 0,
+                    children: [
+                        'web/router/ctrl_style/',
+                        'web/router/functional_style/',
+                        'web/router/router_tree',
+                        'web/router/best_practice',
+                    ]
+                },
                 'web/input/',
                 'web/file/',
-                ['web/session/', 'Web Session']
+                ['web/session/', 'Web Session'],
+                ['web/cookie/', 'Web Cookie'],
+                ['web/error/', '错误处理'],
+                ['web/xsrf/', 'XSRF'],
+                ['web/view/', '视图模板']
 
                 // 'writing-a-theme',
                 // 'option-api',

@@ -3,7 +3,7 @@ title: Web 过滤器
 lang: zh
 ---
 
-# Filter
+# Web 过滤器
 
 `filter`是我们 Beego 提供的 AOP 的解决方案。不仅仅是在`web`中应用，也是在其余模块中应用。
 
