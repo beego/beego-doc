@@ -56,7 +56,7 @@ func (mc *MainController) XsrfPage() {
     <input type="submit" value="Post"/>
 </form>
 ```
-`{{.xsrfdata}}`就是`mc.Data["xsrfdata"]`，详情可以参考[模板引擎](../view/README.md)
+`.xsrfdata`就是`mc.Data["xsrfdata"]`，详情可以参考[模板引擎](../view/README.md)
 
 ### 页面设置 meta
 

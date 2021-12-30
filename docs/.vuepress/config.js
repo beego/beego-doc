@@ -117,7 +117,18 @@ function buildVersionSideBar() {
                 ['web/cookie/', 'Web Cookie'],
                 ['web/error/', '错误处理'],
                 ['web/xsrf/', 'XSRF'],
-                ['web/view/', '视图模板']
+                {
+                    title: '视图',
+                    collapsable: true,
+                    sidebarDepth: 0,
+                    children: [
+                        'web/view/',
+                        'web/view/syntax.md',
+                        'web/view/func.md',
+                        'web/view/page.md',
+                        'web/view/static_file.md'
+                    ]
+                }
 
                 // 'writing-a-theme',
                 // 'option-api',
