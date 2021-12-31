@@ -137,6 +137,7 @@ function buildVersionSideBar() {
                 // 'inheritance'
             ]
         },
+        'validation/',
         {
             title: 'Q & A',
             collapsable: true,
