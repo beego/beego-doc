@@ -7,6 +7,8 @@ lang: zh
 
 数据校验是用于数据验证和错误收集的模块。数据校验可以用于前端输入数据校验，或者后端拿到下游响应校验。某些时候也可以用来验证数据库数据完整性。
 
+这部分例子在[Validation 例子](https://github.com/beego/beego-example/tree/master/validation)
+
 ## 安装及测试
 
 安装：
