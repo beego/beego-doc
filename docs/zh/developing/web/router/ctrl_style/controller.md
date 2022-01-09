@@ -13,7 +13,7 @@ Controller 作为 Beego 的主要概念，它承担了很多的职责，可以�
 - 中断执行
 - [Session 处理](../../session/README.md)
 - [Cookie 处理](../../cookie/README.md)
-- [XSRF]()
+- [XSRF](./../../xsrf/README.md)
 
 ## 中断执行
 
