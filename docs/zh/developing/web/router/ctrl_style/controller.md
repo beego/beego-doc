@@ -8,12 +8,26 @@ lang: zh
 Controller 作为 Beego 的主要概念，它承担了很多的职责，可以分成：
 - [输入处理](../input/README.md)
 - [输出处理](../output/README.md)
-- 生命周期回调或者说钩子函数
+- 请求生命周期回调或者说钩子函数
 - [页面渲染，或者说模板引擎](../view/README.md)
 - 中断执行
 - [Session 处理](../../session/README.md)
 - [Cookie 处理](../../cookie/README.md)
 - [XSRF](./../../xsrf/README.md)
+
+## 请求生命周期回调
+
+在讨论生命周期的时候，要澄清两个概念：
+- 整个 Beego 应用的生命周期
+- 单个请求被处理的生命周期
+
+这里我们讨论的是第二个：单个请求被处理的生命周期。
+
+Controller 自定义了几个钩子函数：
+
+- `Prepare()`: 它会在每一个请求执行之前调用一遍
+- `Finish()`: 它会在每一个请求执行之后调用一遍
+
 
 ## 中断执行
 

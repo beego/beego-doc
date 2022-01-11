@@ -7,6 +7,10 @@ lang: zh
 
 所谓的注册控制器风格路由，可以理解为典型的 MVC 风格代码。即我们会在`web`服务中声明各式各样的`Controller`。
 
+具体`Controller`里面有什么 API，可以查看[Controller API](controller.md)
+
+## 基本用法
+
 在 Beego 里面注册这种风格的路由很简单，只需要声明一个`Controller`就可以：
 
 ```go

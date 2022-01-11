@@ -123,6 +123,27 @@ func main() {
 	web.Run()
 }
 ```
+## 从 panic 中恢复
+
+如果你希望用户在服务器处理请求过程中，即便发生了 panic 依旧能够返回响应，那么可以使用 Beego 的恢复机制。该机制是默认开启的。依赖于配置项：
+```go
+web.BConfig.RecoverPanic = true
+```
+如果你需要关闭，那么将这个配置项设置为`false`就可以。
+
+如果你想自定义`panic`之后的处理行为，那么可以重新设置`web.BConfig.RecoverFunc`。
+
+例如：
+```go
+	web.BConfig.RecoverFunc = func(context *context.Context, config *web.Config) {
+		if err := recover(); err != nil {
+			context.WriteString(fmt.Sprintf("you panic, err: %v", err))
+		}
+	}
+```
+
+千万要注意：你永远需要检测`recover`的结果，并且将从`panic`中恢复过来的逻辑放在检测到`recover`返回不为`nil`的代码里面。
+
 
 ## 相关内容
 -[Controller API - 中断](../router/ctrl_style/controller.md)

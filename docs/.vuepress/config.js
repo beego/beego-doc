@@ -108,6 +108,7 @@ function buildVersionSideBar() {
                         'web/router/ctrl_style/',
                         'web/router/functional_style/',
                         'web/router/router_tree',
+                        'web/router/namespace',
                         'web/router/best_practice',
                     ]
                 },
@@ -128,7 +129,8 @@ function buildVersionSideBar() {
                         'web/view/page.md',
                         'web/view/static_file.md'
                     ]
-                }
+                },
+                'web/grace',
 
                 // 'writing-a-theme',
                 // 'option-api',
@@ -137,7 +139,9 @@ function buildVersionSideBar() {
                 // 'inheritance'
             ]
         },
+        'logs/',
         'validation/',
+        'i18n/',
         {
             title: 'Q & A',
             collapsable: true,
