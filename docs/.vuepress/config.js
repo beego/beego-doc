@@ -114,10 +114,11 @@ function buildVersionSideBar() {
                 },
                 'web/input/',
                 'web/file/',
-                ['web/session/', 'Web Session'],
-                ['web/cookie/', 'Web Cookie'],
-                ['web/error/', '错误处理'],
-                ['web/xsrf/', 'XSRF'],
+                'web/session/',
+                'web/cookie/',
+                'web/error/',
+                'web/admin/',
+                'web/xsrf/', 
                 {
                     title: '视图',
                     collapsable: true,
@@ -141,6 +142,7 @@ function buildVersionSideBar() {
         },
         'logs/',
         'validation/',
+        'task/',
         'i18n/',
         {
             title: 'Q & A',

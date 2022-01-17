@@ -1,9 +1,9 @@
 ---
-title: Web Session
+title: Session
 lang: zh
 ---
 
-# Session 模块
+# Session
 
 `beego` 内置了 `session` 模块，目前 `session` 模块支持的后端引擎包括 `memory`、`cookie`、`file`、`mysql`、`redis`、`couchbase`、`memcache`、`postgres`，用户也可以根据相应的接口实现自己的引擎。
 

@@ -1,4 +1,7 @@
-
+---
+title: XSRF
+lang: zh
+---
 
 # 跨站请求伪造
 

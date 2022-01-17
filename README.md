@@ -1,6 +1,6 @@
 # beego-doc
 We are working on writing new docs. 
-If you are looking for Beego doc, please check [beego.me](http://beego.me/)
+If you are looking for Beego doc, please check [beego.vip](http://beego.vip/)
 
 # Help wanted
 
