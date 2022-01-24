@@ -1,9 +1,9 @@
 ---
-title: 数据库注册
+title: 数据库设置与注册
 lang: zh
 ---
 
-# 数据库注册
+# 数据库设置与注册
 
 Beego ORM 要求显式注册数据库的信息，而后才可以自由使用。
 
@@ -78,3 +78,23 @@ ORM 在进行 `RegisterDataBase` 的同时，会获取数据库使用的时区�
   从某一版本开始，驱动默认使用 UTC 时间，而非本地时间，所以请指定时区参数或者全部以 UTC 时间存取
   例如：`root:root@/orm_test?charset=utf8&loc=Asia%2FShanghai`
   参见 [loc](https://github.com/go-sql-driver/mysql#loc) / [parseTime](https://github.com/go-sql-driver/mysql#parsetime)
+
+## 注册驱动
+
+大多数时候，你只需要使用默认的那些驱动，有：
+
+```go
+	DRMySQL                      // mysql
+	DRSqlite                     // sqlite
+	DROracle                     // oracle
+	DRPostgres                   // pgsql
+	DRTiDB                       // TiDB
+```
+如果你需要注册自定义的驱动，可以使用：
+```go
+// 参数1   driverName
+// 参数2   数据库类型
+// 这个用来设置 driverName 对应的数据库类型
+// mysql / sqlite3 / postgres / tidb 这几种是默认已经注册过的，所以可以无需设置
+orm.RegisterDriver("mysql", yourDriver)
+```
