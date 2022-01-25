@@ -1,9 +1,9 @@
 ---
-title: ORM
+title: 快速开始
 lang: zh
 ---
 
-# ORM
+# Orm
 
 ORM 的例子在[这里](https://github.com/beego/beego-example/tree/master/orm)
 
@@ -56,6 +56,11 @@ func main() {
 - 定义模型，并且注册，参考[模型定义](./model.md)
 - 注册 DB，参考[数据库注册](./db.md)
 - 创建 `Orm` 实例
-- 执行查询，参考[ORM 查询](./query.md)
+- 执行查询，Beego 提供了多样化的查询 API，可以参考：
+  - [Orm 增删改查](orm.md)
+  - [QueryBuilder 构造复杂查询](./query_builder.md)
+  - [QuerySeter 构造复杂查询](./query_seter.md)
+  - [RawSeter 原生查询](./raw_seter.md)
+  - [QueryM2Mer 关联表查询](./query_m2m.md)
 
 需要注意的是，一定要根据自己使用的数据库来匿名引入驱动，例如引入 `"github.com/go-sql-driver/mysql"` 

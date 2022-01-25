@@ -145,7 +145,14 @@ function buildVersionSideBar() {
             collapsable: true,
             sidebarDepth: 0,
             children: [
-                
+                "orm/",
+                "orm/db.md",
+                "orm/model.md",
+                "orm/orm.md",
+                "orm/query_builder.md",
+                "orm/query_seter.md",
+                "orm/raw_seter.md",
+                "orm/query_m2m.md"
             ]
         },
         'logs/',

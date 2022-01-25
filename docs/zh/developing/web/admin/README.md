@@ -24,7 +24,7 @@ web.BConfig.Listen.AdminPort = 8088
 
 访问统计的 URL 地址 `http://localhost:8088/qps`，展现如下所示：
 
-![](../images/monitoring.png)
+![](./img/monitoring.png)
 
 ## 性能调试
 
