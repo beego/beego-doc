@@ -149,6 +149,7 @@ function buildVersionSideBar() {
                 "orm/db.md",
                 "orm/model.md",
                 "orm/orm.md",
+                "orm/transaction.md",
                 "orm/query_builder.md",
                 "orm/query_seter.md",
                 "orm/raw_seter.md",
