@@ -45,7 +45,7 @@ bye = 再见
 
 ## 在控制器中使用
 
-对于每个请求，Beego 都会采用单独的 goroutine 来处理，因此可以对每个控制器匿名嵌入一个 `i18n.Locale`  结构用于处理当前请求的本地化响应。这个要求您能够理解 Beego 的 `baseController` 理念和使用 `Prepare` 方法，具体可参考 Beego 官网的控制器源码部分 `routers/router.go`。
+对于每个请求，Beego 都会采用单独的 goroutine 来处理，因此可以对每个控制器匿名嵌入一个 `i18n.Locale` 结构用于处理当前请求的本地化响应。这个要求您能够理解 Beego 的 `baseController` 理念和使用 `Prepare` 方法，具体可参考 Beego 官网的控制器源码部分 `routers/router.go`。
 
 接受请求之后，在 `baseController` 的 `Prepare` 方法内进行语言处理，这样便可应用后所有其它控制器内而无需重复编写代码。
 
@@ -155,8 +155,10 @@ func (this *baseRouter) setLangVer() bool {
 
 以下两行：
 
+```
 	this.Data["CurLang"] = curLang.Name
 	this.Data["RestLangs"] = restLangs
+```
 
 主要用于实现用户自由切换语言，具体实现原理请参考 beego 官网源码。
 
@@ -170,11 +172,15 @@ func (this *baseRouter) setLangVer() bool {
 
 以下代码摘取自 beego 官网源码 `beeweb.go`：
 
-	beego.AddFuncMap("i18n", i18n.Tr)
+```go
+beego.AddFuncMap("i18n", i18n.Tr)
+```
 
 注册完成之后，便可配合 `Lang` 变量在模板中进行语言处理：
 
-	{{i18n .Lang "hi%d" 12}}
+```
+{{i18n .Lang "hi%d" 12}}
+```
 
 以上代码会输出：
 
@@ -198,11 +204,15 @@ about = About Us
 
 获取首页的 `about`：
 
-	{{i18n .Lang "about"}}
+```
+{{i18n .Lang "about"}}
+```
 
 获取关于页面的 `about`：
 
-	{{i18n .Lang "about.about"}}
+```
+{{i18n .Lang "about.about"}}
+```
 
 ### 歧义处理
 
@@ -210,7 +220,9 @@ about = About Us
 
 例如，我们的键名为 `about.`，为了避免歧义，我们需要使用：
 
-	{{i18n .Lang ".about."}}
+```
+{{i18n .Lang ".about."}}
+```
 
 来获取正确的本地化结果。
 
@@ -221,6 +233,7 @@ i18n 模块提供命令行工具 beei18n 来帮助简化开发中的一些步骤
 ```shell
 go get github.com/beego/i18n/beei18n
 ```
+
 ### 同步本地化文件
 
 命令 `sync` 允许您使用已经创建好的一个本地化文件为模板，创建或同步其它的本地化文件：

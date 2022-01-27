@@ -12,6 +12,7 @@ lang: zh
 ## 简单例子
 
 我们来看一个最简单的例子：
+
 ```go
 import (
 	"fmt"
@@ -36,6 +37,7 @@ func filterFunc(ctx *context.Context) {
 ```
 
 这里我们可以看到，所谓的`filter`，就是一个参数是`*context.Context`的方法，这个是它的定义：
+
 ```go
 // FilterFunc defines a filter function which is invoked before the controller handler is executed.
 // It's a alias of HandleFunc
@@ -45,22 +47,27 @@ type FilterFunc = HandleFunc
 // HandleFunc define how to process the request
 type HandleFunc func(ctx *beecontext.Context)
 ```
+
 > 注意观察这个定义，我们认为`filter`只是一种特殊的`handler`，所以在这里`FilterFunc`是`HandleFunc`的别名。从这个角度来说，我们认为最后处理请求的地方，就是最后的一个`filter`。
 
 现在我们来看看`InsertFilter`的定义：
+
 ```go
 // InserFilter see HttpServer.InsertFilter
 func InsertFilter(pattern string, pos int, filter FilterFunc, opts ...FilterOpt) *HttpServer {
 	// ...
 }
 ```
+
 各个参数的含义是：
+
 1. `pattern`等价于注册路由时候的`pattern`，也可以理解为匹配规则；
 2. `pos` 表示位置，准确来说，是指请求执行的各个阶段；
 3. `filter` 则是逻辑代码；
 4. `opts` 是 `filter` 的一些选项；
 
 比较难理解的是 `pos`，它有很多个取值：
+
 - `BeforeStatic` 静态地址之前
 - `BeforeRouter` 寻找路由之前，从这里开始，我们就能够获得`session`了
 - `BeforeExec` 找到路由之后，开始执行相应的 Controller 之前
@@ -68,14 +75,15 @@ func InsertFilter(pattern string, pos int, filter FilterFunc, opts ...FilterOpt)
 - `FinishRouter` 执行完逻辑之后执行的过滤器
 
 而 `opts` 对应三个选项：
+
 - `web.WithReturnOnOutput`: 设置 `returnOnOutput` 的值(默认`true`), 如果在进行到此过滤之前已经有输出，是否不再继续执行此过滤器,默认设置为如果前面已有输出(参数为`true`)，则不再执行此过滤器；
-- 
+-
 - `web.WithResetParams`: 是否重置`filter`的参数，默认是`false`，因为在`filter`的`pattern`和本身的路由的`pattern`冲突的时候，可以把`filter`的参数重置，这样可以保证在后续的逻辑中获取到正确的参数，例如设置了`/api/*` 的 filter，同时又设置了 `/api/docs/*` 的 router，那么在访问 `/api/docs/swagger/abc.js` 的时候，在执行`filter`的时候设置 `:splat` 参数为 `docs/swagger/abc.js`，但是如果该选项为 `false`，就会在执行路由逻辑的时候保持 `docs/swagger/abc.js`，如果设置了`true`，就会重置 `:splat` 参数；
 - `web.WithCaseSensitive`: 是否大小写敏感；
 
 如果不清楚如何使用这些选项，最好的方法是自己写几个测试来试验一下它们的效果。
 
-我们在看一个验证登录态的例子。该例子是假设启用了Beego的`session`模块：
+我们在看一个验证登录态的例子。该例子是假设启用了 Beego 的`session`模块：
 
 ```go
 var FilterUser = func(ctx *context.Context) {
@@ -87,6 +95,7 @@ var FilterUser = func(ctx *context.Context) {
 
 web.InsertFilter("/*", web.BeforeRouter, FilterUser)
 ```
+
 要注意，要访问`Session`方法，`pos`参数不能设置为`BeforeStatic`。
 
 `pattern` 的设置，可以参考[路由规则](./../router/router_rule.md)
@@ -158,7 +167,7 @@ func main() {
 
 我们提供了一系列的 `filter`，你可以看情况，决定是否启用。
 
-### Prometheus例子
+### Prometheus 例子
 
 ```go
 package main
@@ -204,7 +213,7 @@ func (ctrl *MainController) Hello() {
 
 别忘记了开启`prometheus`的端口。在你没有启动`admin`服务的时候，需要自己手动开启。
 
-### Opentracing例子
+### Opentracing 例子
 
 ```go
 package main
@@ -246,15 +255,18 @@ func (ctrl *MainController) Hello() {
 ### Api Auth Filter
 
 鉴权过滤器用起来要理解两个点：
+
 - 如何接入这个过滤器
 - 如何生成正确的签名
 
 接入鉴权过滤器有两种做法，最基本的做法是：
+
 ```go
 
 // import "github.com/beego/beego/v2/server/web/filter/apiauth"
 web.InsertFilter("/", web.BeforeRouter, apiauth.APIBasicAuth("myid", "mykey"))
 ```
+
 其中`mykey`是用于校验签名的密钥，也是上游发起调用的时候需要用到的密钥。这种接入方案非常简单，`beego`内部实现会从请求参数里面读出`appid`，而后如果`appid`恰好是`myid`，则会用`mykey`来生成签名，和同样从参数里面读出来的签名进行比较。如果两者相等，则会处理请求，否则会拒绝请求，返回`403`错误。
 
 另外一种用法是自定义根据`appid`来查找密钥的方法。接入方式是：
@@ -271,6 +283,7 @@ web.InsertFilter("/", web.BeforeRouter, apiauth.APIBasicAuth("myid", "mykey"))
 注意，`300`代表的是超时时间。
 
 使用这个过滤器，要注意以下几点：
+
 - 过滤器依赖于从请求参数中读取`appid`，并且根据`appid`来查找密钥
 - 过滤器依赖于从请求参数中读取`timestamp`，即时间戳，它的时间格式是`2006-01-02 15:04:05`
 - 过滤器依赖于从请求参数中读取签名`signature`，并且`beego`会用读取到的签名和自己根据密钥生成的签名进行比较，也就是鉴权
@@ -284,19 +297,24 @@ web.InsertFilter("/", web.BeforeRouter, apiauth.APIBasicAuth("myid", "mykey"))
 这个过滤器和前面的鉴权过滤器十分相像。但是两者的机制不同。`apiauth`使用的是签名机制，侧重于应用之间互相调用。而这个应该叫做认证过滤器，侧重的是身份识别，其内部机制是使用用户名和密码，类似于登录过程。
 
 该过滤器，会从请求头部`Authorization`里面读取`token`。目前来说，`beego`只支持`Basic`这一种加密方式。即请求的头部应该包含：
+
 ```
 Authorization Basic your-token
 ```
+
 `beego`内部读取这个`token`并且进行解码，得到携带的用户名和密码。`beego`会比较用户名和密码是否匹配，这个过程需要开发者在初始化过滤器的时候告诉`beego`如何匹配用户名和密码。
 
 初始化这个过滤器有两种方法，最基础的做法是：
+
 ```go
 // import "github.com/beego/beego/v2/server/web/filter/auth"
 web.InsertFilter("/", web.BeforeRouter, auth.Basic("your username", "your pwd"))
 ```
+
 那么`beego`会用`Basic`方法传入的账号密码和从`token`里面解析出来的值做比较，账号和密码同时相等的时候，请求才会被处理。
 
 也可以指定账号密码的匹配方式：
+
 ```go
 	// import "github.com/beego/beego/v2/server/web/filter/auth"
 	web.InsertFilter("/", web.BeforeRouter, auth.NewBasicAuthenticator(func(username, pwd string) bool {
@@ -304,6 +322,7 @@ web.InsertFilter("/", web.BeforeRouter, auth.Basic("your username", "your pwd"))
 	}, "your-realm"))
 	web.Run()
 ```
+
 其中`your-realm`只是在校验失败的时候作为一个错误信息放到响应头部。
 
 ### Authz Filter
@@ -315,36 +334,43 @@ web.InsertFilter("/", web.BeforeRouter, auth.Basic("your username", "your pwd"))
 之后，该过滤器会结合`http method`和请求路径，判断该用户是否权限。如果有权限，那么`beego`就会处理请求。
 
 使用该过滤器的方式是：
+
 ```go
 // import "github.com/beego/beego/v2/server/web/filter/authz"
-web.InsertFilter("/", web.BeforeRouter, authz.NewAuthorizer(casbin.NewEnforcer("path/to/basic_model.conf", "path/to/basic_policy.csv")))	
+web.InsertFilter("/", web.BeforeRouter, authz.NewAuthorizer(casbin.NewEnforcer("path/to/basic_model.conf", "path/to/basic_policy.csv")))
 
 ```
+
 关于更多的`Casbin`的信息，请参考[Casbin github](https://github.com/casbin/casbin)
 
 ### CORS Filter
 
 解决跨域问题的过滤器。使用该过滤器非常简单：
+
 ```go
 	// import "github.com/beego/beego/v2/server/web/filter/cors"
 	web.InsertFilter("/", web.BeforeRouter, cors.Allow(&cors.Options{
 		AllowAllOrigins: true,
 	}))
 ```
+
 在这种设置之下，不管什么域名之下过来的请求，都是被允许的。如果想做精细化控制，可以调整`Options`的参数值。
 
 ### Rate Limit Filter
 
 限流过滤器，使用的是令牌桶的实现。接入方式是：
+
 ```go
 
 // import "github.com/beego/beego/v2/server/web/filter/ratelimit"
 web.InsertFilter("/", web.BeforeRouter, ratelimit.NewLimiter())
 
 ```
+
 令牌桶算法主要受到两个参数的影响，一个是容量，一个是速率。默认情况下，容量被设置为`100`，而速率被设置为每十毫秒产生一个令牌。
 
 有很多选项可以控制这个过滤器的行为：
+
 - `WithCapacity`：控制容量
 - `WithRate`：速率控制
 - `WithRejectionResponse`：拒绝请求的响应
@@ -360,9 +386,11 @@ web.InsertFilter("/", web.BeforeRouter, ratelimit.NewLimiter())
 	// websession "github.com/beego/beego/v2/server/web/session"
 	web.InsertFilterChain("/need/session/path", session.Session(websession.ProviderMemory))
 ```
+
 核心就是通过参数来控制使用什么类型的`session`。
 
 具体的细节可以参考[session](../session/README.md)
 
 ## 相关文档
+
 - [路由规则](./../router/router_rule.md)

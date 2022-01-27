@@ -20,6 +20,7 @@ func (u *UserController) HelloWorld()  {
 	u.Ctx.WriteString("hello, world")
 }
 ```
+
 注意，这里我们使用的接收器是**指针接收器**。那么我们能不能不用指针接收器呢？
 
 答案是可以的。
@@ -43,5 +44,3 @@ func (u UserController) HelloWorld()  {
 2） 如果你使用了 `CtrlXXX` 一族来注册的话，可以考虑使用非指针。当然功能上没什么区别，只不过一个是`(*UserController).HelloWord`，一个是`UserController.HelloWord`，后面一个看起来要清爽；
 
 对于 Beego 来说，用任何接收器都是可以的，**它们在功能上没什么区别**。剩下的就是是否优雅与个人癖好的问题了。
-
-

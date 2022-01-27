@@ -4,6 +4,7 @@ lang: zh
 ---
 
 # Web 文件上传下载
+
 ## 文件上传
 
 在 Beego 中你可以很容易的处理文件上传，就是别忘记在你的表单中增加这个属性 `enctype="multipart/form-data"`，否则你的浏览器不会传输你的上传文件。
@@ -19,7 +20,7 @@ web.MaxMemory = 1<<22
 ```
 maxmemory = 1<<22
 ```
-	
+
 与此同时，Beego 提供了另外一个参数，`MaxUploadSize`来限制最大上传文件大小——如果你一次长传多个文件，那么它限制的就是这些所有文件合并在一起的大小。
 
 默认情况下，`MaxMemory`应该设置得比`MaxUploadSize`小，这种情况下两个参数合并在一起的效果则是：
@@ -36,8 +37,8 @@ Beego 提供了两个很方便的方法来处理文件上传：
 
 ```html
 <form enctype="multipart/form-data" method="post">
-	<input type="file" name="uploadname" />
-	<input type="submit">
+  <input type="file" name="uploadname" />
+  <input type="submit" />
 </form>
 ```
 
@@ -57,10 +58,13 @@ func (c *FormController) Post() {
 ## 文件下载
 
 Beego 直接提供了一个下载文件的方法`Download`：
+
 ```go
 func (output *BeegoOutput) Download(file string, filename ...string) {}
 ```
+
 使用也很简单：
+
 ```go
 func (ctrl *MainController) DownloadFile() {
 	// The file LICENSE is under root path.
@@ -68,9 +72,11 @@ func (ctrl *MainController) DownloadFile() {
 	ctrl.Ctx.Output.Download("LICENSE", "license.txt")
 }
 ```
+
 尤其要注意的是，`Download`方法的第一个参数，是文件路径，也就是要下载的文件；第二个参数是不定参数，代表的是用户保存到本地时候的文件名。
 
 如果第一个参数使用的是相对路径，那么它代表的是从当前工作目录开始计算的相对路径。
 
 ## 相关内容
+
 - [静态文件处理](./../view/static_file.md)

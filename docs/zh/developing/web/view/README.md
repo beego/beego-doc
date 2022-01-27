@@ -47,7 +47,9 @@ web.TemplateRight = ">>>"
 ```go
 this.Data["Content"] = "value"
 ```
+
 对应的 HTML 内容是：
+
 ```html
 {{ .Content }}
 ```
@@ -55,52 +57,55 @@ this.Data["Content"] = "value"
 如何使用各种类型的数据渲染：
 
 - 结构体：结构体定义
-    ```go
-    type A struct{
-        Name string
-        Age  int
-    }
-    ```
-	控制器数据赋值
 
-	```go
+  ```go
+  type A struct{
+      Name string
+      Age  int
+  }
+  ```
+
+  控制器数据赋值
+
+  ```go
     this.Data["a"]=&A{Name:"astaxie",Age:25}
-    ```
+  ```
 
-	模板渲染数据如下：
-    ```html
-    the username is {{.a.Name}}
-    the age is {{.a.Age}}
-    ```
+  模板渲染数据如下：
+
+  ```html
+  the username is {{.a.Name}} the age is {{.a.Age}}
+  ```
 
 - map
-    控制器数据赋值
-    ```go
-    mp["name"]="astaxie"
-	mp["nickname"] = "haha"
-	this.Data["m"]=mp
-    ```
+  控制器数据赋值
 
-	模板渲染数据如下：
-    ```html
-    the username is {{.m.name}}
-	the username is {{.m.nickname}}
-    ```
+  ```go
+  mp["name"]="astaxie"
+  mp["nickname"] = "haha"
+  this.Data["m"]=mp
+  ```
+
+  模板渲染数据如下：
+
+  ```html
+  the username is {{.m.name}} the username is {{.m.nickname}}
+  ```
+
 - slice
 
-	控制器数据赋值
-    ```go
-    ss :=[]string{"a","b","c"}
-    this.Data["s"]=ss
-    ```
+  控制器数据赋值
 
-	模板渲染数据如下：
-    ```html
-    {{range $key, $val := .s}}
-    {{$key}}
-    {{$val}}
-    {{end}}
-    ```
+  ```go
+  ss :=[]string{"a","b","c"}
+  this.Data["s"]=ss
+  ```
+
+  模板渲染数据如下：
+
+  ```html
+  {{range $key, $val := .s}} {{$key}} {{$val}} {{end}}
+  ```
 
 总结下来，可以看到`.`定位到了 Go 程序 `Data` 字段。而后 `.xxx` 则是定位到了 `Data` 包含的元素。
 
@@ -148,42 +153,44 @@ Beego 就会首先解析 `TplName` 指定的文件，获取内容赋值给 `Layo
 目前采用首先把目录下所有的文件进行缓存，所以用户还可以通过类似这样的方式实现 `layout`：
 
 ```html
-{{template "header.html" .}}
-Logic code
-{{template "footer.html" .}}
+{{template "header.html" .}} Logic code {{template "footer.html" .}}
 ```
 
->>> 特别注意后面的`.`,这是传递当前参数到子模板
+> > > 特别注意后面的`.`,这是传递当前参数到子模板
 
 ## LayoutSection
 
-对于一个复杂的 `LayoutContent`，其中可能包括有javascript脚本、CSS 引用等，根据惯例，通常 css 会放到 Head 元素中，javascript 脚本需要放到 body 元素的末尾，而其它内容则根据需要放在合适的位置。在 `Layout` 页中仅有一个 `LayoutContent` 是不够的。所以在 `Controller` 中增加了一个 `LayoutSections`属性，可以允许 `Layout` 页中设置多个 `section`，然后每个 `section` 可以分别包含各自的子模板页。
+对于一个复杂的 `LayoutContent`，其中可能包括有 javascript 脚本、CSS 引用等，根据惯例，通常 css 会放到 Head 元素中，javascript 脚本需要放到 body 元素的末尾，而其它内容则根据需要放在合适的位置。在 `Layout` 页中仅有一个 `LayoutContent` 是不够的。所以在 `Controller` 中增加了一个 `LayoutSections`属性，可以允许 `Layout` 页中设置多个 `section`，然后每个 `section` 可以分别包含各自的子模板页。
 
 `layout_blog.tpl`:
 
 ```html
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Lin Li</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link
+      rel="stylesheet"
+      href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css"
+    />
     {{.HtmlHead}}
-</head>
-<body>
-
-    <div class="container">
-        {{.LayoutContent}}
-    </div>
-    <div>
-        {{.SideBar}}
-    </div>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+  </head>
+  <body>
+    <div class="container">{{.LayoutContent}}</div>
+    <div>{{.SideBar}}</div>
+    <script
+      type="text/javascript"
+      src="http://code.jquery.com/jquery-2.0.3.min.js"
+    ></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     {{.Scripts}}
-</body>
+  </body>
 </html>
 ```
 
@@ -191,9 +198,9 @@ Logic code
 
 ```html
 <style>
-     h1 {
-        color: red;
-     }
+  h1 {
+    color: red;
+  }
 </style>
 ```
 
@@ -201,9 +208,9 @@ Logic code
 
 ```html
 <script type="text/javascript">
-    $(document).ready(function() {
-        // bla bla bla
-    });
+  $(document).ready(function () {
+    // bla bla bla
+  });
 </script>
 ```
 
@@ -227,6 +234,7 @@ func (this *BlogsController) Get() {
 ## renderform 使用
 
 定义 struct:
+
 ```go
 type User struct {
 	Id    int         `form:"-"`
@@ -236,25 +244,27 @@ type User struct {
 	Intro string `form:",textarea"`
 }
 ```
-* StructTag 的定义用的标签用为 `form`，和 [ParseForm 方法](../controller/params.md#%E7%9B%B4%E6%8E%A5%E8%A7%A3%E6%9E%90%E5%88%B0-struct) 共用一个标签，标签后面有三个可选参数，用 `,` 分割。第一个参数为表单中类型的 `name` 的值，如果为空，则以 `struct field name` 为值。第二个参数为表单组件的类型，如果为空，则为 `text`。表单组件的标签默认为 `struct field name` 的值，否则为第三个值。
-* 如果 `form` 标签只有一个值，则为表单中类型 `name` 的值，除了最后一个值可以忽略外，其他位置的必须要有 `,` 号分割，如：`form:",,姓名："`
-* 如果要忽略一个字段，有两种办法，一是：字段名小写开头，二是：`form` 标签的值设置为 `-`
-* 现在的代码版本只能实现固定的格式，用 br 标签实现换行，无法实现 css 和 class 等代码的插入。所以，要实现 form 的高级排版，不能使用 renderform 的方法，而需要手动处理每一个字段。
+
+- StructTag 的定义用的标签用为 `form`，和 [ParseForm 方法](../controller/params.md#%E7%9B%B4%E6%8E%A5%E8%A7%A3%E6%9E%90%E5%88%B0-struct) 共用一个标签，标签后面有三个可选参数，用 `,` 分割。第一个参数为表单中类型的 `name` 的值，如果为空，则以 `struct field name` 为值。第二个参数为表单组件的类型，如果为空，则为 `text`。表单组件的标签默认为 `struct field name` 的值，否则为第三个值。
+- 如果 `form` 标签只有一个值，则为表单中类型 `name` 的值，除了最后一个值可以忽略外，其他位置的必须要有 `,` 号分割，如：`form:",,姓名："`
+- 如果要忽略一个字段，有两种办法，一是：字段名小写开头，二是：`form` 标签的值设置为 `-`
+- 现在的代码版本只能实现固定的格式，用 br 标签实现换行，无法实现 css 和 class 等代码的插入。所以，要实现 form 的高级排版，不能使用 renderform 的方法，而需要手动处理每一个字段。
 
 controller：
+
 ```go
 func (this *AddController) Get() {
 	this.Data["Form"] = &User{}
 	this.TplName = "index.tpl"
 }
 ```
+
 Form 的参数必须是一个 struct 的指针。
 
 template:
+
 ```html
-<form action="" method="post">
-{{.Form | renderform}}
-</form>
+<form action="" method="post">{{.Form | renderform}}</form>
 ```
 
 上面的代码生成的表单为：

@@ -11,10 +11,9 @@ bee 工具是一个为了协助快速开发 Beego 项目而创建的项目，通
 
 你可以通过如下的方式安装 bee 工具：
 
-	go get -u github.com/beego/bee/v2
+    go get -u github.com/beego/bee/v2
 
 安装完之后，`bee` 可执行文件默认存放在 `$GOPATH/bin` 里面，所以你需要把 `$GOPATH/bin` 添加到你的环境变量中，才可以进行下一步。
-
 
 > 如果你本机设置了 `GOBIN`，那么上面的`bee`命令就会安装到 `GOBIN` 目录下，所以我们需要在环境变量中添加相关的配置信息，如何添加可以查看这篇文档: [bee 环境变量配置](./env.md)
 
@@ -34,7 +33,7 @@ The commands are:
     version     show the bee & beego version
     migrate     run database migrations
     api         create an api application base on beego framework
-    bale        packs non-Go files to Go source files    
+    bale        packs non-Go files to Go source files
     new         create an application base on beego framework
     run         run the app which can hot compile
     pack        compress an beego project
@@ -47,9 +46,9 @@ The commands are:
     rs          Run customized scripts
     run         Run the application by starting a local development server
     server      serving static content over HTTP on port
-    
+
 Use bee help [command] for more information about a command.
-    
+
 ```
 
 ### `new` 命令
@@ -114,6 +113,7 @@ create tests default.go: /gopath/src/apiproject/tests/default_test.go
 create models object.go: /gopath/src/apiproject/models/object.go
 create main.go: /gopath/src/apiproject/main.go
 ```
+
 这个项目的目录结构如下：
 
 ```
@@ -158,6 +158,7 @@ bee run
 13-11-25 09:53:16 [INFO] Restarting myproject ...
 13-11-25 09:53:16 [INFO] ./myproject is running...
 ```
+
 我们打开浏览器就可以看到效果 `http://localhost:8080/`:
 
 ![](./img/beerun.png)
@@ -230,7 +231,7 @@ Go    :go version go1.3.3 darwin/amd64
 
 #### `generate scaffold`
 
-``` shell
+```shell
 bee generate scaffold [scaffoldname] [-fields=""] [-driver=mysql] [-conn="root:@tcp(127.0.0.1:3306)/test"]
     The generate scaffold command will do a number of things for you.
     -fields: a list of table fields. Format: field:type, ...
@@ -263,7 +264,7 @@ bee generate view [viewpath]
 
 #### `generate migration`
 
-``` shell
+```shell
 bee generate migration [migrationfile] [-fields=""]
     generate migration file for making database schema update
     -fields: a list of table fields. Format: field:type, ...
@@ -271,7 +272,7 @@ bee generate migration [migrationfile] [-fields=""]
 
 #### `generate docs`
 
-``` shell
+```shell
 bee generate docs
     generate swagger doc file
 ```
@@ -282,19 +283,19 @@ bee generate docs
 
 现在我们把这个东西挪了出来，那么用户可以有更好的控制感。
 
-``` shell
+```shell
 bee generate routers [-ctrlDir=/path/to/controller/directory] [-routersFile=/path/to/routers/file.go] [-routersPkg=myPackage]
     -ctrlDir: the directory contains controllers definition. Bee scans this directory and its subdirectory to generate routers info
-    -routersFile: output file. All generated routers info will be output into this file. 
+    -routersFile: output file. All generated routers info will be output into this file.
               If file not found, Bee create new one, or Bee truncates it.
               The default value is "routers/commentRouters.go"
-    -routersPkg: package declaration.The default value is "routers". 
+    -routersPkg: package declaration.The default value is "routers".
               When you pass routersFile parameter, youd better pass this parameter
 ```
 
 #### `generate test`
 
-``` shell
+```shell
 bee generate test [routerfile]
     generate testcase
 ```
@@ -316,7 +317,7 @@ bee generate appcode [-tables=""] [-driver=mysql] [-conn="root:@tcp(127.0.0.1:33
 
 ### `migrate` 命令
 
-这个命令是应用的数据库迁移命令，主要是用来每次应用升级，降级的SQL管理。
+这个命令是应用的数据库迁移命令，主要是用来每次应用升级，降级的 SQL 管理。
 
 ```
 bee migrate [-driver=mysql] [-conn="root:@tcp(127.0.0.1:3306)/test"]
@@ -342,10 +343,10 @@ bee migrate refresh [-driver=mysql] [-conn="root:@tcp(127.0.0.1:3306)/test"]
 
 ### `dockerize` 命令
 
-这个命令可以通过生成Dockerfile文件来实现docker化你的应用。
+这个命令可以通过生成 Dockerfile 文件来实现 docker 化你的应用。
 
-例子:   
-生成一个以1.6.4版本Go环境为基础镜像的Dockerfile,并暴露9000端口:
+例子:  
+生成一个以 1.6.4 版本 Go 环境为基础镜像的 Dockerfile,并暴露 9000 端口:
 
 ```
 $ bee dockerize -image="library/golang:1.6.4" -expose=9000

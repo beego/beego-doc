@@ -8,12 +8,14 @@ lang: zh
 在 Beego web 的配置中，有一个很让人困惑的参数，叫做`CopyRequestBody`。它是在结构体`web.Config`中。
 
 该参数的引入主要有两个目的：
+
 - Beego 读取 HTTP 请求体数据，并进行一些处理。同时，在 Beego 读取之后，用户还可以再次读取；
-- 
+-
 
 我们可以通过两个例子来感受一下`CopyRequestBody`的效果。
 
 第一个例子是我们开启了`CopyRequestBody`：
+
 ```go
 
 func main() {
@@ -38,10 +40,12 @@ func (m *MainController) ReadDataFromBody() {
 	}
 }
 ```
+
 当我们访问`localhost:8080`并且传入参数之后，我们能够得到响应:
 ![CopyRequestBody=true](../../../img/qa/copy_request_body_true.png)
 
 如果我们将`CopyRequestBody`设置为`false`：
+
 ```go
 func main() {
 	web.BConfig.CopyRequestBody = false
@@ -65,6 +69,7 @@ func (m *MainController) ReadDataFromBody() {
 	}
 }
 ```
+
 那么我们会发现，我们无法从请求体里面读到数据了：
 ![CopyRequestBody=false](../../../img/qa/copy_request_body_false.png)
 

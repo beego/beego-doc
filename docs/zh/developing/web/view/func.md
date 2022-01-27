@@ -6,6 +6,7 @@ lang: zh
 # 模板函数
 
 Beego 支持用户定义模板函数，但是必须在 `web.Run()` 调用之前，设置如下：
+
 ```go
 func hello(in string)(out string){
     out = in + "world"
@@ -14,6 +15,7 @@ func hello(in string)(out string){
 
 web.AddFuncMap("hi",hello)
 ```
+
 定义之后你就可以在模板中这样使用了：
 
 ```html
@@ -22,115 +24,129 @@ web.AddFuncMap("hi",hello)
 
 目前 Beego 内置的模板函数如下所示：
 
-* dateformat
+- dateformat
 
-	实现了时间的格式化，返回字符串，使用方法 
-    ```html
-    {{dateformat .Time "2006-01-02T15:04:05Z07:00"}}
-    ```
+  实现了时间的格式化，返回字符串，使用方法
 
-* date
+  ```html
+  {{dateformat .Time "2006-01-02T15:04:05Z07:00"}}
+  ```
 
-	实现了类似 PHP 的 date 函数，可以很方便的根据字符串返回时间，使用方法:
-    ```html
-    {{date .T "Y-m-d H:i:s"}}
-    ```
+- date
 
-* compare
+  实现了类似 PHP 的 date 函数，可以很方便的根据字符串返回时间，使用方法:
 
-	实现了比较两个对象的比较，如果相同返回 true，否者 false，使用方法
-    ```html
-    {{compare .A .B}}
-    ```
+  ```html
+  {{date .T "Y-m-d H:i:s"}}
+  ```
 
-* substr
+- compare
 
-	实现了字符串的截取，支持中文截取的完美截取，使用方法
-    ```html
-    {{substr .Str 0 30}}
-    ```
+  实现了比较两个对象的比较，如果相同返回 true，否者 false，使用方法
 
-* html2str
+  ```html
+  {{compare .A .B}}
+  ```
 
-	实现了把 html 转化为字符串，剔除一些 script、css 之类的元素，返回纯文本信息，使用方法 
-    ```html
-    {{html2str .Htmlinfo}}
-    ```
-* str2html
+- substr
 
-	实现了把相应的字符串当作 HTML 来输出，不转义，使用方法
-    ```html
-    {{str2html .Strhtml}}
-    ```
+  实现了字符串的截取，支持中文截取的完美截取，使用方法
 
-* htmlquote
+  ```html
+  {{substr .Str 0 30}}
+  ```
 
-	实现了基本的 html 字符转义，使用方法
-    ```html
-    {{htmlquote .quote}}
-    ```
+- html2str
 
-* htmlunquote
+  实现了把 html 转化为字符串，剔除一些 script、css 之类的元素，返回纯文本信息，使用方法
 
-	实现了基本的反转移字符，使用方法
-    ```html
-    {{htmlunquote .unquote}}
-    ```
+  ```html
+  {{html2str .Htmlinfo}}
+  ```
 
-* renderform
+- str2html
 
-	根据 StructTag 直接生成对应的表单，使用方法
-    ```html
-    {{&struct | renderform}}
-    ```
-	
-* assets_js
+  实现了把相应的字符串当作 HTML 来输出，不转义，使用方法
 
-    为 js 文件生成一个 `<script>` 标签. 使用方法 
-    ```html
-    {{assets_js src}}
-    ```
+  ```html
+  {{str2html .Strhtml}}
+  ```
 
-* assets_css
+- htmlquote
 
-    为 css 文件生成一个 `<link>` 标签. 使用方法 
-    ```html
-    {{assets_css src}}
-    ```
+  实现了基本的 html 字符转义，使用方法
 
-* config
+  ```html
+  {{htmlquote .quote}}
+  ```
 
-    获取 `AppConfig` 的值. 使用方法
-    ```html
-    {{config configType configKey defaultValue}}
-    ```
-    可选的 `configType` 有 `String, Bool, Int, Int64, Float, DIY`
+- htmlunquote
 
-* map_get
+  实现了基本的反转移字符，使用方法
 
-    获取 `map` 的值
+  ```html
+  {{htmlunquote .unquote}}
+  ```
 
-    用法:
-    ```go
-    
-        // In controller
-        Data["m"] = map[string]interface{} {
-            "a": 1,
-            "1": map[string]float64{
-                "c": 4,
-            },
-        }
+- renderform
 
-        // In view
-        {{ map_get .m "a" }} // return 1
-        {{ map_get .m 1 "c" }} // return 4
-    ```
-        
-* urlfor
+  根据 StructTag 直接生成对应的表单，使用方法
 
-    获取控制器方法的 URL
-    ```html
-    {{urlfor "TestController.List"}}
-    ```
-        
-   
+  ```html
+  {{&struct | renderform}}
+  ```
+
+- assets_js
+
+  为 js 文件生成一个 `<script>` 标签. 使用方法
+
+  ```html
+  {{assets_js src}}
+  ```
+
+- assets_css
+
+  为 css 文件生成一个 `<link>` 标签. 使用方法
+
+  ```html
+  {{assets_css src}}
+  ```
+
+- config
+
+  获取 `AppConfig` 的值. 使用方法
+
+  ```html
+  {{config configType configKey defaultValue}}
+  ```
+
+  可选的 `configType` 有 `String, Bool, Int, Int64, Float, DIY`
+
+- map_get
+
+  获取 `map` 的值
+
+  用法:
+
+  ```go
+
+      // In controller
+      Data["m"] = map[string]interface{} {
+          "a": 1,
+          "1": map[string]float64{
+              "c": 4,
+          },
+      }
+
+      // In view
+      {{ map_get .m "a" }} // return 1
+      {{ map_get .m 1 "c" }} // return 4
+  ```
+
+- urlfor
+
+  获取控制器方法的 URL
+
+  ```html
+  {{urlfor "TestController.List"}}
+  ```

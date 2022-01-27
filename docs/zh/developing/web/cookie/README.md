@@ -10,10 +10,12 @@ lang: zh
 ## 普通 Cookie 处理
 
 Beego 通过`Context`直接封装了对普通 Cookie 的处理方法，可以直接使用：
+
 - `GetCookie(key string)`
 - `SetCookie(name string, value string, others ...interface{})`
 
 例子：
+
 ```go
 type MainController struct {
 	web.Controller
@@ -39,12 +41,13 @@ func (ctrl *MainController) ReadCookie() {
 ```
 
 `others`参数含义依次是：
-  - 第一个代表 `maxAge`，Beego 使用这个值计算`Expires`和`Max-Age`两个值
-  - 第二个代表`Path`，字符串类型，默认值是`/`
-  - 第三个代表`Domain`，字符串类型
-  - 第四个代表`Secure`，布尔类型
-  - 第五个代表`HttpOnly`，布尔类型
-  - 第六个代表`SameSite`，字符串类型
+
+- 第一个代表 `maxAge`，Beego 使用这个值计算`Expires`和`Max-Age`两个值
+- 第二个代表`Path`，字符串类型，默认值是`/`
+- 第三个代表`Domain`，字符串类型
+- 第四个代表`Secure`，布尔类型
+- 第五个代表`HttpOnly`，布尔类型
+- 第六个代表`SameSite`，字符串类型
 
 ## 加密 Cookie 处理
 
@@ -78,5 +81,3 @@ func (ctrl *MainController) ReadSecureCookie() {
 ```
 
 `others`参数和普通 Cookie 一样。
-
-

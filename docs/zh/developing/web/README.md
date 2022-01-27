@@ -11,6 +11,7 @@ sidebar: auto
 ## 快速开始
 
 搭建一个 Web 服务器非常简单，只需要在代码中写下：
+
 ```go
 import (
 	"github.com/beego/beego/v2/server/web"
@@ -22,6 +23,7 @@ func main() {
 	web.Run()
 }
 ```
+
 在这种情况下，Web 服务器将使用`8080`端口，所以启动之前请确认该端口没有被占用。
 
 完整例子[Web 模块基础用法](https://github.com/beego/beego-example/blob/master/httpserver/basic/main.go)
@@ -29,7 +31,9 @@ func main() {
 ## 基础配置
 
 ### 端口
+
 如果你希望指定服务器的端口，那么可以在启动的时候传入端口：
+
 ```go
 import (
     "github.com/beego/beego/v2/server/web"
@@ -45,7 +49,9 @@ func main() {
 这是我们推荐的写法。
 
 ### 主机和端口
+
 一般我们不推荐这种写法，因为这看起来没啥必要，即：
+
 ```go
 import (
     "github.com/beego/beego/v2/server/web"
@@ -61,6 +67,7 @@ func main() {
 ```
 
 如果你只是指定了主机，但是没有指定端口，那么我们会使用默认端口`8080`。例如：
+
 ```go
 import (
     "github.com/beego/beego/v2/server/web"
@@ -74,4 +81,5 @@ func main() {
 ```
 
 ## 相关内容
+
 [如何注册路由？](router/README.md)

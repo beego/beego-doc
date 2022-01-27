@@ -4,18 +4,22 @@ lang: zh
 ---
 
 # 输入处理
+
 总体来说，处理输入主要依赖于 `Controller` 提供的方法。而具体输入可以来源于：
+
 - 路径参数：这一部分主要是指[参数路由](../router/router_rule.md)
 - 查询参数
 - 请求体：要想从请求体里面读取数据，大多数时候将`BConfig.CopyRequestBody` 设置为`true`就足够了。而如果你是创建了多个 `web.Server`，那么必须每一个`Server`实例里面的配置都将`CopyRequestBody`设置为`true`了
 
 而获取参数的方法可以分成两大类：
+
 - 第一类是以 Get 为前缀的方法：这一大类的方法，主要获得某个特定参数的值
 - 第二类是以 Bind 为前缀的方法：这一大类的方法，试图将输入转化为结构体
 
 ## Get 类方法
 
 针对这一类方法，Beego 主要从两个地方读取：查询参数和表单，如果两个地方都有相同名字的参数，那么 Beego 会返回表单里面的数据。例如最简单的例子：
+
 ```go
 type MainController struct {
 	web.Controller
@@ -30,26 +34,32 @@ func (ctrl *MainController) Post() {
 	ctrl.Ctx.WriteString("Hello " + name)
 }
 ```
+
 当我们访问：
+
 - 路径 `localhost:8080?name=a`: 这是使用查询参数的形式，那么会输出 `Hello, a`
 - 路径 `localhost:8080`，而后表单里面提交了`name=b`，那么会输出`b`
 - 路径 `localhost:8080?name=a`，并且表单提交了`name=b`，那么会输出`b`
 
 这一类的方法也允许传入默认值，例如：
+
 ```go
 func (ctrl *MainController) Get() {
 	name := ctrl.GetString("name", "Tom")
 	ctrl.Ctx.WriteString("Hello " + name)
 }
 ```
+
 如果我们没有传入`name`参数，那么就会使用`Tom`作为`name`的值，例如我们访问`GET localhost:8080`的时候，就会输出 `Hello Tom`。
 
 需要注意的是，`GetString`的方法签名是：
+
 ```go
 func (c *Controller) GetString(key string, def ...string) string {
     // ...
 }
 ```
+
 要注意的是，虽然`def`被声明为不定参数，但是实际上，Beego 只会使用第一个默认值，后面的都会被忽略。
 
 这一类方法签名和行为都是类似的，它们有：
@@ -70,8 +80,8 @@ func (c *Controller) GetString(key string, def ...string) string {
 
 这里要注意到，`GetString` 和 `GetStrings` 本身在设计的时候并没有设计返回 `error`，所以无法拿到错误。
 
-
 ## Bind 类方法
+
 大多数时候，我们还需要把输入转换为结构体，Beego 提供了一系列的方法来完成输入到结构体的绑定。
 
 这部分方法是直接定义在 `Context` 结构体上的，所以用户可以直接操作 `Context` 实例。为了简化操作，我们在`Controller`上也定义了类似的方法。
@@ -103,6 +113,7 @@ type User struct {
 ```
 
 `Bind`这一大类有多个方法：
+
 - `Bind(obj interface{}) error`: 默认是依据输入的 `Content-Type`字段，来判断该如何反序列化；
 - `BindYAML(obj interface{}) error`: 处理`YAML`输入
 - `BindForm(obj interface{}) error`: 处理表单输入
@@ -153,5 +164,6 @@ this.Ctx.Input.Bind(&user, "user")  //user =={Name:"astaxie"}
 ```
 
 # 相关内容
+
 - [路由定义——参数路由](../router/router_rule.md)
 - [文件上传](../file/README.md)

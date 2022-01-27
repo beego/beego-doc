@@ -11,7 +11,7 @@ lang: zh
 
 其次，在`http`方法匹配上之后，我们会进一步匹配路径。
 
-此外，为了方便大家快速写对路由，我们在这里征集各种路由规则的写法，请直接提交 PR 到github，附在本页面的最后章节。
+此外，为了方便大家快速写对路由，我们在这里征集各种路由规则的写法，请直接提交 PR 到 github，附在本页面的最后章节。
 
 ## 路由规则详解
 
@@ -64,6 +64,7 @@ lang: zh
 本质上来说，可以将这种路由理解为一种特殊的正则路由。
 
 当我们使用这种注册路由方式的时候，我们可以使用`:splat`来获得`*`所命中的数据：
+
 ```go
 // web.Router("/user/name/*", ctrl, "post:Post")
 func (ctrl *MainController) Post() {
@@ -73,6 +74,7 @@ func (ctrl *MainController) Post() {
 	ctrl.Ctx.WriteString("Your router param username is:" + username)
 }
 ```
+
 如果是多段的，例如`/api/*/name/*/detail`，那么`:splat`只能获得最后一段的数据：
 
 ```go
@@ -84,6 +86,7 @@ func (ctrl *MainController) Post() {
 	ctrl.Ctx.WriteString("Your router param username is:" + username)
 }
 ```
+
 如果我们输入的路径是`http://localhost:8080/api/tom/name/oid123/detail`，那么我们最终得到的`username`是`oid123`
 
 总结一下：如果要使用`*`匹配，我们建议在整个路由里面应该只有一个`*`，也尽量避免包含参数路由或者正则路由。并且`*`命中的内容，可以通过`:splat`来获得。
@@ -93,11 +96,13 @@ func (ctrl *MainController) Post() {
 Beego 支持参数路由，或者说 Ant 风格的路由。它通常见于 RESTFul 风格的 API 中。其语法是在路径之中以`:`后面跟着参数的名字。
 
 比如典型的例子：`/api/:username/profile`。该路由`:username`是指，位于`api`和`profile`之间的数据，是用户名。`/api/:username/profile` 能够命中：
+
 - `/api/flycash/profile`
-- `/api/astaxie/profile` 
+- `/api/astaxie/profile`
 - `/api/123456/profile`
 
 但是无法命中：
+
 - `/api//profile`
 - `/api/tom/jerry/profile`
 
@@ -119,6 +124,7 @@ func (ctrl *MainController) Get() {
 Beego 支持正则路由。这是一个功能很强大的特性。其实，我们前面提到的参数路由，也可以理解为是正则路由的一种。只不过上面的参数路由实际中使用非常多，所以我们单独在文档中列出来讨论。
 
 正则路由的核心语法是`:param(reg)`。其中`param`是参数名字，你可以通过`Ctx.Input.Param(":param")`来获取值。而`reg`则是正则表达式。我们看一个例子`/api/:id([0-9]+)`这里表示，只有命中了路由规则的`[0-9]+`的路径才会被认为是`id`的值。因此：
+
 - `/api/123` 中`id`的值是`123`
 - `/api/tom` 则无法命中这条路由，因为`tom`不符合规则`[0-9]+`
 
@@ -134,10 +140,10 @@ Beego 支持正则路由。这是一个功能很强大的特性。其实，我�
 
 但是，功能强大则意味着学习成本比较高。我们强烈建议大家尽量避免使用这一类复杂的路由，这相当于将部分业务逻辑泄露到了路由注册中，这本身就不是一个很好的设计。
 
-
 ## 例子
 
 如果你写过有趣的路由规则，请提交上来这里，那么可以帮助到更加多的人。:)
 
 ## 相关内容
+
 [读取数据](../context/README.md)

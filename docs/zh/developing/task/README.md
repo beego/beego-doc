@@ -6,26 +6,30 @@ lang: zh
 # 定时任务
 
 1. 初始化一个任务
+
    ```go
    tk1 := task.NewTask("tk1", "0 12 * * * *", func(ctx context.Context) error { fmt.Println("tk1"); return nil })
    ```
 
-	函数原型：
+   函数原型：
 
-	`NewTask(tname string, spec string, f TaskFunc) *Task`
-	- `tname`: 任务名称
-	- `spec`: 定时任务格式，请参考下面的详细介绍
-	- `f`: 执行的函数
+   `NewTask(tname string, spec string, f TaskFunc) *Task`
+
+   - `tname`: 任务名称
+   - `spec`: 定时任务格式，请参考下面的详细介绍
+   - `f`: 执行的函数
 
 2. 可以测试开启运行。直接运行创建的 `tk`
-    ```go
-    err := tk1.Run()
-		if err != nil {
-			t.Fatal(err)
-		}
-    ```
+
+   ```go
+   err := tk1.Run()
+   	if err != nil {
+   		t.Fatal(err)
+   	}
+   ```
 
 3. 加入全局的计划任务列表
+
    ```go
    task.AddTask("tk1", tk1)
    ```
@@ -36,7 +40,7 @@ lang: zh
    defer task.StopTask()
    ```
 
-查看注册的任务，或者手动调动执行，可以参考[Admin后台](../web/admin/README.md)
+查看注册的任务，或者手动调动执行，可以参考[Admin 后台](../web/admin/README.md)
 
 ## spec 详解
 

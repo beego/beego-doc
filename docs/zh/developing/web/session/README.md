@@ -10,10 +10,13 @@ lang: zh
 ## 在 Web 中使用 Session
 
 在 `web`模块中使用 `session` 相当方便，只要在 `main` 入口函数中设置如下：
+
 ```go
 web.BConfig.WebConfig.Session.SessionOn = true
 ```
+
 或者通过配置文件配置如下：
+
 ```
 sessionon = true
 ```
@@ -50,13 +53,14 @@ func (this *MainController) Get() {
 sess:=this.StartSession()
 defer sess.SessionRelease()
 ```
+
 `sess` 对象具有如下方法：
 
-* `sess.Set()`
-* `sess.Get()`
-* `sess.Delete()`
-* `sess.SessionID()`
-* `sess.Flush()`
+- `sess.Set()`
+- `sess.Get()`
+- `sess.Delete()`
+- `sess.SessionID()`
+- `sess.Flush()`
 
 但是我还是建议大家采用 `SetSession、GetSession、DelSession` 三个方法来操作，避免自己在操作的过程中资源没释放的问题。
 
@@ -70,13 +74,11 @@ defer sess.SessionRelease()
 
 - `web.BConfig.WebConfig.Session.SessionGCMaxLifetime`: 设置 `Session` 过期的时间，默认值是 `3600` 秒，配置文件对应的参数：`sessiongcmaxlifetime`。
 
-
 - `web.BConfig.WebConfig.Session.SessionProviderConfig`: 设置对应 `file`、`mysql`、`redis` 引擎的保存路径或者链接地址，默认值是空，配置文件对应的参数：`sessionproviderconfig`。
 
 - `web.BConfig.WebConfig.Session.SessionHashFunc`: 默认值为 `sha1`，采用 `sha1` 加密算法生产 `sessionid`
 
 - `web.BConfig.WebConfig.Session.SessionCookieLifeTime`: 设置 `cookie` 的过期时间，`cookie` 是用来存储保存在客户端的数据。
-
 
 在使用某种特定引擎的时候，需要匿名引入该引擎对应的包，以完成初始化工作:
 
@@ -87,13 +89,16 @@ import _ "github.com/beego/beego/v2/server/web/session/mysql"
 ### 不同引擎的初始化工作
 
 #### File
+
 当 `SessionProvider` 为 `file` `SessionProviderConfig` 是指保存文件的目录，如下所示：
 
 ```go
 web.BConfig.WebConfig.Session.SessionProvider="file"
 web.BConfig.WebConfig.Session.SessionProviderConfig = "./tmp"
 ```
+
 #### MySQL
+
 当 `SessionProvider` 为 `mysql` 时，`SessionProviderConfig` 是链接地址，采用 [go-sql-driver](https://github.com/go-sql-driver/mysql)，如下所示：
 
 ```go
@@ -111,7 +116,9 @@ CREATE TABLE `session` (
 	PRIMARY KEY (`session_key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 ```
+
 #### Redis
+
 当 `SessionProvider` 为 `redis` `时，SessionProviderConfig` 是 `redis` 的链接地址，采用了 [redigo](https://github.com/garyburd/redigo)，如下所示：
 
 ```go
@@ -120,6 +127,7 @@ web.BConfig.WebConfig.Session.SessionProviderConfig = "127.0.0.1:6379"
 ```
 
 #### memcache
+
 当 `SessionProvider` 为 `memcache` `时，SessionProviderConfig` 是 `memcache` 的链接地址，采用了 [memcache](https://github.com/beego/memcache)，如下所示：
 
 ```go
@@ -172,10 +180,10 @@ var globalSessions *session.Manager
 ```go
 func init() {
 	sessionConfig := &session.ManagerConfig{
-	CookieName:"gosessionid", 
-	EnableSetCookie: true, 
+	CookieName:"gosessionid",
+	EnableSetCookie: true,
 	Gclifetime:3600,
-	Maxlifetime: 3600, 
+	Maxlifetime: 3600,
 	Secure: false,
 	CookieLifeTime: 3600,
 	ProviderConfig: "./tmp",
@@ -189,15 +197,15 @@ func init() {
 
 1. 引擎名字，可以是`memory`、`file`、`MySQL`或`Redis`。
 2. 一个`JSON`字符串,传入`Manager`的配置信息
-	* `cookieName`: 客户端存储`cookie`的名字。
-	* `enableSetCookie`, `omitempty`: 是否开启 `SetCookie`, `omitempty`这个设置
-	* `gclifetime`: 触发 `GC` 的时间。
-	* `maxLifetime`: 服务器端存储的数据的过期时间
-	* `secure`: 是否开启`HTTPS`，在`cookie`中设置`cookie.Secure`。
-	* `sessionIDHashFunc`: `sessionID`生产的函数，默认是`sha1`算法。
-	* `sessionIDHashKey`: `hash`算法中的`key`。
-	* `cookieLifeTime`: 客户端存储的 `cookie` 的时间，默认值是 `0`，即浏览器生命周期。
-	* `providerConfig`: 配置信息，根据不同的引擎设置不同的配置信息，详细的配置请看下面的引擎设置
+   - `cookieName`: 客户端存储`cookie`的名字。
+   - `enableSetCookie`, `omitempty`: 是否开启 `SetCookie`, `omitempty`这个设置
+   - `gclifetime`: 触发 `GC` 的时间。
+   - `maxLifetime`: 服务器端存储的数据的过期时间
+   - `secure`: 是否开启`HTTPS`，在`cookie`中设置`cookie.Secure`。
+   - `sessionIDHashFunc`: `sessionID`生产的函数，默认是`sha1`算法。
+   - `sessionIDHashKey`: `hash`算法中的`key`。
+   - `cookieLifeTime`: 客户端存储的 `cookie` 的时间，默认值是 `0`，即浏览器生命周期。
+   - `providerConfig`: 配置信息，根据不同的引擎设置不同的配置信息，详细的配置请看下面的引擎设置
 
 最后我们的业务逻辑处理函数中可以这样调用：
 
@@ -226,33 +234,37 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 返回的 `session` 对象是一个 `Interface`，包含下面的方法
 
-* Set(key, value interface{}) error
-* Get(key interface{}) interface{}
-* Delete(key interface{}) error
-* SessionID() string
-* SessionRelease()
-* Flush() error
+- Set(key, value interface{}) error
+- Get(key interface{}) interface{}
+- Delete(key interface{}) error
+- SessionID() string
+- SessionRelease()
+- Flush() error
 
 ### 引擎设置
 
 上面已经展示了 `memory` 的设置，接下来我们看一下其他三种引擎的设置方式：
 
 - `mysql`: 其他参数一样，只是第四个参数配置设置如下所示，详细的配置请参考 [mysql](https://github.com/go-sql-driver/mysql#dsn-data-source-name)：
-    ```
-    username:password@protocol(address)/dbname?param=value
-    ```
+
+  ```
+  username:password@protocol(address)/dbname?param=value
+  ```
 
 - `Redis`: 配置文件信息如下所示，表示链接的地址，连接池，访问密码，没有保持为空：
-	> 注意：若使用Redis等引擎作为session backend，请在使用前导入 < _ "github.com/beego/beego/v2/server/web/session/redis" >
-	        否则会在运行时发生错误，使用其他引擎时也是同理。
-	```go
+
+  > 注意：若使用 Redis 等引擎作为 session backend，请在使用前导入 < \_ "github.com/beego/beego/v2/server/web/session/redis" >
+
+          否则会在运行时发生错误，使用其他引擎时也是同理。
+
+  ```go
     127.0.0.1:6379,100,astaxie
-    ```
+  ```
 
 - `file`: 配置文件如下所示，表示需要保存的目录，默认是两级目录新建文件，例如 `sessionID` 是 `xsnkjklkjjkh27hjh78908`，那么目录文件应该是 `./tmp/x/s/xsnkjklkjjkh27hjh78908`：
-    ```go
-    ./tmp
-    ```
+  ```go
+  ./tmp
+  ```
 
 ## 如何创建自己的引擎
 

@@ -84,6 +84,7 @@ to.Insert(xxx)
 当然，从`TxOrm`里面衍生出来的`QuerySeter`和`QueryM2Mer`,`RawSeter`也是被认为在事务里面。
 
 和事务相关的方法有：
+
 ```go
 	// 需要自己管理事务生命周期
 	Begin() (TxOrmer, error)

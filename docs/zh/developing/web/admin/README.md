@@ -46,5 +46,5 @@ web.BConfig.Listen.AdminPort = 8088
 应用开发完毕之后，我们可能需要知道在运行的进程到底是怎么样的配置，beego 的监控模块提供了这一功能。
 
 - 显示所有的配置信息: `http://localhost:8088/listconf?command=conf`
-- 显示所有的路由配置信息:  `http://localhost:8088/listconf?command=router`
-- 显示所有的过滤设置信息:  `http://localhost:8088/listconf?command=filter`
+- 显示所有的路由配置信息: `http://localhost:8088/listconf?command=router`
+- 显示所有的过滤设置信息: `http://localhost:8088/listconf?command=filter`

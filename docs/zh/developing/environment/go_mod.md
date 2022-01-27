@@ -7,6 +7,7 @@ sidebar: auto
 `Beego`强依赖于`go mod`命令，这里我们简单介绍以下日常用的`go mod`命令。
 
 详细信息可以在命令行输入：
+
 ```shell
 go help mod
 ```

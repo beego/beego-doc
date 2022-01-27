@@ -21,9 +21,11 @@ type UserController struct {
     web.Controller
 }
 ```
+
 这样我们就写好了一个`Controller`。
 
 如果我们要想添加一个方法，那么可以：
+
 ```go
 import "github.com/beego/beego/v2/server/web"
 
@@ -56,7 +58,6 @@ func (u *UserController) HelloWorldNoPtr(name string) {
 
 如果你的方法接收器不是指针：
 
-
 golangci-lint run
 
 ```go
@@ -64,20 +65,23 @@ func (u UserController) HelloWorldNoPtr() {
 	u.Ctx.WriteString("don't work")
 }
 ```
+
 这种写法也是可以的。一般的惯例是使用指针接收器，但是这并不强制。关于接收器的讨论，可以参考[选择什么作为方法接收器](../../../qa/choose_func_recever_for_web.md)
 
 ### Controller 的名字
 
-在一些比较智能的API里面，我们会使用`Controller`的名字来作为前缀、命名空间等。
+在一些比较智能的 API 里面，我们会使用`Controller`的名字来作为前缀、命名空间等。
 
 那么，`Controller`的名字是如何确定的呢？
 
 在 Beego 里面，我们认为，一个`Controller`的定义是形如：
+
 ```go
 type CtrlNameController struct {
-	
+
 }
 ```
+
 比如说，我们定义了一个`UserController`，那么`Controller`的名字就是`User`。如果大小写不敏感，那么`user`也是合法的名字。
 
 再比如说我们定义了一个`BuyerRefundController`，那么`BuyerRefund`就是名字，大小写不敏感的时候，`buyerrefund`也是合法的名字。
@@ -211,6 +215,7 @@ func main() {
 	web.Run()
 }
 ```
+
 需要注意的是，我们新的注册方法，要求我们传入方法的时候，传入的是`(*YourController).MethodName`。这是因为 Go 语言特性，要求在接收器是指针的时候，如果你希望拿到这个方法，那么应该用`(*YourController)`的形式。
 
 那么，如果我们不用指针接收器：
@@ -294,9 +299,10 @@ func main() {
 
 ### 历史注册路由方式
 
-和之前的注册路由方式比起来，我们这一次的改进，让用户可以在现代IDE中，点击方法名进行跳转。
+和之前的注册路由方式比起来，我们这一次的改进，让用户可以在现代 IDE 中，点击方法名进行跳转。
 
 历史上，我们的注册方式是这样的：
+
 ```go
 func main() {
 
@@ -331,6 +337,7 @@ func main() {
 **我们不再推荐使用这种方式，因为可读性和可维护性都不太好。特别是重构进行方法重命名的时候，容易出错。**
 
 ## 相关内容
+
 [如何查看我注册的路由信息](../router_tree.md)
 
 [控制器方法该选择哪个接收器](../../../qa/choose_func_recever_for_web.md)

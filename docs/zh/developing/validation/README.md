@@ -65,12 +65,12 @@ func main() {
 ```
 
 用户也可以通过声明式的写法来表达某个字段需要遵守的校验规则，声明式写法是通过结构体的标签来实现的：
+
 - 验证函数写在 "valid" 的标签里
 - 各个函数之间用分号 ";" 分隔，分号后面可以有空格
 - 参数用括号 "()" 括起来，多个参数之间用逗号 "," 分开，逗号后面可以有空格
 - 正则函数(Match)的匹配模式用两斜杠 "/" 括起来
 - 各个函数的结果的 key 值为字段名.验证函数名
-
 
 ```go
 import (
@@ -116,6 +116,7 @@ func main() {
 ```
 
 需要注意的是，`Valid`方法是用户自定义验证方法，它接收两个参数：
+
 - 字段名字
 - 错误原因
 
@@ -123,25 +124,25 @@ func main() {
 
 `StructTag` 可用的验证函数：
 
-* `Required` 不为空，即各个类型要求不为其零值
-* `Min(min int)` 最小值，有效类型：`int`，其他类型都将不能通过验证
-* `Max(max int)` 最大值，有效类型：`int`，其他类型都将不能通过验证
-* `Range(min, max int)` 数值的范围，有效类型：`int`，他类型都将不能通过验证
-* `MinSize(min int)` 最小长度，有效类型：`string slice`，其他类型都将不能通过验证
-* `MaxSize(max int)` 最大长度，有效类型：`string slice`，其他类型都将不能通过验证
-* `Length(length int)` 指定长度，有效类型：`string slice`，其他类型都将不能通过验证
-* `Alpha` alpha字符，有效类型：`string`，其他类型都将不能通过验证
-* `Numeric` 数字，有效类型：`string`，其他类型都将不能通过验证
-* `AlphaNumeric` alpha 字符或数字，有效类型：`string`，其他类型都将不能通过验证
-* `Match(pattern string)` 正则匹配，有效类型：`string`，其他类型都将被转成字符串再匹配(fmt.Sprintf("%v", obj).Match)
-* `AlphaDash` alpha 字符或数字或横杠 `-_`，有效类型：`string`，其他类型都将不能通过验证
-* `Email` 邮箱格式，有效类型：`string`，其他类型都将不能通过验证
-* `IP` IP 格式，目前只支持 IPv4 格式验证，有效类型：`string`，其他类型都将不能通过验证
-* `Base64` base64 编码，有效类型：`string`，其他类型都将不能通过验证
-* `Mobile` 手机号，有效类型：`string`，其他类型都将不能通过验证
-* `Tel` 固定电话号，有效类型：`string`，其他类型都将不能通过验证
-* `Phone` 手机号或固定电话号，有效类型：`string`，其他类型都将不能通过验证
-* `ZipCode` 邮政编码，有效类型：`string`，其他类型都将不能通过验证
+- `Required` 不为空，即各个类型要求不为其零值
+- `Min(min int)` 最小值，有效类型：`int`，其他类型都将不能通过验证
+- `Max(max int)` 最大值，有效类型：`int`，其他类型都将不能通过验证
+- `Range(min, max int)` 数值的范围，有效类型：`int`，他类型都将不能通过验证
+- `MinSize(min int)` 最小长度，有效类型：`string slice`，其他类型都将不能通过验证
+- `MaxSize(max int)` 最大长度，有效类型：`string slice`，其他类型都将不能通过验证
+- `Length(length int)` 指定长度，有效类型：`string slice`，其他类型都将不能通过验证
+- `Alpha` alpha 字符，有效类型：`string`，其他类型都将不能通过验证
+- `Numeric` 数字，有效类型：`string`，其他类型都将不能通过验证
+- `AlphaNumeric` alpha 字符或数字，有效类型：`string`，其他类型都将不能通过验证
+- `Match(pattern string)` 正则匹配，有效类型：`string`，其他类型都将被转成字符串再匹配(fmt.Sprintf("%v", obj).Match)
+- `AlphaDash` alpha 字符或数字或横杠 `-_`，有效类型：`string`，其他类型都将不能通过验证
+- `Email` 邮箱格式，有效类型：`string`，其他类型都将不能通过验证
+- `IP` IP 格式，目前只支持 IPv4 格式验证，有效类型：`string`，其他类型都将不能通过验证
+- `Base64` base64 编码，有效类型：`string`，其他类型都将不能通过验证
+- `Mobile` 手机号，有效类型：`string`，其他类型都将不能通过验证
+- `Tel` 固定电话号，有效类型：`string`，其他类型都将不能通过验证
+- `Phone` 手机号或固定电话号，有效类型：`string`，其他类型都将不能通过验证
+- `ZipCode` 邮政编码，有效类型：`string`，其他类型都将不能通过验证
 
 ## 自定义验证
 
@@ -150,6 +151,7 @@ func main() {
 ```go
 AddCustomFunc(name string, f CustomFunc) error
 ```
+
 例如：
 
 ```go
@@ -168,10 +170,9 @@ func main() {
 			v.AddError(key, "China address only")
 		}
 	})
-    // ... 
+    // ...
 }
 
 ```
 
 注意的是，`AddCustomFunc`并不是线程安全的。在我们的设计理念中，注册这种自定义的方法，应该在系统初始化阶段完成。在该阶段，应当不存在竞争问题。
-

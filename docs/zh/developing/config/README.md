@@ -62,12 +62,15 @@ Web 模块封装了配置模块，可以参考[Web 配置](./../web/config.md)
 ## 初始化方法
 
 大致上有两种用法：
+
 - 使用`config.XXXX`：这是依赖于全局配置实例
 - 使用`Configer`实例
-- 
+-
+
 ### 全局实例
 
 Beego 默认会解析当前应用下的 `conf/app.conf` 文件，后面就可以通过`config`包名直接使用：
+
 ```go
 import (
 	"github.com/beego/beego/v2/core/config"
@@ -81,6 +84,7 @@ func main() {
 ```
 
 也可以手动初始化全局实例，以指定不同的配置类型，例如说启用`etcd`：
+
 ```go
 config.InitGlobalInstance("etcd", "etcd address")
 ```
@@ -88,6 +92,7 @@ config.InitGlobalInstance("etcd", "etcd address")
 ### 使用`Configer`实例
 
 如果要从多个源头读取配置，或者说自己不想依赖于全局配置，那么可以自己初始化一个配置实例：
+
 ```go
 func main() {
 	cfg, err := config.NewConfig("ini", "my_config.ini")
@@ -118,6 +123,7 @@ func main() {
 INI 是配置模块的默认格式。同时它支持使用`include`的方式，加载多个配置文件。
 
 app.ini:
+
 ```ini
 	appname = beepkg
 	httpaddr = "127.0.0.1"
@@ -127,6 +133,7 @@ app.ini:
 ```
 
 app2.ini:
+
 ```ini
 	runmode ="dev"
 	autorender = false
@@ -140,6 +147,7 @@ app2.ini:
 	[test]
 	httpport = 8888
 ```
+
 ```go
 func main() {
 	cfg, err := config.NewConfig("ini", "app.ini")
@@ -150,9 +158,11 @@ func main() {
 	logs.Info("auto load config name is", val)
 }
 ```
+
 ### JSON
 
 JSON 只需要指定格式，并且不要忘了使用匿名引入的方式引入 JSON 的实现：
+
 ```go
 import (
 	"github.com/beego/beego/v2/core/config"
@@ -177,6 +187,7 @@ func main() {
 	logs.Info("load config name is", val)
 }
 ```
+
 ### YAML
 
 别忘了匿名引入 YAML 的实现！
@@ -205,9 +216,11 @@ func main() {
 	logs.Info("load config name is", val)
 }
 ```
+
 ### XML
 
 别忘了匿名引入 XML 的实现！
+
 ```go
 import (
 	"github.com/beego/beego/v2/core/config"
@@ -234,6 +247,7 @@ func main() {
 ```
 
 要注意，所有的配置项都要放在`config`这个顶级节点之内：
+
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
@@ -242,6 +256,7 @@ func main() {
 ```
 
 ### TOML
+
 别忘了匿名引入 TOML 的实现！
 
 ```go
@@ -270,7 +285,9 @@ func main() {
 ```
 
 ### Etcd
+
 别忘了匿名引入 ETCD 的实现！
+
 ```go
 import (
 	"github.com/beego/beego/v2/core/config"
@@ -291,7 +308,9 @@ func main() {
 	logs.Info("load config name is", val)
 }
 ```
+
 其中 `your_config` 是一个 JSON 配置，它对应于：
+
 ```go
 type Config struct {
 	// Endpoints is a list of URLs.
@@ -361,5 +380,3 @@ type Config struct {
 	// TODO: support custom balancer picker
 }
 ```
-
-

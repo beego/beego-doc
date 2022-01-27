@@ -9,7 +9,6 @@ lang: zh
 
 Beego 主要的思路来源于： http://grisha.org/blog/2014/06/03/graceful-restart-in-golang/
 
-
 ```go
  import(
    "log"
@@ -37,7 +36,6 @@ Beego 主要的思路来源于： http://grisha.org/blog/2014/06/03/graceful-res
 	     os.Exit(0)
     }
 ```
-
 
 打开两个终端
 

@@ -34,7 +34,7 @@ Beego 使用了 `Secure` 和 `HTTP-ONLY` 两个选项来保存 Cookie。因此�
 
 > 在早期缺乏这两个选项的时候，攻击者可以轻易拿到我们设置的 Cookie 值，因此造成了安全问题。但是即便加上这两个选项，也不意味着万无一失。比如说，攻击者可以尝试用 HTTP 协议覆盖掉原有的 HTTP 协议设置的 Cookie。具体细节可以参考前面 `secure` 选项中的说明。
 
-因为 Beego 需要拿到 Token 和 Cookie 里面的值进行比较，所以Beego 要求用户必须在自己的请求里面带上 XSRF Token，你有两种方式：
+因为 Beego 需要拿到 Token 和 Cookie 里面的值进行比较，所以 Beego 要求用户必须在自己的请求里面带上 XSRF Token，你有两种方式：
 
 - 在表单里面携带一个叫做 `_xsrf` 的字段，里面是 XSRF 的 Token;
 - 在提交的请求的 HTTP HEADER 里面设置 `X-Xsrftoken` 或 `X-Csrftoken`，值就是 Token;
@@ -44,6 +44,7 @@ Beego 使用了 `Secure` 和 `HTTP-ONLY` 两个选项来保存 Cookie。因此�
 ### 表单中携带 Token
 
 最简单的做法，是利用 Beego 的方法，在表单中加入一个字段，将 XSRF Token 带回来，例如：
+
 ```go
 func (mc *MainController) XsrfPage() {
 	mc.XSRFExpire = 7200
@@ -51,14 +52,17 @@ func (mc *MainController) XsrfPage() {
 	mc.TplName = "xsrf.html"
 }
 ```
+
 其中`xsrf.html`的核心代码是：
+
 ```html
 <form action="/new_message" method="post">
-    {{ .xsrfdata }}
-    <input type="text" name="message"/>
-    <input type="submit" value="Post"/>
+  {{ .xsrfdata }}
+  <input type="text" name="message" />
+  <input type="submit" value="Post" />
 </form>
 ```
+
 `.xsrfdata`就是`mc.Data["xsrfdata"]`，详情可以参考[模板引擎](../view/README.md)
 
 ### 页面设置 meta
@@ -77,7 +81,7 @@ func (this *HomeController) Get(){
 
 ```html
 <head>
-    <meta name="_xsrf" content="{{.xsrf_token}}" />
+  <meta name="_xsrf" content="{{.xsrf_token}}" />
 </head>
 ```
 
@@ -86,27 +90,32 @@ func (this *HomeController) Get(){
 ```js
 var ajax = $.ajax;
 $.extend({
-    ajax: function(url, options) {
-        if (typeof url === 'object') {
-            options = url;
-            url = undefined;
-        }
-        options = options || {};
-        url = options.url;
-        var xsrftoken = $('meta[name=_xsrf]').attr('content');
-        var headers = options.headers || {};
-        var domain = document.domain.replace(/\./ig, '\\.');
-        if (!/^(http:|https:).*/.test(url) || eval('/^(http:|https:)\\/\\/(.+\\.)*' + domain + '.*/').test(url)) {
-            headers = $.extend(headers, {'X-Xsrftoken':xsrftoken});
-        }
-        options.headers = headers;
-        return ajax(url, options);
+  ajax: function (url, options) {
+    if (typeof url === "object") {
+      options = url;
+      url = undefined;
     }
+    options = options || {};
+    url = options.url;
+    var xsrftoken = $("meta[name=_xsrf]").attr("content");
+    var headers = options.headers || {};
+    var domain = document.domain.replace(/\./gi, "\\.");
+    if (
+      !/^(http:|https:).*/.test(url) ||
+      eval("/^(http:|https:)\\/\\/(.+\\.)*" + domain + ".*/").test(url)
+    ) {
+      headers = $.extend(headers, { "X-Xsrftoken": xsrftoken });
+    }
+    options.headers = headers;
+    return ajax(url, options);
+  },
 });
 ```
+
 注意的是，这里你可以将`ajax`或者`JQuery`替换为你自己的前端框架，因为核心在于要设置头部`headers, {'X-Xsrftoken':xsrftoken}`。
 
 而这个`xsrftoken`可以是存在 HTML 的一个标签里面，也可是直接从之前响应里面读取出来，而后再提交表单的时候带过来。例如：
+
 ```go
 func (mc *MainController) XsrfJSON() {
 	mc.XSRFExpire = 7200
@@ -120,7 +129,7 @@ func (mc *MainController) XsrfJSON() {
 
 ## Controller 级别的 XSRF 屏蔽
 
-XSRF 之前是全局设置的一个参数,如果设置了那么所有的 API 请求都会进行验证,但是有些时候API 逻辑是不需要进行验证的,因此现在支持在 Controller 级别设置屏蔽:
+XSRF 之前是全局设置的一个参数,如果设置了那么所有的 API 请求都会进行验证,但是有些时候 API 逻辑是不需要进行验证的,因此现在支持在 Controller 级别设置屏蔽:
 
 ```go
 type AdminController struct{
@@ -139,7 +148,7 @@ func (a *AdminController) Prepare() {
 ```go
 func (this *HomeController) Get(){
 	this.XSRFExpire = 7200
-	// ... 
+	// ...
 }
 ```
 

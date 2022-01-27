@@ -3,7 +3,7 @@ title: QuerySeter 构造复杂查询
 lang: zh
 ---
 
-#  QuerySeter 复杂查询
+# QuerySeter 复杂查询
 
 ORM 以 **QuerySeter** 来组织查询，每个返回 **QuerySeter** 的方法都会获得一个新的 **QuerySeter** 对象。
 
@@ -26,6 +26,7 @@ qs = o.QueryTable(user) // 返回 QuerySeter
 ```
 
 `QuerySeter`的方法大体上可以分成两类：
+
 - 中间方法：用于构造查询
 - 终结方法：用于执行查询并且封装结果
 
@@ -38,10 +39,13 @@ qs = o.QueryTable(user) // 返回 QuerySeter
 Beego 设计了自己的查询表达式，这些表达式可以用在很多方法上。
 
 一般来说，你可以对单表的字段使用表达式，也可以在关联表上使用表达式。例如单个使用：
+
 ```go
 qs.Filter("id", 1) // WHERE id = 1
 ```
+
 或者在关联表里面使用：
+
 ```go
 qs.Filter("profile__age", 18) // WHERE profile.age = 18
 qs.Filter("Profile__Age", 18) // 使用字段名和 Field 名都是允许的
@@ -55,14 +59,14 @@ qs.Filter("profile__age__gt", 18) // WHERE profile.age > 18
 
 当前支持的操作符号：
 
-* [exact](#exact) / [iexact](#iexact) 等于
-* [contains](#contains) / [icontains](#icontains) 包含
-* [gt / gte](#gt-gte) 大于 / 大于等于
-* [lt / lte](#lt-lte) 小于 / 小于等于
-* [startswith](#startswith) / [istartswith](#istartswith) 以...起始
-* [endswith](#endswith) / [iendswith](#iendswith) 以...结束
-* [in](#in)
-* [isnull](#isnull)
+- [exact](#exact) / [iexact](#iexact) 等于
+- [contains](#contains) / [icontains](#icontains) 包含
+- [gt / gte](#gt-gte) 大于 / 大于等于
+- [lt / lte](#lt-lte) 小于 / 小于等于
+- [startswith](#startswith) / [istartswith](#istartswith) 以...起始
+- [endswith](#endswith) / [iendswith](#iendswith) 以...结束
+- [in](#in)
+- [isnull](#isnull)
 
 后面以 `i` 开头的表示：大小写不敏感
 
@@ -188,7 +192,6 @@ Filter(string, ...interface{}) QuerySeter
 
 多次调用`Filter`方法，会使用`AND`将它们连起来。
 
-
 ```go
 qs.Filter("profile__isnull", true).Filter("name", "slene")
 // WHERE profile_id IS NULL AND name = 'slene'
@@ -203,6 +206,7 @@ FilterRaw(string, string) QuerySeter
 该方法会直接把输入当做是一个查询条件，因此如果输入有错误，那么拼接得来的 SQL 则无法运行。Beego 本身并不会执行任何的检查。
 
 例如：
+
 ```go
 qs.FilterRaw("user_id IN (SELECT id FROM profile WHERE age>=18)")
 //sql-> WHERE user_id IN (SELECT id FROM profile WHERE age>=18)
@@ -215,28 +219,37 @@ Exclude(string, ...interface{}) QuerySeter
 ```
 
 准确来说，`Exclude`表达的是`NOT`的语义：
+
 ```go
 qs.Filter("profile__age__in", 18, 20).Exclude("profile__lt", 1000)
 // WHERE profile.age IN (18, 20) AND NOT profile_id < 1000
 ```
+
 ### SetCond
+
 ```go
 SetCond(*Condition) QuerySeter
 ```
+
 设置查询条件：
+
 ```go
 cond := orm.NewCondition()
 cond1 := cond.And("profile__isnull", false).AndNot("status__in", 1).Or("profile__age__gt", 2000)
 //sql-> WHERE T0.`profile_id` IS NOT NULL AND NOT T0.`Status` IN (?) OR T1.`age` >  2000
 num, err := qs.SetCond(cond1).Count()
 ```
+
 `Condition`中使用的表达式，可以参考[查询表达式](#查询表达式)
 
 ### GetCond
+
 ```go
 GetCond() *Condition
 ```
+
 获得查询条件。例如：
+
 ```go
  cond := orm.NewCondition()
  cond = cond.And("profile__isnull", false).AndNot("status__in", 1)
@@ -246,12 +259,15 @@ GetCond() *Condition
  //sql-> WHERE T0.`profile_id` IS NOT NULL AND NOT T0.`Status` IN (?) OR T1.`age` >  2000
  num, err := qs.SetCond(cond).Count()
 ```
-### Limit 
+
+### Limit
+
 ```go
 Limit(limit interface{}, args ...interface{}) QuerySeter
 ```
 
 该方法第二个参数`args`实际上只是表达偏移量。也就是说：
+
 - 如果你只传了`limit`，例如说 10，那么相当于`LIMIT 10`
 - 如果你同时传了`args` 为 2， 那么相当于 `LIMIT 10 OFFSET 2`，或者说`LIMIT 2, 10`
 
@@ -277,28 +293,35 @@ qs.Limit(-1, 100)
 
 如果你没有调用该方法，或者调用了该方法，但是传入了一个负数，Beego 会使用默认的值，例如 1000。
 
-
 ### Offset
+
 ```go
 Offset(offset interface{}) QuerySeter
 ```
+
 设置偏移量，等同于`Limit`方法的第二个参数。
 
 ### GroupBy
+
 ```go
 GroupBy(exprs ...string) QuerySeter
 ```
+
 设置分组，参数是列名。
 
 ### OrderBy
+
 ```go
 OrderBy(exprs ...string) QuerySeter
 ```
+
 设置排序，使用的是一种特殊的表达：
+
 - 如果传入的是列名，那么代表的是按照列名 ASC 排序；
 - 如果传入的列名前面有一个负号，那么代表的是按照列名 DESC 排序；
 
 例如：
+
 ```go
 // ORDER BY STATUS DESC
 qs.OrderBy("-status")
@@ -317,13 +340,17 @@ qs.OrderBy("-profile__age", "profile")
 ```
 
 ### ForceIndex
+
 ```go
 qs.ForceIndex(`idx_name1`,`idx_name2`)
 ```
+
 强制使用某个索引。你需要确认自己使用的数据库支持该特性，并且确认该特性在数据库上的语义。
 
 参数是索引的名字。
+
 ### UseIndex
+
 ```go
 UseIndex(indexes ...string) QuerySeter
 ```
@@ -337,19 +364,23 @@ UseIndex(indexes ...string) QuerySeter
 ```go
 IgnoreIndex(indexes ...string) QuerySeter
 ```
+
 忽略某个索引。你需要确认自己使用的数据库支持该特性，并且确认该特性在数据库上的语义。比如说在一些数据库上，该特性是“建议不使用某个索引”，但是数据库在真实执行查询的时候，完全可能使用这里指定的索引。
 
 参数是索引的名字。
 
 ### RelatedSel
+
 ```go
 RelatedSel(params ...interface{}) QuerySeter
 ```
+
 加载关联表的数据。如果没有传入参数，那么 Beego 加载所有关联表的数据。而如果传入了参数，那么只会加载特定的关联表数据。
 
 在加载的时候，如果对应的字段是可以为 NULL 的，那么会使用 LEFT JOIN，否则使用 JOIN。
 
 例如：
+
 ```go
 // 使用 LEFT JOIN 加载 user 里面的所有关联表数据
 qs.RelatedSel().One(&user)
@@ -357,25 +388,31 @@ qs.RelatedSel().One(&user)
 qs.RelatedSel("profile").One(&user)
 user.Profile.Age = 32
 ```
+
 默认情况下直接调用 RelatedSel 将进行最大`DefaultRelsDepth`层的关系查询
 
-
 ### Distinct
+
 ```go
 Distinct() QuerySeter
 ```
+
 为查询加上 DISTINCT 关键字
 
 ### ForUpdate
+
 ```go
 ForUpdate() QuerySeter
 ```
+
 为查询加上 FOR UPDATE 片段。
 
 ### PrepareInsert
+
 ```go
 PrepareInsert() (Inserter, error)
 ```
+
 用于一次 prepare 多次 insert 插入，以提高批量插入的速度。
 
 ```go
@@ -397,10 +434,13 @@ i.Close() // 别忘记关闭 statement
 ```
 
 ### Aggregate
+
 ```go
 Aggregate(s string) QuerySeter
 ```
+
 指定聚合函数。例如：
+
 ```go
 type result struct {
   DeptName string
@@ -413,21 +453,27 @@ o.QueryTable("dept_info").Aggregate("dept_name,sum(salary) as total").GroupBy("d
 ## 终结方法
 
 ### Count
+
 ```go
 Count() (int64, error)
 ```
+
 执行查询并且返回结果集的大小。
 
 ### Exist
+
 ```go
 Exist() bool
 ```
+
 判断查询是否返回数据。等效于`Count()` 返回大于 0 的值。
 
 ### Update
+
 ```go
 Update(values Params) (int64, error)
 ```
+
 依据当前查询条件，进行批量更新操作。
 
 ```go
@@ -456,10 +502,13 @@ ColMinus    // 减
 ColMultiply // 乘
 ColExcept   // 除
 ```
+
 ### Delete
+
 ```go
 Delete() (int64, error)
 ```
+
 删除数据，返回被删除的数据行数。
 
 ### All
@@ -517,9 +566,11 @@ if err == orm.ErrNoRows {
 ```
 
 ### Values
+
 ```go
 Values(results *[]Params, exprs ...string) (int64, error)
 ```
+
 返回结果集的 `key => value` 值
 
 key 为模型里的字段名, value 是`interface{}`类型,例如，如果你要将 value 赋值给 struct 中的某字段，需要根据结构体对应字段类型使用[断言](https://golang.org/ref/spec#Type_assertions)获取真实值。:`Name : m["Name"].(string)`
@@ -550,7 +601,9 @@ if err == nil {
 	}
 }
 ```
+
 ### ValuesList
+
 ```go
 ValuesList(results *[]ParamsList, exprs ...string) (int64, error)
 ```
@@ -582,9 +635,11 @@ if err == nil {
 ```
 
 ### ValuesFlat
+
 ```go
 ValuesFlat(result *ParamsList, expr string) (int64, error)
 ```
+
 只返回特定的字段的值，将结果集展开到单个切片里。
 
 ```go
@@ -596,6 +651,6 @@ if err == nil {
 }
 ```
 
-### RowsToMap 和 RowsToStruct 
+### RowsToMap 和 RowsToStruct
 
 这两个方法都没有实现。

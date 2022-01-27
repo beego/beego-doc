@@ -8,6 +8,7 @@ lang: zh
 该风格比较接近 Go 本身的语法特性，所以我们倾向于建议大家使用该路由注册方式。
 
 使用该风格，非常简单，可以直接采用函数式的写法：
+
 ```go
 func main() {
 	web.Get("/hello", func(ctx *context.Context) {
@@ -21,6 +22,7 @@ func main() {
 注意，在函数式写法里面，我们只需要提供一个使用`*context.Context`参数的方法就可以。这个`context`不是 GO 的`context`包，而是 Beego 的`context`包。
 
 大多数情况下，我们可能不太想这么写，那么我们可以在别的地方定义方法，然后再注册进来：
+
 ```go
 func main() {
 
@@ -37,6 +39,7 @@ func PostHello(ctx *context.Context) {
 这可能会符合我们的一般习惯。
 
 函数式注册，基本上就是各个 HTTP 方法都有一个对应的方法：
+
 ```
 Get(rootpath string, f HandleFunc)
 Post(rootpath string, f HandleFunc)
@@ -67,6 +70,7 @@ Any(rootpath string, f HandleFunc)
 最后一种方式，是自己定义一个`Controller`，但是这个`Controller`只起到一个组织代码的效果，并不是我们在控制器风格里面强调的那种。
 
 例如我们完全可以不组合`web.Controller`写一个`Controller`：
+
 ```go
 type UserController struct {
 
@@ -76,9 +80,11 @@ func (ctrl UserController) AddUser(ctx *context.Context) {
     // you business code
 }
 ```
+
 **这种`Controller`不能用于控制器风格的理由注册**。只是为了提供一种类似的方式来组织代码而已。
 
 ## 相关资源
+
 [路由规则——正确撰写路由](../router_rule.md)
 
 [命名空间——namespace](./name_space.md)

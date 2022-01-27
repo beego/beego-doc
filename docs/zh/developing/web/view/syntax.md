@@ -16,9 +16,7 @@ go 统一使用了 `{{` 和 `}}` 作为左右标签，没有其他的标签符�
 **模板中支持的 go 语言符号**
 
 ```html
-{{"string"}} // 一般 string
-{{`raw string`}} // 原始 string
-{{'c'}} // byte
+{{"string"}} // 一般 string {{`raw string`}} // 原始 string {{'c'}} // byte
 {{print nil}} // nil 也被支持
 ```
 
@@ -32,9 +30,9 @@ go 统一使用了 `{{` 和 `}}` 作为左右标签，没有其他的标签符�
 
 当 `pipeline` 的值等于:
 
-* `false` 或 0
-* `nil` 的指针或 `interface`
-* 长度为 0 的 `array`, `slice`, `map`, `string`
+- `false` 或 0
+- `nil` 的指针或 `interface`
+- 长度为 0 的 `array`, `slice`, `map`, `string`
 
 那么这个 `pipeline` 被认为是空
 
@@ -64,10 +62,7 @@ this.Data["IsAbout"] = true
 也可以使用 `else if` 进行
 
 ```html
-{{if .IsHome}}
-{{else if .IsAbout}}
-{{else}}
-{{end}}
+{{if .IsHome}} {{else if .IsAbout}} {{else}} {{end}}
 ```
 
 ### range ... end
@@ -94,25 +89,20 @@ this.Data["Pages"] = pages
 使用 `.Num` 输出子元素的 Num 属性，使用 `$.` 引用模板中的根级上下文
 
 ```html
-{{range .Pages}}
-	{{.Num}} of {{$.Total}}
-{{end}}
+{{range .Pages}} {{.Num}} of {{$.Total}} {{end}}
 ```
 
 使用创建的变量，在这里和 go 中的 range 用法是相同的。
 
 ```html
-{{range $index, $elem := .Pages}}
-	{{$index}} - {{$elem.Num}} - {{.Num}} of {{$.Total}}
-{{end}}
+{{range $index, $elem := .Pages}} {{$index}} - {{$elem.Num}} - {{.Num}} of
+{{$.Total}} {{end}}
 ```
 
 `range` 也支持 `else`
 
 ```html
-{{range .Pages}}
-{{else}}
-	{{/* 当 .Pages 为空 或者 长度为 0 时会执行这里 */}}
+{{range .Pages}} {{else}} {{/* 当 .Pages 为空 或者 长度为 0 时会执行这里 */}}
 {{end}}
 ```
 
@@ -125,26 +115,19 @@ this.Data["Pages"] = pages
 `with` 用于重定向 `pipeline`
 
 ```html
-{{with .Field.NestField.SubField}}
-	{{.Var}}
-{{end}}
+{{with .Field.NestField.SubField}} {{.Var}} {{end}}
 ```
 
 也可以对变量赋值操作
 
 ```html
-{{with $value := "My name is %s"}}
-	{{printf . "slene"}}
-{{end}}
+{{with $value := "My name is %s"}} {{printf . "slene"}} {{end}}
 ```
 
 with 也支持 else
 
 ```html
-{{with pipeline}}
-{{else}}
-	{{/* 当 pipeline 为空时会执行这里 */}}
-{{end}}
+{{with pipeline}} {{else}} {{/* 当 pipeline 为空时会执行这里 */}} {{end}}
 ```
 
 ### define
@@ -153,7 +136,7 @@ define 可以用来定义自模板，可用于模块定义和模板嵌套
 
 ```html
 {{define "loop"}}
-	<li>{{.Name}}</li>
+<li>{{.Name}}</li>
 {{end}}
 ```
 
@@ -161,9 +144,7 @@ define 可以用来定义自模板，可用于模块定义和模板嵌套
 
 ```html
 <ul>
-	{{range .Items}}
-		{{template "loop" .}}
-	{{end}}
+  {{range .Items}} {{template "loop" .}} {{end}}
 </ul>
 ```
 
@@ -190,8 +171,7 @@ Beego 会依据你设置的模板路径读取 head.html
 允许多行文本注释，不允许嵌套
 
 ```html
-{{/* comment content
-support new line */}}
+{{/* comment content support new line */}}
 ```
 
 ## 基本函数

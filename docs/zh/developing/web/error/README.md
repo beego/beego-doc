@@ -73,6 +73,7 @@ func main() {
 一旦在入口注册该错误处理代码，那么你可以在任何你的逻辑中遇到数据库错误调用 `this.Abort("dbError")` 来进行异常页面处理。
 
 ## Controller 定义 Error
+
 从 1.4.3 版本开始，支持 Controller 方式定义 Error 错误处理函数，这样就可以充分利用系统自带的模板处理，以及 context 等方法。
 
 ```go
@@ -105,7 +106,6 @@ func (c *ErrorController) ErrorDb() {
 
 通过上面的例子我们可以看到，所有的函数都是有一定规律的，都是 `Error` 开头，后面的名字就是我们调用 `Abort` 的名字，例如 `Error404` 函数其实调用对应的就是 `Abort("404")`
 
-
 我们就只要在 `web.Run` 之前采用 `web.ErrorController` 注册这个错误处理函数就可以了
 
 ```go
@@ -123,17 +123,21 @@ func main() {
 	web.Run()
 }
 ```
+
 ## 从 panic 中恢复
 
 如果你希望用户在服务器处理请求过程中，即便发生了 panic 依旧能够返回响应，那么可以使用 Beego 的恢复机制。该机制是默认开启的。依赖于配置项：
+
 ```go
 web.BConfig.RecoverPanic = true
 ```
+
 如果你需要关闭，那么将这个配置项设置为`false`就可以。
 
 如果你想自定义`panic`之后的处理行为，那么可以重新设置`web.BConfig.RecoverFunc`。
 
 例如：
+
 ```go
 	web.BConfig.RecoverFunc = func(context *context.Context, config *web.Config) {
 		if err := recover(); err != nil {
@@ -144,6 +148,6 @@ web.BConfig.RecoverPanic = true
 
 千万要注意：你永远需要检测`recover`的结果，并且将从`panic`中恢复过来的逻辑放在检测到`recover`返回不为`nil`的代码里面。
 
-
 ## 相关内容
+
 -[Controller API - 中断](../router/ctrl_style/controller.md)

@@ -8,6 +8,7 @@ lang: zh
 Beego ORM 要求显式注册数据库的信息，而后才可以自由使用。
 
 当然，永远不要忘了匿名引入驱动：
+
 ```go
 import (
 	_ "github.com/go-sql-driver/mysql"
@@ -15,9 +16,11 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 ```
+
 上面三种，你根据自己需要引入一种就可以。
 
 最简单的例子：
+
 ```go
 // 参数1        数据库的别名，用来在 ORM 中切换数据库使用
 // 参数2        driverName
@@ -38,11 +41,13 @@ ORM 要求必须要注册一个`default`的数据库。并且，Beego 的 ORM �
 ### 最大连接数
 
 最大连接数的设置有两种方式，一种方式是在注册数据库的时候，使用`MaxOpenConnections` 选项：
+
 ```go
 orm.RegisterDataBase("default", "mysql", "root:root@/orm_test?charset=utf8", orm.MaxOpenConnections(100))
 ```
 
 也可以在注册之后修改：
+
 ```go
 orm.SetMaxOpenConns("default", 30)
 ```
@@ -59,8 +64,8 @@ orm.RegisterDataBase("default", "mysql", "root:root@/orm_test?charset=utf8", orm
 
 ORM 默认使用 `time.Local` 本地时区
 
-* 作用于 ORM 自动创建的时间
-* 从数据库中取回的时间转换成 ORM 本地时间
+- 作用于 ORM 自动创建的时间
+- 从数据库中取回的时间转换成 ORM 本地时间
 
 如果需要的话，你也可以进行更改
 
@@ -73,8 +78,8 @@ ORM 在进行 `RegisterDataBase` 的同时，会获取数据库使用的时区�
 
 **注意:**
 
-* 鉴于 Sqlite3 的设计，存取默认都为 UTC 时间
-* 使用 go-sql-driver 驱动时，请注意参数设置
+- 鉴于 Sqlite3 的设计，存取默认都为 UTC 时间
+- 使用 go-sql-driver 驱动时，请注意参数设置
   从某一版本开始，驱动默认使用 UTC 时间，而非本地时间，所以请指定时区参数或者全部以 UTC 时间存取
   例如：`root:root@/orm_test?charset=utf8&loc=Asia%2FShanghai`
   参见 [loc](https://github.com/go-sql-driver/mysql#loc) / [parseTime](https://github.com/go-sql-driver/mysql#parsetime)
@@ -90,7 +95,9 @@ ORM 在进行 `RegisterDataBase` 的同时，会获取数据库使用的时区�
 	DRPostgres                   // pgsql
 	DRTiDB                       // TiDB
 ```
+
 如果你需要注册自定义的驱动，可以使用：
+
 ```go
 // 参数1   driverName
 // 参数2   数据库类型
