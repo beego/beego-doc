@@ -1,5 +1,5 @@
 # Welcome to Beego
 
-[English](en-US/README.md)
+[English - NOT READY](en-US/README.md)
 
 [中文](zh/README.md)

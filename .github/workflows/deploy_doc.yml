@@ -15,6 +15,6 @@ jobs:
       - name: Build docs
         run: npm install && npm run docs:build
       - name: Install UploadCDN Client
-        run: wget https://github.91chifun.workers.dev/https://github.com//gotomicro/uploadcdn/releases/download/v0.1.0/uploadcdn-client.tar.gz && tar xvf uploadcdn-client.tar.gz && chmod 755 uploadcdn-client
+        run: wget https://github.com/gotomicro/uploadcdn/releases/download/v0.1.0/uploadcdn-client.tar.gz && tar xvf uploadcdn-client.tar.gz && chmod 755 uploadcdn-client
       - name: Upload docs
         run: export EGO_DEBUG=true && ./uploadcdn-client -id=${{ secrets.UPLOAD_CDN_CLIENT_ID }} -secret=${{ secrets.UPLOAD_CDN_CLIENT_SECRET }} -dir=./docs/.vuepress/dist

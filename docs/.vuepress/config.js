@@ -76,12 +76,13 @@ module.exports = {
             ariaLabel: "Version",
             items: [
               { text: "developing", link: "/zh/developing/" },
-              // {text: 'developing', link: '/zh/developing/'}
+              {text: 'v2.0.2', link: '/zh/v2.0.2/'}
             ],
           },
         ],
         sidebar: {
           "/zh/developing/": buildVersionSideBar("developing"),
+          "/zh/v2.0.2/": buildVersionSideBar("v2.0.2"),
         },
       },
     },
@@ -130,12 +131,6 @@ function buildVersionSideBar() {
           ],
         },
         "web/grace",
-
-        // 'writing-a-theme',
-        // 'option-api',
-        // 'default-theme-config',
-        // 'blog-theme',
-        // 'inheritance'
       ],
     },
     {
