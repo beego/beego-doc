@@ -1,15 +1,16 @@
 ---
-title: 配置模块
+title: Configure Module
 lang: zh
 ---
 
-# 配置模块
+# Configure Module
+Configure module is the core module which provides an abstraction layer for different configuration sources or formats. 
 
-配置模块是基础模块之一，对不同类型的配置文件提供了一种抽象。该章节内容都可以在[配置模块例子](https://github.com/beego/beego-example/tree/master/config)
+You can find the [examples here](https://github.com/beego/beego-example/tree/master/config)
 
-Beego 目前支持 INI、XML、JSON、YAML 格式的配置文件解析，也支持以 `etcd` 作为远程配置中心。默认采用了 INI 格式解析，用户可以通过简单的配置就可以获得很大的灵活性。
+Currently, Beego support all major configure formats, including **INI(by default)**, XML, JSON, YAML and remote configure center `etcd`.
 
-它们拥有的方法都是一样的，具体可以参考[Config API](https://github.com/beego/beego/blob/develop/core/config/config.go)。主要方法有：
+[Config API](https://github.com/beego/beego/blob/develop/core/config/config.go)：
 
 ```go
 // Configer defines how to get and set value from configuration raw data.
@@ -46,30 +47,30 @@ type Configer interface {
 }
 ```
 
-这里有一些使用的注意事项：
+Notices：
 
-1. 所有的`Default*`方法，在`key`不存在，或者查找的过程中，出现`error`，都会返回默认值；
-2. `DIY`直接返回对应的值，而没有做任何类型的转换。当你使用这个方法的时候，你应该自己确认值的类型。只有在极少数的情况下你才应该考虑使用这个方法；
-3. `GetSection`会返回`section`所对应的部分配置。`section`如何被解释，取决于具体的实现；
-4. `Unmarshaler`会尝试用当且配置的值来初始化`obj`。需要注意的是，`prefix`的概念类似于`section`；
-5. `Sub`类似与`GetSection`，都是尝试返回配置的一部分。所不同的是，`GetSection`将结果组织成`map`，而`Sub`将结果组织成`Config`实例；
-6. `OnChange`主要用于监听配置的变化。对于大部分依赖于文件系统的实现来说，都不支持。具体而言，我们设计这个主要是为了考虑支持远程配置；
-7. `SaveConfigFile`尝试将配置导出成为一个文件；
-8. 某些实现支持分段式的`key`。比如说`a.b.c`这种，但是，并不是所有的实现都支持，也不是所有的实现都采用`.`作为分隔符。这是一个历史遗留问题，为了保留兼容性，我们无法在这方面保持一致。
+1. All `Default*` methods will return the default value if the key is not exist or got any error;
+2. `DIY` returns the value directly without any conversion；
+3. `GetSection` returns all configuration of the specific `section`, and it depends on the implementation details；
+4. `Unmarshaler` tries to use the configuration value to initiate the `obj`。`prefix` is similar to `section`；
+5. `Sub` is similar to `GetSection` which tries to return all configuration of the specific `section`。The difference is that `GetSection` returns the values as `map` but `Sub` returns the values as `Config` instance；
+6. `OnChange` subscribes the change the configuration. But most of the implementations which is based on file system do not support this methods. In general we prefer to use this for configure center like etcd；
+7. `SaveConfigFile` writes all configuration into file(s)；
+8. Some implementations support the key like `a.b.c` while some DO NOT. Besides, some implementations choose the `.` as separator while some choose other characters. This is a historical problem and we can not make them consistent if we keep backward compatible。
 
-Web 模块封装了配置模块，可以参考[Web 配置](./../web/config.md)
+Web module re-encapsulate the configuration module, more details refer [Web Module Configuration](./../web/config.md)
 
-## 初始化方法
+## Initiate
 
-大致上有两种用法：
+There are two major ways to use the configuration module:
 
-- 使用`config.XXXX`：这是依赖于全局配置实例
-- 使用`Configer`实例
--
+- Uses package functions `config.XXXX` which relies on the global instance
+- Initiates `Configer` instances
 
-### 全局实例
 
-Beego 默认会解析当前应用下的 `conf/app.conf` 文件，后面就可以通过`config`包名直接使用：
+### Global instance
+
+Beego will try to parse the file `conf/app.conf` so that you can use the package functions：
 
 ```go
 import (
@@ -83,15 +84,15 @@ func main() {
 }
 ```
 
-也可以手动初始化全局实例，以指定不同的配置类型，例如说启用`etcd`：
+Or you can initiate the global instance manually to specify the source:
 
 ```go
 config.InitGlobalInstance("etcd", "etcd address")
 ```
 
-### 使用`Configer`实例
+### Initiates `Configer` instances
 
-如果要从多个源头读取配置，或者说自己不想依赖于全局配置，那么可以自己初始化一个配置实例：
+If you do not want to use the global instance, you can initiate the `Configer` instances manually:
 
 ```go
 func main() {
@@ -104,23 +105,26 @@ func main() {
 }
 ```
 
-## 环境变量支持
+## Environment variable
 
-配置文件解析支持从环境变量中获取配置项，配置项格式：`${环境变量}`。例如下面的配置中优先使用环境变量中配置的 runmode 和 httpport，如果有配置环境变量 ProRunMode 则优先使用该环境变量值。如果不存在或者为空，则使用 "dev" 作为 runmode。例如使用 INI 的时候指定环境变量：
+The format for this is `${ENVIRONMENTVARIABLE}` within the configuration file which is equivalent to `value = os.Getenv('ENVIRONMENTVARIABLE')`. Beego will only check for environment variables if the value begins with `${` and ends with `}`.
+
+Additionally, a default value can be configured for the case that there is no environment variable set or the environment variable is empty. This is accomplished by using the format `${ENVVAR||defaultvalue}`:
 
 ```ini
 	runmode  = "${ProRunMode||dev}"
 	httpport = "${ProPort||9090}"
 ```
 
-## 支持的格式
+## Implementations
 
-注意，所以的相对文件路径，都是从你的工作目录开始计算！
-其次，除了默认的 INI 格式，其余格式都需要采用匿名引入的方式引入对应的包。
 
-### INI 格式
+Note that all relative file paths, are calculated from your working directory!
+Second, except for the default INI implementation, all other implementations need to be introduced using anonymous introduction of the corresponding package.
 
-INI 是配置模块的默认格式。同时它支持使用`include`的方式，加载多个配置文件。
+### INI
+
+INI is the default implementation for configuring modules. It also supports loading multiple configuration files using the `include` syntax。
 
 app.ini:
 
@@ -161,12 +165,10 @@ func main() {
 
 ### JSON
 
-JSON 只需要指定格式，并且不要忘了使用匿名引入的方式引入 JSON 的实现：
-
 ```go
 import (
 	"github.com/beego/beego/v2/core/config"
-	// 千万不要忘了
+	// DO NOT FORGET THIS
 	_ "github.com/beego/beego/v2/core/config/json"
 	"github.com/beego/beego/v2/core/logs"
 )
@@ -189,8 +191,6 @@ func main() {
 ```
 
 ### YAML
-
-别忘了匿名引入 YAML 的实现！
 
 ```go
 import (
@@ -219,8 +219,6 @@ func main() {
 
 ### XML
 
-别忘了匿名引入 XML 的实现！
-
 ```go
 import (
 	"github.com/beego/beego/v2/core/config"
@@ -246,7 +244,7 @@ func main() {
 }
 ```
 
-要注意，所有的配置项都要放在`config`这个顶级节点之内：
+Note that all configuration items should be placed within the root `config`：
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -256,8 +254,6 @@ func main() {
 ```
 
 ### TOML
-
-别忘了匿名引入 TOML 的实现！
 
 ```go
 import (
@@ -286,8 +282,6 @@ func main() {
 
 ### Etcd
 
-别忘了匿名引入 ETCD 的实现！
-
 ```go
 import (
 	"github.com/beego/beego/v2/core/config"
@@ -309,7 +303,7 @@ func main() {
 }
 ```
 
-其中 `your_config` 是一个 JSON 配置，它对应于：
+where `your_config` is a JSON configuration that corresponds to：
 
 ```go
 type Config struct {

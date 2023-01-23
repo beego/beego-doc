@@ -63,11 +63,15 @@ module.exports = {
             text: "Version",
             ariaLabel: "Version",
             items: [
-              { text: "developing", link: "/en-US/developing/" },
-              // {text: 'developing', link: '/developing/'}
+              // {text: 'developing', link: '/developing/'},
+              { text: "v2.0.x", link: "/en-US/v2.0.x/" }
             ],
           },
         ],
+        sidebar: {
+          "/en-US/developing/": buildVersionSideBar("developing"),
+          "/en-US/v2.0.2/": buildVersionSideBar("v2.0.x"),
+        },
       },
       "/zh/": {
         nav: [
@@ -76,13 +80,13 @@ module.exports = {
             ariaLabel: "Version",
             items: [
               { text: "developing", link: "/zh/developing/" },
-              {text: 'v2.0.2', link: '/zh/v2.0.2/'}
+              {text: 'v2.0.x', link: '/zh/v2.0.x/'}
             ],
           },
         ],
         sidebar: {
           "/zh/developing/": buildVersionSideBar("developing"),
-          "/zh/v2.0.2/": buildVersionSideBar("v2.0.2"),
+          "/zh/v2.0.2/": buildVersionSideBar("v2.0.x"),
         },
       },
     },

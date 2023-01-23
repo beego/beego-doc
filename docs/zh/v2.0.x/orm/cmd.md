@@ -37,8 +37,6 @@ Usage of orm command: syncdb:
 
 使用 `-v` 可以查看执行的 `sql` 语句
 
----
-
 在程序中直接调用自动建表：
 
 ```go

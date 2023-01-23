@@ -94,7 +94,7 @@ bee version
 | |_/ /  ___   ___
 | ___ \ / _ \ / _ \
 | |_/ /|  __/|  __/
-\____/  \___| \___| v2.0.2
+\____/  \___| \___| v2.0.x
 
 ├── Beego     : Beego is not installed. Please do consider installing it first: https://github.com/beego/beego/v2. If you are using go mod, and you don't install the beego under $GOPATH/src/github.com/beego, just ignore this.
 ├── GoVersion : go1.16
