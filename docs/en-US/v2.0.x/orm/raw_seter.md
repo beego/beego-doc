@@ -1,9 +1,9 @@
 ---
-title: 原生查询
+title: Raw Query
 lang: en-US
 ---
 
-# 原生查询
+# Raw Query
 
 Most of the time, you should not use raw queries. Raw queries should only be considered when there is no other choice.
 

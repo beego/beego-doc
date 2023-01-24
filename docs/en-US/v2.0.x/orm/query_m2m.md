@@ -1,9 +1,9 @@
 ---
-title: 关联表查询
+title: Relationships
 lang: en-US
 ---
 
-# 关联表查询
+# Relationships
 
 For querying relationships, you can use [QuerySeter](./query_seter.md) or `QueryM2Mer`。
 

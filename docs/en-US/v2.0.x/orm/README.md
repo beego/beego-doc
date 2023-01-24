@@ -1,9 +1,9 @@
 ---
-title: 快速开始
+title: Quickly Start
 lang: en-US
 ---
 
-# Orm
+# Quickly Start
 
 [ORM examples](https://github.com/beego/beego-example/tree/master/orm)
 

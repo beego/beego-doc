@@ -1,9 +1,9 @@
 ---
-title: QuerySeter 构造复杂查询
+title: QuerySeter
 lang: en-US
 ---
 
-# QuerySeter 复杂查询
+# QuerySeter
 
 ORM uses **QuerySeter** to organize queries.  Every method that returns  **QuerySeter** will give you a new **QuerySeter** object.
 
