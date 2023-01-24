@@ -174,8 +174,6 @@ for _,tag := range post.Tags{
 }
 ```
 
-该方法对
-
 注意到，这两个方法最后一个参数都是传入 KV 值，目前这些 KV 值被定义在 `hints` 包里面，有：
 
 - `hints.DefaultRelDepth`：设置关联表的解析深度为默认值 2；
@@ -197,4 +195,4 @@ for _,tag := range post.Tags{
 
 `QueryM2MWithCtx`已经不建议使用了，因为`ctx`参数毫无效果。
 
-这两个方法都是返回一个`QueryM2Mer`，用于查询多对多关联关系的数据。可以参考[./query.md#QueryM2Mer]
+这两个方法都是返回一个`QueryM2Mer`，用于查询多对多关联关系的数据。可以参考[QueryM2Mer](./query_m2m.md)

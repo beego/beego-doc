@@ -1,29 +1,29 @@
 ---
-title: QueryBuilder 构造复杂查询
+title: QueryBuilder
 lang: zh
 ---
 
-# QueryBuilder 构造复杂查询
+# QueryBuilder Constructs Complicate Query
 
-**QueryBuilder** 提供了一个简便，流畅的 SQL 查询构造器。在不影响代码可读性的前提下用来快速的建立 SQL 语句。
+**QueryBuilder** provides an API for convenient and fluent construction of SQL queries. It consists of a set of methods enabling developers to easily construct SQL queries without compromising readability.
 
-**QueryBuilder** 在功能上与 ORM 重合， 但是各有利弊。ORM 更适用于简单的 CRUD 操作，而 QueryBuilder 则更适用于复杂的查询，例如查询中包含子查询和多重联结。
+It serves as an alternative to ORM. ORM is more for simple CRUD operations, whereas QueryBuilder is for complex queries with subqueries and multi-joins.
 
-使用方法:
+Usage example:
 
 ```go
-// User 包装了下面的查询结果
+// User is a wrapper for result row in this example
 type User struct {
 	Name string
 	Age  int
 }
 var users []User
 
-// 获取 QueryBuilder 对象. 需要指定数据库驱动参数。
-// 第二个返回值是错误对象，在这里略过
+// Get a QueryBuilder object. Takes DB driver name as parameter
+// Second return value is error, ignored here
 qb, _ := orm.NewQueryBuilder("mysql")
 
-// 构建查询对象
+// Construct query object
 qb.Select("user.name",
 	"profile.age").
 	From("user").
@@ -32,15 +32,15 @@ qb.Select("user.name",
 	OrderBy("name").Desc().
 	Limit(10).Offset(0)
 
-// 导出 SQL 语句
+// export raw query string from QueryBuilder object
 sql := qb.String()
 
-// 执行 SQL 语句
+// execute the raw query string
 o := orm.NewOrm()
 o.Raw(sql, 20).QueryRows(&users)
 ```
 
-完整 API 接口:
+Full API interface:
 
 ```go
 type QueryBuilder interface {
@@ -72,4 +72,4 @@ type QueryBuilder interface {
 }
 ```
 
-目前支持`Postgress`, `MySQL`和`TiDB`的支持。
+Now we support `Postgress`, `MySQL` and `TiDB`.

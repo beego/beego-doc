@@ -19,7 +19,7 @@ import (
 
 The above three, you can introduce one according to your needs.
 
-The simplest example:
+Example:
 
 ```go
 // args[0]        Alias of the database, used to switch the database in ORM
@@ -28,65 +28,59 @@ The simplest example:
 orm.RegisterDataBase("default", "mysql", "root:root@/orm_test?charset=utf8")
 
 // args[3](optional)  max number of idle connections
-// args[4](optional)  设置最大数据库连接 (go >= 1.2)
+// args[4](optional)  max number of connections (go >= 1.2)
 maxIdle := 30
 maxConn := 30
 orm.RegisterDataBase("default", "mysql", "root:root@/orm_test?charset=utf8", orm.MaxIdleConnections(maxIdle), orm.MaxOpenConnections(maxConn))
 ```
 
-ORM 要求必须要注册一个`default`的数据库。并且，Beego 的 ORM 并没有自己管理连接，而是直接依赖于驱动。
+ORM requires a `default` database to be registered. And Beego's ORM does not manage connections itself, but relies directly on the driver.
 
-## 数据库设置
+## Configuration
 
-### 最大连接数
+### Max number of connections
 
-最大连接数的设置有两种方式，一种方式是在注册数据库的时候，使用`MaxOpenConnections` 选项：
+There are two ways to set the maximum number of connections, one way is to use the `MaxOpenConnections` option when registering the database:
 
 ```go
 orm.RegisterDataBase("default", "mysql", "root:root@/orm_test?charset=utf8", orm.MaxOpenConnections(100))
 ```
 
-也可以在注册之后修改：
+It can also be modified after registration:
 
 ```go
 orm.SetMaxOpenConns("default", 30)
 ```
 
-### 最大空闲连接数
+### Max number of idle connections
 
-最大空闲连接数的设置有两种方式，一种方式是在注册数据库的时候，使用`MaxIdleConnections`选项：
-
+There are two ways to set the maximum number of idle connections, one way is to use the `MaxIdleConnections` option when registering the database:
 ```go
 orm.RegisterDataBase("default", "mysql", "root:root@/orm_test?charset=utf8", orm.MaxIdleConnections(20))
 ```
 
-### 时区
+### Time zone 
 
-ORM 默认使用 `time.Local` 本地时区
-
-- 作用于 ORM 自动创建的时间
-- 从数据库中取回的时间转换成 ORM 本地时间
-
-如果需要的话，你也可以进行更改
+ORM uses `time.Local` as default time zone, and you can modify it by:
 
 ```go
 // 设置为 UTC 时间
 orm.DefaultTimeLoc = time.UTC
 ```
 
-ORM 在进行 `RegisterDataBase` 的同时，会获取数据库使用的时区，然后在 `time.Time` 类型存取时做相应转换，以匹配时间系统，从而保证时间不会出错。
+ORM will get the time zone used by the database while doing `RegisterDataBase`, and then do the corresponding conversion when accessing the `time.Time` type to match the time system, so as to ensure that the time will not be wrong.
 
-**注意:**
+**Notice:**
 
-- 鉴于 Sqlite3 的设计，存取默认都为 UTC 时间
-- 使用 go-sql-driver 驱动时，请注意参数设置
-  从某一版本开始，驱动默认使用 UTC 时间，而非本地时间，所以请指定时区参数或者全部以 UTC 时间存取
-  例如：`root:root@/orm_test?charset=utf8&loc=Asia%2FShanghai`
-  参见 [loc](https://github.com/go-sql-driver/mysql#loc) / [parseTime](https://github.com/go-sql-driver/mysql#parsetime)
+- Given the design of Sqlite3, accesses default to UTC time
+- When using the go-sql-driver driver, please pay attention to the configuration
+  From a certain version, the driver uses UTC time by default instead of local time, so please specify the time zone parameter or access it all in UTC time:
+  For example `root:root@/orm_test?charset=utf8&loc=Asia%2FShanghai`
+  More details refer [loc](https://github.com/go-sql-driver/mysql#loc) / [parseTime](https://github.com/go-sql-driver/mysql#parsetime)
 
-## 注册驱动
+## Driver
 
-大多数时候，你只需要使用默认的那些驱动，有：
+Most of the time, you only need to use the default ones for drivers that have:
 
 ```go
 	DRMySQL                      // mysql
@@ -96,12 +90,11 @@ ORM 在进行 `RegisterDataBase` 的同时，会获取数据库使用的时区�
 	DRTiDB                       // TiDB
 ```
 
-如果你需要注册自定义的驱动，可以使用：
+If you need to register a custom driver, you can use.
 
 ```go
-// 参数1   driverName
-// 参数2   数据库类型
-// 这个用来设置 driverName 对应的数据库类型
-// mysql / sqlite3 / postgres / tidb 这几种是默认已经注册过的，所以可以无需设置
+// args[0]   driverName
+// args[1]   driver implementation
+// mysql / sqlite3 / postgres / tidb were registered automatically
 orm.RegisterDriver("mysql", yourDriver)
 ```

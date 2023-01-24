@@ -5,80 +5,83 @@ lang: zh
 
 # QuerySeter 复杂查询
 
-ORM 以 **QuerySeter** 来组织查询，每个返回 **QuerySeter** 的方法都会获得一个新的 **QuerySeter** 对象。
+ORM uses **QuerySeter** to organize queries.  Every method that returns  **QuerySeter** will give you a new **QuerySeter** object.
 
-基本使用方法:
+Basic Usage:
 
 ```go
 o := orm.NewOrm()
 
-// 获取 QuerySeter 对象，user 为表名
+// or
 qs := o.QueryTable("user")
 
-// 也可以直接使用 Model 结构体作为表名
+// or
 qs = o.QueryTable(&User)
 
-// 也可以直接使用对象作为表名
+// or
 user := new(User)
-qs = o.QueryTable(user) // 返回 QuerySeter
+qs = o.QueryTable(user) // return QuerySeter
 
-// 后面可以调用qs上的方法，执行复杂查询。
 ```
 
-`QuerySeter`的方法大体上可以分成两类：
+The methods of `QuerySeter` can be roughly divided into two categories:
 
-- 中间方法：用于构造查询
-- 终结方法：用于执行查询并且封装结果
+- Intermediate methods: used to construct the query
+- Terminate methods: used to execute the query and encapsulate the result
 
-* 每个返回 QuerySeter 的 api 调用时都会新建一个 QuerySeter，不影响之前创建的。
+* Each api call that returns a QuerySeter creates a new QuerySeter, without affecting the previously created.
 
-* 高级查询使用 Filter 和 Exclude 来做常用的条件查询。囊括两种清晰的过滤规则：包含， 排除
+* Advanced queries use Filter and Exclude to do common conditional queries. 
 
-## 查询表达式
+## Query Expression
 
-Beego 设计了自己的查询表达式，这些表达式可以用在很多方法上。
+Beego has designed its own query expressions, which can be used in many methods.
 
-一般来说，你可以对单表的字段使用表达式，也可以在关联表上使用表达式。例如单个使用：
-
+In general, you can use expressions for fields in a single table, or you can use expressions on related tables. For example:
 ```go
 qs.Filter("id", 1) // WHERE id = 1
 ```
 
-或者在关联表里面使用：
+Or in relationships:
 
 ```go
 qs.Filter("profile__age", 18) // WHERE profile.age = 18
-qs.Filter("Profile__Age", 18) // 使用字段名和 Field 名都是允许的
+qs.Filter("Profile__Age", 18) // key name and field name are both valid
+qs.Filter("profile__age", 18) // WHERE profile.age = 18
 qs.Filter("profile__age__gt", 18) // WHERE profile.age > 18
+qs.Filter("profile__age__gte", 18) // WHERE profile.age >= 18
+qs.Filter("profile__age__in", 18, 20) // WHERE profile.age IN (18, 20)
+
+qs.Filter("profile__age__in", 18, 20).Exclude("profile__lt", 1000)
 // WHERE profile.age IN (18, 20) AND NOT profile_id < 1000
 ```
 
-字段组合的前后顺序依照表的关系，比如 User 表拥有 Profile 的外键，那么对 User 表查询对应的 Profile.Age 为条件，则使用 `Profile__Age` 注意，字段的分隔符号使用双下划线 `__`。
+For example, if the User table has a foreign key for Profile, then if the User table is queried for the corresponding Profile.Age, then `Profile__Age` is used. Note that the field separators use the double underscore `__` for the field separator.
 
-除了描述字段， 表达式的尾部可以增加操作符以执行对应的 sql 操作。比如 `Profile__Age__gt` 代表 Profile.Age > 18 的条件查询。在没有指定操作符的情况下，会使用`=`作为操作符。
+Operators can be added to the end of an expression to perform the corresponding sql operation. For example, `Profile__Age__gt` represents a conditional query for Profile.Age > 18. If no operator is specified, `=` will be used as the operator.
 
-当前支持的操作符号：
+The supported operators:
 
-- [exact](#exact) / [iexact](#iexact) 等于
-- [contains](#contains) / [icontains](#icontains) 包含
-- [gt / gte](#gt-gte) 大于 / 大于等于
-- [lt / lte](#lt-lte) 小于 / 小于等于
-- [startswith](#startswith) / [istartswith](#istartswith) 以...起始
-- [endswith](#endswith) / [iendswith](#iendswith) 以...结束
-- [in](#in)
-- [isnull](#isnull)
+* [exact](#exact) / [iexact](#iexact) equal to
+* [contains](#contains) / [icontains](#icontains) contains
+* [gt / gte](#gt / gte) greater than / greater than or equal to
+* [lt / lte](#lt / lte) less than / less than or equal to
+* [startswith](#startswith) / [istartswith](#istartswith) starts with
+* [endswith](#endswith) / [iendswith](#iendswith) ends with
+* [in](#in)
+* [isnull](#isnull)
 
-后面以 `i` 开头的表示：大小写不敏感
+The operators that start with `i` ignore case.
 
 ### exact
 
-Filter / Exclude / Condition expr 的默认值
+Default values of Filter, Exclude and Condition expr
 
 ```go
 qs.Filter("name", "slene") // WHERE name = 'slene'
 qs.Filter("name__exact", "slene") // WHERE name = 'slene'
-// 使用 = 匹配，大小写是否敏感取决于数据表使用的 collation
-qs.Filter("profile_id", nil) // WHERE profile_id IS NULL
+// using = , case sensitive or not is depending on which collation database table is used
+qs.Filter("profile", nil) // WHERE profile_id IS NULL
 ```
 
 ### iexact
@@ -86,7 +89,7 @@ qs.Filter("profile_id", nil) // WHERE profile_id IS NULL
 ```go
 qs.Filter("name__iexact", "slene")
 // WHERE name LIKE 'slene'
-// 大小写不敏感，匹配任意 'Slene' 'sLENE'
+// Case insensitive, will match any name that equals to 'slene'
 ```
 
 ### contains
@@ -94,7 +97,7 @@ qs.Filter("name__iexact", "slene")
 ```go
 qs.Filter("name__contains", "slene")
 // WHERE name LIKE BINARY '%slene%'
-// 大小写敏感, 匹配包含 slene 的字符
+// Case sensitive, only match name that contains 'slene'
 ```
 
 ### icontains
@@ -102,21 +105,14 @@ qs.Filter("name__contains", "slene")
 ```go
 qs.Filter("name__icontains", "slene")
 // WHERE name LIKE '%slene%'
-// 大小写不敏感, 匹配任意 'im Slene', 'im sLENE'
+// Case insensitive, will match any name that contains 'slene'
 ```
 
 ### in
 
 ```go
-qs.Filter("age__in", 17, 18, 19, 20)
-// WHERE age IN (17, 18, 19, 20)
-
-
-ids:=[]int{17,18,19,20}
-qs.Filter("age__in", ids)
-// WHERE age IN (17, 18, 19, 20)
-
-// 同上效果
+qs.Filter("profile__age__in", 17, 18, 19, 20)
+// WHERE profile.age IN (17, 18, 19, 20)
 ```
 
 ### gt / gte
@@ -144,7 +140,7 @@ qs.Filter("profile__age__lte", 18)
 ```go
 qs.Filter("name__startswith", "slene")
 // WHERE name LIKE BINARY 'slene%'
-// 大小写敏感, 匹配以 'slene' 起始的字符串
+// Case sensitive, only match name that starts with 'slene'
 ```
 
 ### istartswith
@@ -152,7 +148,7 @@ qs.Filter("name__startswith", "slene")
 ```go
 qs.Filter("name__istartswith", "slene")
 // WHERE name LIKE 'slene%'
-// 大小写不敏感, 匹配任意以 'slene', 'Slene' 起始的字符串
+// Case insensitive, will match any name that starts with 'slene'
 ```
 
 ### endswith
@@ -160,15 +156,15 @@ qs.Filter("name__istartswith", "slene")
 ```go
 qs.Filter("name__endswith", "slene")
 // WHERE name LIKE BINARY '%slene'
-// 大小写敏感, 匹配以 'slene' 结束的字符串
+// Case sensitive, only match name that ends with 'slene'
 ```
 
 ### iendswith
 
 ```go
-qs.Filter("name__iendswithi", "slene")
+qs.Filter("name__iendswith", "slene")
 // WHERE name LIKE '%slene'
-// 大小写不敏感, 匹配任意以 'slene', 'Slene' 结束的字符串
+// Case insensitive, will match any name that ends with 'slene'
 ```
 
 ### isnull
@@ -182,15 +178,13 @@ qs.Filter("profile__isnull", false)
 // WHERE profile_id IS NOT NULL
 ```
 
-## 中间方法
+## Intermediate Methods
 
 ### Filter
 
-```go
-Filter(string, ...interface{}) QuerySeter
-```
+Used to filter the result for the **include conditions**.
 
-多次调用`Filter`方法，会使用`AND`将它们连起来。
+Use `AND` to connect multiple filters:
 
 ```go
 qs.Filter("profile__isnull", true).Filter("name", "slene")
@@ -203,7 +197,7 @@ qs.Filter("profile__isnull", true).Filter("name", "slene")
 FilterRaw(string, string) QuerySeter
 ```
 
-该方法会直接把输入当做是一个查询条件，因此如果输入有错误，那么拼接得来的 SQL 则无法运行。Beego 本身并不会执行任何的检查。
+This method treats the input directly as a query condition, so if there is an error in the input, then the resulting spliced SQL will not work. Beego itself does not perform any checks.
 
 例如：
 
@@ -214,33 +208,33 @@ qs.FilterRaw("user_id IN (SELECT id FROM profile WHERE age>=18)")
 
 ### Exclude
 
+Used to filter the result for the **exclude conditions**.
+
+Use `NOT` to exclude condition
+Use `AND` to connect multiple filters:
+
 ```go
-Exclude(string, ...interface{}) QuerySeter
+qs.Exclude("profile__isnull", true).Filter("name", "slene")
+// WHERE NOT profile_id IS NULL AND name = 'slene'
 ```
 
-准确来说，`Exclude`表达的是`NOT`的语义：
-
-```go
-qs.Filter("profile__age__in", 18, 20).Exclude("profile__lt", 1000)
-// WHERE profile.age IN (18, 20) AND NOT profile_id < 1000
-```
 
 ### SetCond
 
-```go
-SetCond(*Condition) QuerySeter
-```
-
-设置查询条件：
+Custom conditions:
 
 ```go
-cond := orm.NewCondition()
+cond := NewCondition()
 cond1 := cond.And("profile__isnull", false).AndNot("status__in", 1).Or("profile__age__gt", 2000)
-//sql-> WHERE T0.`profile_id` IS NOT NULL AND NOT T0.`Status` IN (?) OR T1.`age` >  2000
-num, err := qs.SetCond(cond1).Count()
-```
 
-`Condition`中使用的表达式，可以参考[查询表达式](#查询表达式)
+qs := orm.QueryTable("user")
+qs = qs.SetCond(cond1)
+// WHERE ... AND ... AND NOT ... OR ...
+
+cond2 := cond.AndCond(cond1).OrCond(cond.And("name", "slene"))
+qs = qs.SetCond(cond2).Count()
+// WHERE (... AND ... AND NOT ... OR ...) OR ( ... )
+```
 
 ### GetCond
 
@@ -248,7 +242,7 @@ num, err := qs.SetCond(cond1).Count()
 GetCond() *Condition
 ```
 
-获得查询条件。例如：
+It returns all conditions:
 
 ```go
  cond := orm.NewCondition()
@@ -262,52 +256,43 @@ GetCond() *Condition
 
 ### Limit
 
-```go
-Limit(limit interface{}, args ...interface{}) QuerySeter
-```
-
-该方法第二个参数`args`实际上只是表达偏移量。也就是说：
-
-- 如果你只传了`limit`，例如说 10，那么相当于`LIMIT 10`
-- 如果你同时传了`args` 为 2， 那么相当于 `LIMIT 10 OFFSET 2`，或者说`LIMIT 2, 10`
+Limit maximum returned lines. The second param can set `Offset`
 
 ```go
-var DefaultRowsLimit = 1000 // ORM 默认的 limit 值为 1000
+var DefaultRowsLimit = 1000 // The default limit of ORM is 1000
 
-// 默认情况下 select 查询的最大行数为 1000
 // LIMIT 1000
 
 qs.Limit(10)
 // LIMIT 10
 
 qs.Limit(10, 20)
-// LIMIT 10 OFFSET 20 注意跟 SQL 反过来的
+// LIMIT 10 OFFSET 20
 
 qs.Limit(-1)
 // no limit
 
 qs.Limit(-1, 100)
 // LIMIT 18446744073709551615 OFFSET 100
-// 18446744073709551615 是 1<<64 - 1 用来指定无 limit 限制 但有 offset 偏移的情况
+// 18446744073709551615 is 1<<64 - 1. Used to set the condition which is no limit but with offset
 ```
 
-如果你没有调用该方法，或者调用了该方法，但是传入了一个负数，Beego 会使用默认的值，例如 1000。
+If you do not call the method, or if you call the method but pass in a negative number, Beego will use the default value, e.g. 1000.
 
 ### Offset
 
+Set offset lines:
+
 ```go
-Offset(offset interface{}) QuerySeter
+qs.Offset(20)
+// LIMIT 1000 OFFSET 20
 ```
-
-设置偏移量，等同于`Limit`方法的第二个参数。
-
 ### GroupBy
 
 ```go
-GroupBy(exprs ...string) QuerySeter
+qs.GroupBy("id", "age")
+// GROUP BY id,age
 ```
-
-设置分组，参数是列名。
 
 ### OrderBy
 
@@ -315,21 +300,22 @@ GroupBy(exprs ...string) QuerySeter
 OrderBy(exprs ...string) QuerySeter
 ```
 
-设置排序，使用的是一种特殊的表达：
+Cases:
 
-- 如果传入的是列名，那么代表的是按照列名 ASC 排序；
-- 如果传入的列名前面有一个负号，那么代表的是按照列名 DESC 排序；
+- If the column names are passed in, then it means sort by column name ASC；
+- If the column names with symbol `-` are passed in, then it means sort by column name DESC；
 
-例如：
+Example:
 
 ```go
-// ORDER BY STATUS DESC
-qs.OrderBy("-status")
-// ORDER BY ID ASC, STATUS DESC
-qs.OrderBy("id", "-status")
+qs.OrderBy("id", "-profile__age")
+// ORDER BY id ASC, profile.age DESC
+
+qs.OrderBy("-profile__age", "profile")
+// ORDER BY profile.age DESC, profile_id ASC
 ```
 
-同样地，也可以使用[查询表达式](#查询表达式)，例如：
+Similarly:
 
 ```go
 qs.OrderBy("id", "-profile__age")
@@ -341,33 +327,33 @@ qs.OrderBy("-profile__age", "profile")
 
 ### ForceIndex
 
+Forcing DB to use the index.
+
+You need to check your DB whether it support this feature.
+
 ```go
 qs.ForceIndex(`idx_name1`,`idx_name2`)
 ```
 
-强制使用某个索引。你需要确认自己使用的数据库支持该特性，并且确认该特性在数据库上的语义。
-
-参数是索引的名字。
-
 ### UseIndex
 
+Suggest DB to user the index.
+
+You need to check your DB whether it support this feature.
+
 ```go
-UseIndex(indexes ...string) QuerySeter
+qs.UseIndex(`idx_name1`,`idx_name2`)
 ```
-
-使用某个索引。你需要确认自己使用的数据库支持该特性，并且确认该特性在数据库上的语义。比如说在一些数据库上，该特性是“建议使用某个索引”，但是数据库在真实执行查询的时候，完全可能不使用这里指定的索引。
-
-参数是索引的名字。
 
 ### IgnoreIndex
 
+Make DB ignore the index
+
+You need to check your DB whether it support this feature.
+
 ```go
-IgnoreIndex(indexes ...string) QuerySeter
+qs.IgnoreIndex(`idx_name1`,`idx_name2`)
 ```
-
-忽略某个索引。你需要确认自己使用的数据库支持该特性，并且确认该特性在数据库上的语义。比如说在一些数据库上，该特性是“建议不使用某个索引”，但是数据库在真实执行查询的时候，完全可能使用这里指定的索引。
-
-参数是索引的名字。
 
 ### RelatedSel
 
@@ -375,29 +361,30 @@ IgnoreIndex(indexes ...string) QuerySeter
 RelatedSel(params ...interface{}) QuerySeter
 ```
 
-加载关联表的数据。如果没有传入参数，那么 Beego 加载所有关联表的数据。而如果传入了参数，那么只会加载特定的关联表数据。
+Loads the data of the associated table. If no parameters are passed, then Beego loads the data of all related tables. If parameters are passed, then only the specific table data is loaded.
 
-在加载的时候，如果对应的字段是可以为 NULL 的，那么会使用 LEFT JOIN，否则使用 JOIN。
+When loading, if the corresponding field is available as NULL, then LEFT JOIN is used, otherwise JOIN is used.
 
-例如：
+Example:
 
 ```go
-// 使用 LEFT JOIN 加载 user 里面的所有关联表数据
+// Use LEFT JOIN to load all the related table data of table user
 qs.RelatedSel().One(&user)
-// 使用 LEFT JOIN 只加载 user 里面 profile 的数据
+// Use LEFT JOIN to load only the data of the profile of table user
 qs.RelatedSel("profile").One(&user)
 user.Profile.Age = 32
 ```
 
-默认情况下直接调用 RelatedSel 将进行最大`DefaultRelsDepth`层的关系查询
+Calling RelatedSel directly by default will perform a relational query at the maximum `DefaultRelsDepth`.
 
 ### Distinct
 
-```go
-Distinct() QuerySeter
-```
+Same as `distinct` statement in sql, return only distinct (different) values
 
-为查询加上 DISTINCT 关键字
+```go
+qs.Distinct()
+// SELECT DISTINCT
+```
 
 ### ForUpdate
 
@@ -405,7 +392,7 @@ Distinct() QuerySeter
 ForUpdate() QuerySeter
 ```
 
-为查询加上 FOR UPDATE 片段。
+Add FOR UPDATE clause.
 
 ### PrepareInsert
 
@@ -413,7 +400,7 @@ ForUpdate() QuerySeter
 PrepareInsert() (Inserter, error)
 ```
 
-用于一次 prepare 多次 insert 插入，以提高批量插入的速度。
+Used to prepare multiple insert inserts at once to increase the speed of bulk insertion.
 
 ```go
 var users []*User
@@ -430,7 +417,7 @@ for _, user := range users {
 // EXECUTE INSERT INTO user (`name`, ...) VALUES ("slene", ...)
 // EXECUTE ...
 // ...
-i.Close() // 别忘记关闭 statement
+i.Close() // don't forget to close statement
 ```
 
 ### Aggregate
@@ -439,7 +426,7 @@ i.Close() // 别忘记关闭 statement
 Aggregate(s string) QuerySeter
 ```
 
-指定聚合函数。例如：
+Using aggregate functions:
 
 ```go
 type result struct {
@@ -450,7 +437,7 @@ var res []result
 o.QueryTable("dept_info").Aggregate("dept_name,sum(salary) as total").GroupBy("dept_name").All(&res)
 ```
 
-## 终结方法
+## Terminate Methods
 
 ### Count
 
@@ -458,7 +445,7 @@ o.QueryTable("dept_info").Aggregate("dept_name,sum(salary) as total").GroupBy("d
 Count() (int64, error)
 ```
 
-执行查询并且返回结果集的大小。
+Return line count based on the current query
 
 ### Exist
 
@@ -466,15 +453,11 @@ Count() (int64, error)
 Exist() bool
 ```
 
-判断查询是否返回数据。等效于`Count()` 返回大于 0 的值。
+Determines if the query returns data. Equivalent to `Count()` to return a value greater than 0。
 
 ### Update
 
-```go
-Update(values Params) (int64, error)
-```
-
-依据当前查询条件，进行批量更新操作。
+Execute batch updating based on the current query
 
 ```go
 num, err := o.QueryTable("user").Filter("name", "slene").Update(orm.Params{
@@ -484,23 +467,23 @@ fmt.Printf("Affected Num: %s, %s", num, err)
 // SET name = "astaixe" WHERE name = "slene"
 ```
 
-原子操作增加字段值
+Atom operation add field:
 
 ```go
-// 假设 user struct 里有一个 nums int 字段
+// Assume there is a nums int field in user struct
 num, err := o.QueryTable("user").Update(orm.Params{
-	"nums": orm.ColValue(orm.ColAdd, 100),
+	"nums": orm.ColValue(orm.Col_Add, 100),
 })
 // SET nums = nums + 100
 ```
 
-`orm.ColValue` 支持以下操作
+orm.ColValue supports:
 
 ```go
-ColAdd      // 加
-ColMinus    // 减
-ColMultiply // 乘
-ColExcept   // 除
+Col_Add      // plus
+Col_Minus    // minus 
+Col_Multiply // multiply 
+Col_Except   // divide
 ```
 
 ### Delete
@@ -509,15 +492,13 @@ ColExcept   // 除
 Delete() (int64, error)
 ```
 
-删除数据，返回被删除的数据行数。
+Execute batch deletion based on the current query.
 
 ### All
 
-```go
-All(container interface{}, cols ...string) (int64, error)
-```
+Return the related ResultSet
 
-返回对应的结果集对象。参数支持 `*[]Type` 和 `*[]*Type` 两种形式的切片
+Param of `All` supports *[]Type and *[]*Type
 
 ```go
 var users []*User
@@ -525,9 +506,9 @@ num, err := o.QueryTable("user").Filter("name", "slene").All(&users)
 fmt.Printf("Returned Rows Num: %s, %s", num, err)
 ```
 
-`All / Values / ValuesList / ValuesFlat` 受到 [Limit](#limit) 的限制，默认最大行数为 1000
+All / Values / ValuesList / ValuesFlat will be limited by [Limit](#limit). 1000 lines by default.
 
-可以指定返回的字段：
+The returned fields can be specified:
 
 ```go
 type Post struct {
@@ -537,43 +518,44 @@ type Post struct {
 	Status  int
 }
 
-// 只返回 Id 和 Title
+// Only return Id and Title
 var posts []Post
 o.QueryTable("post").Filter("Status", 1).All(&posts, "Id", "Title")
 ```
 
-对象的其他字段值将会是对应类型的默认值。
+The other fields of the object are set to the default value of the field's type.
 
 ### One
 
-```go
-One(container interface{}, cols ...string) error
-```
-
-尝试返回单条记录：
+Try to return one record
 
 ```go
 var user User
 err := o.QueryTable("user").Filter("name", "slene").One(&user)
 if err == orm.ErrMultiRows {
-	// 多条的时候报错
+	// Have multiple records
 	fmt.Printf("Returned Multi Rows Not One")
 }
 if err == orm.ErrNoRows {
-	// 没有找到记录
+	// No result 
 	fmt.Printf("Not row found")
 }
 ```
 
-### Values
+The returned fields can be specified:
 
 ```go
-Values(results *[]Params, exprs ...string) (int64, error)
+// Only return Id and Title
+var post Post
+o.QueryTable("post").Filter("Content__istartswith", "prefix string").One(&post, "Id", "Title")
 ```
 
-返回结果集的 `key => value` 值
+The other fields of the object are set to the default value of the fields' type.
+### Values
 
-key 为模型里的字段名, value 是`interface{}`类型,例如，如果你要将 value 赋值给 struct 中的某字段，需要根据结构体对应字段类型使用[断言](https://golang.org/ref/spec#Type_assertions)获取真实值。:`Name : m["Name"].(string)`
+Return key => value of result set
+
+key is Field name in Model. value type if string.
 
 ```go
 var maps []orm.Params
@@ -586,29 +568,31 @@ if err == nil {
 }
 ```
 
-**TODO**: 暂不支持级联查询 **RelatedSel** 直接返回 Values
+Return specific fields:
 
-第二个参数可以是列名，也可以是查询表达式：
+**TODO**: doesn't support recursive query. **RelatedSel** return Values directly
+
+But it can specify the value needed by expr.
 
 ```go
 var maps []orm.Params
 num, err := o.QueryTable("user").Values(&maps, "id", "name", "profile", "profile__age")
 if err == nil {
-	fmt.Printf("Result Nums: %d\n", num)
-	for _, m := range maps {
-		fmt.Println(m["Id"], m["Name"], m["Profile"], m["Profile__Age"])
-		// map 中的数据都是展开的，没有复杂的嵌套
-	}
+fmt.Printf("Result Nums: %d\n", num)
+for _, m := range maps {
+fmt.Println(m["Id"], m["Name"], m["Profile"], m["Profile__Age"])
+// There is no complicated nesting data in the map
+}
 }
 ```
 
 ### ValuesList
 
-```go
-ValuesList(results *[]ParamsList, exprs ...string) (int64, error)
-```
+The result set will be stored as a slice
 
-顾名思义，返回的结果集以切片存储，其排列与模型中定义的字段顺序一致，每个元素值是 string 类型。
+The order of the result is same as the Fields order in the Model definition.
+
+The values are saved as strings.
 
 ```go
 var lists []orm.ParamsList
@@ -621,7 +605,7 @@ if err == nil {
 }
 ```
 
-当然也可以指定查询表达式返回指定的字段：
+It can return specific fields by setting expr.
 
 ```go
 var lists []orm.ParamsList
@@ -636,11 +620,7 @@ if err == nil {
 
 ### ValuesFlat
 
-```go
-ValuesFlat(result *ParamsList, expr string) (int64, error)
-```
-
-只返回特定的字段的值，将结果集展开到单个切片里。
+Only returns a single values slice of a specific field.
 
 ```go
 var list orm.ParamsList
@@ -653,4 +633,4 @@ if err == nil {
 
 ### RowsToMap 和 RowsToStruct
 
-这两个方法都没有实现。
+Not implement.

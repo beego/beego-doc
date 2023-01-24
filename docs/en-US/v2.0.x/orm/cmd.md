@@ -3,7 +3,7 @@ title: ORM tool
 lang: zh
 ---
 
-# 命令行工具
+# ORM tool
 
 After registering [model](. /model.md) and [database](./db.md), call the `RunCommand` method to execute the ORM command。
 

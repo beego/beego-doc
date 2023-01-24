@@ -1,33 +1,33 @@
 ---
-title: 模型定义与注册
+title: Model
 lang: zh
 ---
 
-# ORM 模型
+# ORM Model
 
-Beego 的 ORM 模块要求在使用之前要先注册好模型，并且 Beego 会执行一定的校验，用于辅助检查模型和模型之间的约束。并且模型定义也会影响自动建表功能[自动建表](./cmd.md)
+Beego's ORM module requires that the model be registered before it can be used, and Beego performs certain checks to assist in checking the model and the constraints between the models。The definition of models has impact on [creating table automatically](./cmd.md)
 
-Beego 的模型定义，大部分都是依赖于 Go 标签特性，可以设置多个特性，用`;`分隔。同一个特性的不同值使用`,`来分隔。
+Beego's model definition, which mostly relies on Go tag features, can set multiple features, separated by `;`. Different values of the same feature are separated by `,`。
 
-例如：
+Example:
 
 ```go
 orm:"null;rel(fk)"
 ```
 
-## 注册模型
+## Register
 
-注册模型有三个方法：
+There are three ways to register a model:
 
 - `RegisterModel(models ...interface{})`
-- `RegisterModelWithPrefix(prefix string, models ...interface{})`：该方法会为表名加上前缀，例如`RegisterModelWithPrefix("tab_", &User{})`，那么表名是`tab_user`；
-- `RegisterModelWithSuffix(suffix string, models ...interface{})`：该方法会为表名加上后缀，例如`RegisterModelWithSuffix("_tab", &User{})`，那么表名是`user_tab`
+- `RegisterModelWithPrefix(prefix string, models ...interface{})`: This method prefixes the table name with，i.e. `RegisterModelWithPrefix("tab_", &User{})` => `tab_user`；
+- `RegisterModelWithSuffix(suffix string, models ...interface{})`: This method adds a suffix to the table name, i.e.`RegisterModelWithSuffix("_tab", &User{})` => `user_tab`
 
-## 模型基本设置
+## Basic Usage
 
-### 表名
+### Table Name
 
-默认的表名规则，使用驼峰转蛇形：
+Beego ORM will use the snake case as the table name:
 
 ```
 AuthUser -> auth_user
@@ -35,9 +35,7 @@ Auth_User -> auth__user
 DB_AuthUser -> d_b__auth_user
 ```
 
-除了开头的大写字母以外，遇到大写会增加 `_`，原名称中的下划线保留。
-
-也可以自定义表名，只需要实现接口`TableNameI`:
+Or you can specify the table name by implementing interface `TableNameI`:
 
 ```go
 type User struct {
@@ -50,19 +48,19 @@ func (u *User) TableName() string {
 }
 ```
 
-同时，也可以在注册模型的时候为表名加上前缀或者后缀，参考**注册模型**一节。
+Also, you can add a prefix or suffix to the table name when registering the model. More details refer to the section **Registering the Model**。
 
-### 列
+### Column
 
-为字段设置 DB 列的名称
+Using tag to specify the column name:
 
 ```go
 Name string `orm:"column(user_name)"`
 ```
 
-### 忽略字段
+### Ignore Fields
 
-设置 `-` 即可忽略模型中的字段
+Using tag "-" to ignore some fields:
 
 ```go
 type User struct {
@@ -72,23 +70,23 @@ type User struct {
 }
 ```
 
-### 索引
+### Index
 
-默认情况下，可以在字段定义里面使用 Go 的标签功能指定索引，包括指定唯一索引。
+Similarly, you can use tag to specify indexes, including unique index.
 
-例如，为单个字段增加索引：
+For example, specify the index for the field:
 
 ```go
 Name string `orm:"index"`
 ```
 
-或者，为单个字段增加 unique 键
+Or specify the field as unique index:
 
 ```go
 Name string `orm:"unique"`
 ```
 
-实现接口`TableIndexI`，可以为单个或多个字段增加索引：
+Or implement the interface `TableIndexI`: 
 
 ```go
 type User struct {
@@ -97,14 +95,14 @@ type User struct {
 	Email string
 }
 
-// 多字段索引
+// index with multiple columns
 func (u *User) TableIndex() [][]string {
 	return [][]string{
 		[]string{"Id", "Name"},
 	}
 }
 
-// 多字段唯一键
+// unique index with columns
 func (u *User) TableUnique() [][]string {
 	return [][]string{
 		[]string{"Name", "Email"},
@@ -112,44 +110,41 @@ func (u *User) TableUnique() [][]string {
 }
 ```
 
-### 主键
+### Primary Key
 
-可以用`auto`显示指定一个字段为自增主键，该字段必须是 int, int32, int64, uint, uint32, 或者 uint64。
+You can specify a field as a auto-incrementing primary key using the `auto` tag，and the type of the specific fields must be int, int32, int64, uint, uint32, or uint64。
 
 ```go
 MyId int32 `orm:"auto"`
 ```
 
-如果一个模型没有定义主键，那么 符合上述类型且名称为 `Id` 的模型字段将被视为自增主键。
+If a model does not have a primary key defined, then a field of the above type with the name `Id` will be treated as a auto-incrementing primary key。
 
-如果不想使用自增主键，那么可以使用`pk`设置为主键。
+If you don't want to use a auto-incrementing primary key, then you can use `pk` tag to specify the primary key。
 
 ```go
 Name string `orm:"pk"`
 ```
 
-> 注意，目前 Beego 的非自增主键和联合主键支持得不是特别好。建议普遍使用自增主键
+> Note that Beego's non-auto-incrementing primary keys and union primary keys are not particularly well supported now. It is recommended to use self-incrementing primary keys in general
 
-鉴于 go 目前的设计，即使使用了 uint64，但你也不能存储到他的最大值。依然会作为 int64 处理。
+Given go's current design, even though uint64 is used, you can't store it to its maximum value. It will still be treated as int64。 More details refer issue [6113](http://code.google.com/p/go/issues/detail?id=6113)
 
-参见 issue [6113](http://code.google.com/p/go/issues/detail?id=6113)
+### Default Value
 
-### 默认值
-
-默认值是一个扩展功能，必须要显示注册默认值的`Filter`，而后在模型定义里面加上`default`的设置。
+you could use it like:
 
 ```go
-
 import (
-"github.com/beego/beego/v2/client/orm/filter/bean"
-"github.com/beego/beego/v2/client/orm"
+    "github.com/beego/beego/v2/client/orm/filter/bean"
+    "github.com/beego/beego/v2/client/orm"
 )
 
 type DefaultValueTestEntity struct {
-Id            int
-Age           int `default:"12"`
-AgeInOldStyle int `orm:"default(13);bee()"`
-AgeIgnore     int
+    Id            int
+    Age           int `default:"12"`
+    AgeInOldStyle int `orm:"default(13);bee()"`
+    AgeIgnore     int
 }
 
 func XXX() {
@@ -163,44 +158,48 @@ func XXX() {
 }
 ```
 
-### 自动更新时间
+`NewDefaultValueFilterChainBuilder`will create an instance of `DefaultValueFilterChainBuilder`
+In beego v1.x, the default value config looks like `orm:default(xxxx)`
+But the default value in 2.x is `default:xxx`, so if you want to be compatible with v1.x, please pass true as `compatibleWithOldStyle`
+
+### auto_now / auto_now_add
 
 ```go
 Created time.Time `orm:"auto_now_add;type(datetime)"`
 Updated time.Time `orm:"auto_now;type(datetime)"`
 ```
 
-- auto_now 每次 model 保存时都会对时间自动更新
-- auto_now_add 第一次保存时才设置时间
+* auto_now: every save will update time.
+* auto_now_add: set time at the first save
 
-对于批量的 update 此设置是不生效的
+This setting won't affect massive `update`.
 
-### 引擎
+### engine
 
-仅支持 MySQL，只需要实现接口`TableEngineI`。
+Only supports MySQL database
 
-默认使用的引擎，为当前数据库的默认引擎，这个是由你的 mysql 配置参数决定的。
+The default engine is the default engine of the current database engine of your mysql settings.
 
-你可以在模型里设置 TableEngine 函数，指定使用的引擎
+Using `TableEngineI` interface:
 
 ```go
 type User struct {
-	Id    int
-	Name  string
-	Email string
+    Id    int
+    Name  string
+    Email string
 }
 
-// 设置引擎为 INNODB
+// Set engine to INNODB
 func (u *User) TableEngine() string {
-	return "INNODB"
+    return "INNODB"
 }
 ```
 
-## 模型高级设置
+## Advance Usage
 
 ### null
 
-数据库表默认为 `NOT NULL`，设置 null 代表 `ALLOW NULL`
+Fields are `NOT NULL` by default. Set null to `ALLOW NULL`.
 
 ```go
 Name string `orm:"null"`
@@ -208,41 +207,38 @@ Name string `orm:"null"`
 
 ### size
 
-string 类型字段默认为 varchar(255)
+Default value for string field is varchar(255).
 
-设置 size 以后，db type 将使用 varchar(size)
+It will use varchar(size) after setting.
 
 ```go
 Title string `orm:"size(60)"`
 ```
-
 ### digits / decimals
 
-设置 float32, float64 类型的浮点精度
+Set precision for float32 or float64.
 
 ```go
 Money float64 `orm:"digits(12);decimals(4)"`
 ```
 
-总长度 12 小数点后 4 位 eg: `99999999.9999`
+Total 12 digits, 4 digits after point. For example: `12345678.1234`
 
 ### type
 
-设置为 date 时，time.Time 字段的对应 db 类型使用 date
+If set type as date, the field's db type is date.
 
 ```go
 Created time.Time `orm:"auto_now_add;type(date)"`
 ```
 
-设置为 datetime 时，time.Time 字段的对应 db 类型使用 datetime
+If set type as datetime, the field's db type is datetime.
 
 ```go
 Created time.Time `orm:"auto_now_add;type(datetime)"`
 ```
 
-### Precision
-
-为`datetime`字段设置精度值位数，不同 DB 支持最大精度值位数也不一致。
+### Time Precision
 
 ```go
 type User struct {
@@ -254,111 +250,111 @@ type User struct {
 
 ### Comment
 
-为字段添加注释
-
 ```go
 type User struct {
 	...
-	Status int `orm:"default(1);description(这是状态字段)"`
+	Status int `orm:"default(1);description(this is status)"`
 	...
 }
 ```
 
-注意: 注释中禁止包含引号
+You should never use quoter as the value of description.
 
-## 模型字段与数据库类型的映射
+## Types Mapping
 
-在此列出 ORM 推荐的对应数据库类型，自动建表功能也会以此为标准。
+Model fields mapping with database type
 
-默认所有的字段都是 **NOT NULL**
+Here is the recommended database type mapping. It's also the standard for table generation.
 
-##z## MySQL
+All the fields are **NOT NULL** by default.
 
-| go                                          | mysql                           |
-| :------------------------------------------ | :------------------------------ |
-| int, int32 - 设置 auto 或者名称为 `Id` 时   | integer AUTO_INCREMENT          |
-| int64 - 设置 auto 或者名称为 `Id` 时        | bigint AUTO_INCREMENT           |
-| uint, uint32 - 设置 auto 或者名称为 `Id` 时 | integer unsigned AUTO_INCREMENT |
-| uint64 - 设置 auto 或者名称为 `Id` 时       | bigint unsigned AUTO_INCREMENT  |
-| bool                                        | bool                            |
-| string - 默认为 size 255                    | varchar(size)                   |
-| string - 设置 type(char) 时                 | char(size)                      |
-| string - 设置 type(text) 时                 | longtext                        |
-| time.Time - 设置 type 为 date 时            | date                            |
-| time.Time                                   | datetime                        |
-| byte                                        | tinyint unsigned                |
-| rune                                        | integer                         |
-| int                                         | integer                         |
-| int8                                        | tinyint                         |
-| int16                                       | smallint                        |
-| int32                                       | integer                         |
-| int64                                       | bigint                          |
-| uint                                        | integer unsigned                |
-| uint8                                       | tinyint unsigned                |
-| uint16                                      | smallint unsigned               |
-| uint32                                      | integer unsigned                |
-| uint64                                      | bigint unsigned                 |
-| float32                                     | double precision                |
-| float64                                     | double precision                |
-| float64 - 设置 digits, decimals 时          | numeric(digits, decimals)       |
+### MySQL
+
+| go		   |mysql
+| :---   	   | :---
+| int, int32 - set as auto or name is `Id` | integer AUTO_INCREMENT
+| int64 - set as auto or name is`Id` | bigint AUTO_INCREMENT
+| uint, uint32 - set as auto or name is `Id` | integer unsigned AUTO_INCREMENT
+| uint64 - set as auto or name is `Id` | bigint unsigned AUTO_INCREMENT
+| bool | bool
+| string - default size 255 | varchar(size)
+| string - set type(char) | char(size)
+| string - set type(text) | longtext
+| time.Time - set type as date | date
+| time.Time | datetime
+| byte | tinyint unsigned
+| rune | integer
+| int | integer
+| int8 | tinyint
+| int16 | smallint
+| int32 | integer
+| int64 | bigint
+| uint | integer unsigned
+| uint8 | tinyint unsigned
+| uint16 | smallint unsigned
+| uint32 | integer unsigned
+| uint64 | bigint unsigned
+| float32 | double precision
+| float64 | double precision
+| float64 - set digits and decimals  | numeric(digits, decimals)
 
 ### Sqlite3
 
-| go                                                                     | sqlite3               |
-| :--------------------------------------------------------------------- | :-------------------- |
-| int, int32, int64, uint, uint32, uint64 - 设置 auto 或者名称为 `Id` 时 | integer AUTOINCREMENT |
-| bool                                                                   | bool                  |
-| string - 默认为 size 255                                               | varchar(size)         |
-| string - 设置 type(char) 时                                            | character(size)       |
-| string - 设置 type(text) 时                                            | text                  |
-| time.Time - 设置 type 为 date 时                                       | date                  |
-| time.Time                                                              | datetime              |
-| byte                                                                   | tinyint unsigned      |
-| rune                                                                   | integer               |
-| int                                                                    | integer               |
-| int8                                                                   | tinyint               |
-| int16                                                                  | smallint              |
-| int32                                                                  | integer               |
-| int64                                                                  | bigint                |
-| uint                                                                   | integer unsigned      |
-| uint8                                                                  | tinyint unsigned      |
-| uint16                                                                 | smallint unsigned     |
-| uint32                                                                 | integer unsigned      |
-| uint64                                                                 | bigint unsigned       |
-| float32                                                                | real                  |
-| float64                                                                | real                  |
-| float64 - 设置 digits, decimals 时                                     | decimal               |
+| go		   | sqlite3
+| :---   	   | :---
+| int, int32, int64, uint, uint32, uint64 - set as auto or name is `Id` | integer AUTOINCREMENT
+| bool | bool
+| string - default size 255 | varchar(size)
+| string - set type(char) | character(size)
+| string - set type(text) | text
+| time.Time - set type as date | date
+| time.Time | datetime
+| byte | tinyint unsigned
+| rune | integer
+| int | integer
+| int8 | tinyint
+| int16 | smallint
+| int32 | integer
+| int64 | bigint
+| uint | integer unsigned
+| uint8 | tinyint unsigned
+| uint16 | smallint unsigned
+| uint32 | integer unsigned
+| uint64 | bigint unsigned
+| float32 | real
+| float64 | real
+| float64 - set digits and decimals | decimal
 
 ### PostgreSQL
 
-| go                                                                     | postgres                                             |
-| :--------------------------------------------------------------------- | :--------------------------------------------------- |
-| int, int32, int64, uint, uint32, uint64 - 设置 auto 或者名称为 `Id` 时 | serial                                               |
-| bool                                                                   | bool                                                 |
-| string - 若没有指定 size 默认为 text                                   | varchar(size)                                        |
-| string - 设置 type(char) 时                                            | char(size)                                           |
-| string - 设置 type(text) 时                                            | text                                                 |
-| string - 设置 type(json) 时                                            | json                                                 |
-| string - 设置 type(jsonb) 时                                           | jsonb                                                |
-| time.Time - 设置 type 为 date 时                                       | date                                                 |
-| time.Time                                                              | timestamp with time zone                             |
-| byte                                                                   | smallint CHECK("column" >= 0 AND "column" <= 255)    |
-| rune                                                                   | integer                                              |
-| int                                                                    | integer                                              |
-| int8                                                                   | smallint CHECK("column" >= -127 AND "column" <= 128) |
-| int16                                                                  | smallint                                             |
-| int32                                                                  | integer                                              |
-| int64                                                                  | bigint                                               |
-| uint                                                                   | bigint CHECK("column" >= 0)                          |
-| uint8                                                                  | smallint CHECK("column" >= 0 AND "column" <= 255)    |
-| uint16                                                                 | integer CHECK("column" >= 0)                         |
-| uint32                                                                 | bigint CHECK("column" >= 0)                          |
-| uint64                                                                 | bigint CHECK("column" >= 0)                          |
-| float32                                                                | double precision                                     |
-| float64                                                                | double precision                                     |
-| float64 - 设置 digits, decimals 时                                     | numeric(digits, decimals)                            |
+| go		   | postgres
+| :---   	   | :---
+| int, int32, int64, uint, uint32, uint64 - set as auto or name is `Id` | serial
+| bool | bool
+| string - if not set size default text | varchar(size)
+| string - set type(char) | char(size)
+| string - set type(text) | text
+| string - set type(json) | json
+| string - set type(jsonb) | jsonb
+| time.Time - set type as date | date
+| time.Time | timestamp with time zone
+| byte | smallint CHECK("column" >= 0 AND "column" <= 255)
+| rune | integer
+| int | integer
+| int8 | smallint CHECK("column" >= -127 AND "column" <= 128)
+| int16 | smallint
+| int32 | integer
+| int64 | bigint
+| uint | bigint CHECK("column" >= 0)
+| uint8 | smallint CHECK("column" >= 0 AND "column" <= 255)
+| uint16 | integer CHECK("column" >= 0)
+| uint32 | bigint CHECK("column" >= 0)
+| uint64 | bigint CHECK("column" >= 0)
+| float32 | double precision
+| float64 | double precision
+| float64 - set digits and decimals  | numeric(digits, decimals)
 
-## 表关系设置
+## Relationships
 
 ### rel / reverse
 
@@ -372,7 +368,7 @@ type User struct {
 }
 ```
 
-对应的反向关系 **RelReverseOne**:
+The reverse relationship **RelReverseOne**:
 
 ```go
 type Profile struct {
@@ -392,7 +388,7 @@ type Post struct {
 }
 ```
 
-对应的反向关系 **RelReverseMany**:
+The reverse relationship **RelReverseMany**:
 
 ```go
 type User struct {
@@ -412,7 +408,7 @@ type Post struct {
 }
 ```
 
-对应的反向关系 **RelReverseMany**:
+The reverse relationship **RelReverseMany**:
 
 ```go
 type Tag struct {
@@ -424,27 +420,30 @@ type Tag struct {
 
 ### rel_table / rel_through
 
-此设置针对 `orm:"rel(m2m)"` 的关系字段
+This setting is for `orm:"rel(m2m)"` field:
 
-- `rel_table`: 设置自动生成的 m2m 关系表的名称
-- `rel_through`: 如果要在 m2m 关系中使用自定义的 m2m 关系表，通过这个设置其名称，格式为 `pkg.path.ModelName`，例如: `app.models.PostTagRel`，`PostTagRel` 表需要有到 `Post` 和 `Tag` 的关系
+	rel_table       Set the auto-generated m2m connecting table name
+	rel_through     If you want to use custom m2m connecting table, set name by using this setting.
+                  Format: `project_path/current_package.ModelName`
+                  For example: `app/models.PostTagRel` PostTagRel table needs to have a relationship to Post table and Tag table.
 
-当设置 `rel_table` 时会忽略 `rel_through`
 
-设置方法：
+If rel_table is set, rel_through is ignored.
+
+You can set these as follows:
 
 `orm:"rel(m2m);rel_table(the_table_name)"`
 
-`orm:"rel(m2m);rel_through(pkg.path.ModelName)"`
+`orm:"rel(m2m);rel_through(project_path/current_package.ModelName)"`
 
 ### on_delete
 
-设置对应的 rel 关系删除时，如何处理关系字段。
+Set how to deal with field if related relationship is deleted:
 
-- `cascade`: 级联删除(默认值)
-- `set_null`: 设置为 NULL，需要设置 null = true
-- `set_default`: 设置为默认值，需要设置 default 值
-- `do_nothing`: 什么也不做，忽略
+	cascade        cascade delete (default)
+	set_null       set to NULL. Need to set null = true
+	set_default    set to default value. Need to set default value.
+	do_nothing     do nothing. ignore.
 
 ```go
 type User struct {
@@ -458,10 +457,10 @@ type Profile struct {
 	...
 }
 
-// 删除 Profile 时将设置 User.Profile 的数据库字段为 NULL
+// Set User.Profile to NULL while deleting Profile
 ```
 
-#### 例子
+#### Exmaple 
 
 ```go
 type User struct {
@@ -476,15 +475,15 @@ type Post struct {
 }
 ```
 
-假设 `Post -> User` 是 `ManyToOne` 的关系，也就是外键。
+Assume Post -> User is ManyToOne relationship by foreign key.
 
-```go
+```
 o.Filter("Id", 1).Delete()
 ```
 
-这个时候即会删除 `Id` 为 1 的 `User` 也会删除其发布的 `Post`
+This will delete User with Id 1 and all his Posts.
 
-不想删除的话，需要设置 `set_null`
+If you don't want to delete the Posts, you need to set `set_null`
 
 ```go
 type Post struct {
@@ -494,9 +493,9 @@ type Post struct {
 }
 ```
 
-那这个时候，删除 `User` 只会把对应的 `Post.user_id` 设置为 `NULL`
+In this case, only set related Post.user_id to NULL while deleting.
 
-当然有时候为了高性能的需要，多存点数据无所谓啊，造成批量删除才是问题。
+Usually for performance purposes, it doesn't matter to have redundant data. The massive deletion is the real problem
 
 ```go
 type Post struct {
@@ -506,4 +505,4 @@ type Post struct {
 }
 ```
 
-那么只要删除的时候，不操作 Post 就可以了。
+So just don't change Post (ignore it) while deleting User.

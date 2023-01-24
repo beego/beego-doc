@@ -3,11 +3,11 @@ title: 事务
 lang: zh
 ---
 
-# 事务
+# Transaction
 
-事务依赖于 `Orm` 实例。`Orm`的用法可以参考[Orm 增删改查](./orm.md)
+More API refer [Orm 增删改查](./orm.md)
 
-ORM 操作事务，支持两种范式。一种通过闭包的方式，由 Beego 本身来管理事务的生命周期。
+There are two ways to handle transaction in Beego. One is closure:
 
 ```go
 	// Beego will manage the transaction's lifecycle
@@ -26,16 +26,13 @@ ORM 操作事务，支持两种范式。一种通过闭包的方式，由 Beego 
 		return e
 	})
 ```
+In this way, the first parameter is `task`, all DB operation should be inside the task.
 
-在这种方式里面，第一个参数是`task`，即该事务所有完成的动作。注意的是，如果它返回了 error，那么 Beego 会将整个事务回滚。
+If the task return error, Beego rollback the transaction.
 
-否则提交事务。
+We recommend you to use this way.
 
-另外一个要注意的是，如果在`task`执行过程中，发生了`panic`，那么 Beego 会回滚事务。
-
-我们推荐使用这种方式。
-
-另外一种方式，则是传统的由开发自己手动管理事务的生命周期
+Another way is that users handle transaction manually:
 
 ```go
 	o := orm.NewOrm()
@@ -68,7 +65,7 @@ ORM 操作事务，支持两种范式。一种通过闭包的方式，由 Beego 
 	}
 ```
 
-无论使用哪种方式，都应该注意到，只有通过`TxOrm`执行的 SQL 才会被认为是在一个事务里面。
+Either way, it should be noted that only SQL executed via `TxOrm` will be considered to be within a transaction.
 
 ```go
 o := orm.NewOrm()
@@ -81,18 +78,17 @@ o.Insert(xxx)
 to.Insert(xxx)
 ```
 
-当然，从`TxOrm`里面衍生出来的`QuerySeter`和`QueryM2Mer`,`RawSeter`也是被认为在事务里面。
+Of course, `QuerySeter` and `QueryM2Mer`, `RawSeter` derived from `TxOrm` are also considered to be inside the transaction.
 
-和事务相关的方法有：
+The methods related to transactions are:
 
 ```go
-	// 需要自己管理事务生命周期
 	Begin() (TxOrmer, error)
 	BeginWithCtx(ctx context.Context) (TxOrmer, error)
 	BeginWithOpts(opts *sql.TxOptions) (TxOrmer, error)
 	BeginWithCtxAndOpts(ctx context.Context, opts *sql.TxOptions) (TxOrmer, error)
 
-	// Beego 利用闭包管理生命周期
+	// Beego closure
 	DoTx(task func(ctx context.Context, txOrm TxOrmer) error) error
 	DoTxWithCtx(ctx context.Context, task func(ctx context.Context, txOrm TxOrmer) error) error
 	DoTxWithOpts(opts *sql.TxOptions, task func(ctx context.Context, txOrm TxOrmer) error) error

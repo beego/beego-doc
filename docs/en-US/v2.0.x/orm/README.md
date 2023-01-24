@@ -5,16 +5,16 @@ lang: zh
 
 # Orm
 
-ORM 的例子在[这里](https://github.com/beego/beego-example/tree/master/orm)
+[ORM examples](https://github.com/beego/beego-example/tree/master/orm)
 
-Beego 的 ORM 被设计成为两种：
+Beego's ORM is designed as two:
 
-- 普通的 `Orm` 实例：这种实例是无状态的，因此你应该尽可能保持一个数据库只有一个实例。当然，即便每次你都创建新的实例，问题也不大，只是没有必要而已；
-- `TxOrm`：这是启动事务之后得到的`Orm`对象，它只能被用于事务内，提交或者回滚之后就要丢弃，不能复用。每一个事务都需要创建一个新的实例；
+- Normal `Orm` instances: These instances are stateless, so you should keep a database with only one instance if possible. Of course, even if you create a new instance every time, it's not a big deal, it's just not necessary;
+- `TxOrm`: This is the `Orm` object obtained after starting a transaction, it can only be used within the transaction, and will be discarded after commit or rollback, and cannot be reused. A new instance needs to be created for each transaction.
 
-## 快速开始
+## Quickly Start
 
-这是一个最简单的 ORM 例子：
+Exmaple:
 
 ```go
 import (
@@ -54,27 +54,27 @@ func main() {
 
 ```
 
-总体来说，可以分成以下几步：
+In general, it can be divided into the following steps:
 
-- 定义模型，并且注册，参考[模型定义](./model.md)
-- 注册 DB，参考[数据库注册](./db.md)
-- 创建 `Orm` 实例
-- 执行查询，Beego 提供了多样化的查询 API，可以参考：
-  - [Orm 增删改查](orm.md)
-  - [QueryBuilder 构造复杂查询](./query_builder.md)
-  - [QuerySeter 构造复杂查询](./query_seter.md)
-  - [RawSeter 原生查询](./raw_seter.md)
-  - [QueryM2Mer 关联表查询](./query_m2m.md)
+- Define and register models, refer [model](./model.md)
+- Register databases, refer [database](./db.md)
+- Create `Orm` instances
+- Execute queries, Beego provides query API, refer:
+  - [Orm CRUD](orm.md)
+  - [QueryBuilder](./query_builder.md)
+  - [QuerySeter](./query_seter.md)
+  - [RawSeter](./raw_seter.md)
+  - [QueryM2Mer](./query_m2m.md)
 
-需要注意的是，一定要根据自己使用的数据库来匿名引入驱动，例如引入 `"github.com/go-sql-driver/mysql"`
+It is important to note that you must introduce the driver anonymously according to the database you are using. i.e. `"github.com/go-sql-driver/mysql"`
 
-## 调试查询日志
+## Debug log
 
-在开发环境下，可以设置输出 DEBUG 的 SQL 语句：
+In the development environment, you can output the SQL:
 
 ```go
 func main() {
 	orm.Debug = true
 ```
 
-开启后将会输出所有查询语句，包括执行、准备、事务等。注意，在生产环境不应该开启这个选项，因为输出日志会严重影响性能。
+When turned on, all query statements will be output, including execution, preparation, transactions, etc. Note that this option should not be turned on in production environments, as outputting logs can seriously impact performance.
