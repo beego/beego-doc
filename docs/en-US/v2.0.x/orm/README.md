@@ -1,6 +1,6 @@
 ---
 title: 快速开始
-lang: zh
+lang: en-US
 ---
 
 # Orm

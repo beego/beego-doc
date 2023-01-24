@@ -1,6 +1,6 @@
 ---
 title: 原生查询
-lang: zh
+lang: en-US
 ---
 
 # 原生查询

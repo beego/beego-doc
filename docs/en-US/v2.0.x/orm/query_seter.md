@@ -1,6 +1,6 @@
 ---
 title: QuerySeter 构造复杂查询
-lang: zh
+lang: en-US
 ---
 
 # QuerySeter 复杂查询

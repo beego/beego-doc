@@ -231,7 +231,7 @@ web.BConfig.AppName="My-App"
   CommentRouterPath 注解路由所在位置。默认值是`controllers`。 Beego 会在启动的时候扫描下面的文件生成了路由。
   `web.BConfig.WebConfig.CommentRouterPath = "controllers"`
 
-### 监听配置
+### HTTP server 配置
 
 - Graceful
 

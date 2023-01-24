@@ -63,14 +63,14 @@ module.exports = {
             text: "Version",
             ariaLabel: "Version",
             items: [
-              // {text: 'developing', link: '/developing/'},
+              {text: 'developing', link: '/developing/'},
               { text: "v2.0.x", link: "/en-US/v2.0.x/" }
             ],
           },
         ],
         sidebar: {
-          "/en-US/developing/": buildVersionSideBar("developing"),
-          "/en-US/v2.0.2/": buildVersionSideBar("v2.0.x"),
+          "/en-US/developing/": buildVersionSideBarEn("developing"),
+          "/en-US/v2.0.2/": buildVersionSideBarEn("v2.0.x"),
         },
       },
       "/zh/": {
@@ -92,6 +92,86 @@ module.exports = {
     },
   },
 };
+
+function buildVersionSideBarEn() {
+  return [
+    "environment/",
+    "bee/",
+    "config/",
+    {
+      title: "Web Module",
+      collapsable: true,
+      sidebarDepth: 0,
+      children: [
+        {
+          title: "Routes",
+          collapsable: true,
+          sidebarDepth: 0,
+          children: [
+            "web/router/ctrl_style/",
+            "web/router/functional_style/",
+            "web/router/router_tree",
+            "web/router/namespace",
+            "web/router/best_practice",
+          ],
+        },
+        "web/input/",
+        "web/file/",
+        "web/session/",
+        "web/cookie/",
+        "web/error/",
+        "web/admin/",
+        "web/xsrf/",
+        {
+          title: "View",
+          collapsable: true,
+          sidebarDepth: 0,
+          children: [
+            "web/view/",
+            "web/view/func.md",
+            "web/view/page.md",
+            "web/view/static_file.md",
+          ],
+        },
+        "web/grace",
+      ],
+    },
+    {
+      title: "ORM",
+      collapsable: true,
+      sidebarDepth: 0,
+      children: [
+        "orm/",
+        "orm/db.md",
+        "orm/model.md",
+        "orm/orm.md",
+        "orm/transaction.md",
+        "orm/query_builder.md",
+        "orm/query_seter.md",
+        "orm/raw_seter.md",
+        "orm/query_m2m.md",
+      ],
+    },
+    "logs/",
+    "validation/",
+    "task/",
+    "i18n/",
+    {
+      title: "Q & A",
+      collapsable: true,
+      sidebarDepth: 1,
+      children: [
+        ["qa/", "QA"],
+        "qa/failed_to_start_web_server",
+        // 'writing-a-theme',
+        // 'option-api',
+        // 'default-theme-config',
+        // 'blog-theme',
+        // 'inheritance'
+      ],
+    },
+  ];
+}
 
 function buildVersionSideBar() {
   return [
@@ -128,7 +208,6 @@ function buildVersionSideBar() {
           sidebarDepth: 0,
           children: [
             "web/view/",
-            "web/view/syntax.md",
             "web/view/func.md",
             "web/view/page.md",
             "web/view/static_file.md",

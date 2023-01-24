@@ -1,6 +1,6 @@
 ---
 title: 关联表查询
-lang: zh
+lang: en-US
 ---
 
 # 关联表查询
