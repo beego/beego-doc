@@ -171,8 +171,9 @@ Following code is from beego.vip source file `beeweb.go`:
 	beego.AddFuncMap("i18n", i18n.Tr)
 
 After that, do the following with `Lang` to handle language:
-
-	{{i18n .Lang "hi%d" 12}}
+```
+{{i18n .Lang "hi%d" 12}}
+```
 
 Code above will produce:
 
@@ -196,11 +197,15 @@ about = About Us
 
 Get `about` in home page:
 
-	{{i18n .Lang "about"}}
+```
+{{i18n .Lang "about"}}
+```
 
 Get `about` in about page:
 
-	{{i18n .Lang "about.about"}}
+```
+{{i18n .Lang "about.about"}}
+```
 
 ### Ambiguity
 
@@ -208,7 +213,9 @@ Because dot `.` denotes a section in both [INI parser](https://github.com/Unknwo
 
 For example, the key name is `about.`, then we can use:
 
-	{{i18n .Lang ".about."}}
+```
+{{i18n .Lang ".about."}}
+```
 
 to get the desired result.
 

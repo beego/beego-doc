@@ -39,7 +39,7 @@ The commands are:
 	migrate     run database migrations
 ```
 
-### Command `new`
+### Command new
 
 The `new` command can create a new web project. You can create a new Beego project by typing `bee new <project name>` under `$GOPATH/src`. This will generate all the default project folders and files:
 
@@ -84,7 +84,7 @@ myproject
 8 directories, 4 files
 ```
 
-### Command `api`
+### Command api
 
 The `new` command is used for crafting new web applications. The `api` command is used to create new API applications.
 Here is the result of running `bee api project_name`:
@@ -131,7 +131,7 @@ You can also create a model and controller based on the database schema by provi
 
 `bee api [appname] [-tables=""] [-driver=mysql] [-conn=root:@tcp(127.0.0.1:3306)/test]`
 
-### Command `run`
+### Command run
 
 The `bee run` command will supervise the file system of any Beego project using [inotify](http://en.wikipedia.org/wiki/Inotify).  The results will autocompile and display immediately after any modification in the Beego project folders.
 
@@ -148,7 +148,7 @@ The `bee run` command will supervise the file system of any Beego project using 
 ```
 Visting `http://localhost:8080/` with a web browser will display your app running:
 
-![](../images/beerun.png)
+![](./img/beerun.png)
 
 After modifying the `default.go` file in the `controllers` folder, the following output will be displayed in the command line:
 
@@ -165,7 +165,7 @@ After modifying the `default.go` file in the `controllers` folder, the following
 Refresh the browser to show the results of the new modifications.
 
 
-### Command `pack`
+### Command pack
 
 The `pack` command is used to compress the project into a single file. The compressed file can be deployed by uploading and extracting the zip file to the server.
 
@@ -192,11 +192,11 @@ drwxr-xr-x  3 astaxie  staff      102 11 25 22:31 models
 drwxr-xr-x  3 astaxie  staff      102 11 25 22:31 tests
 ```
 
-### Command `bale`
+### Command bale
 
 This command is currently only available to the developer team. It is used to compress all static files in to a single binary file so that they do not need to carry static files including js, css, images and views when publishing the project. Those files will be self-extracting with non-overwrite when the program starts.
 
-### Command `version`
+### Command version
 
 This command displays the version of `bee`, `beego`, and `go`.
 
@@ -211,7 +211,7 @@ This command try to output beego's version. It works well for GOPATH mode. Bee f
 
 So when we use GOMOD mode, and we don't download beego's source code, Bee could not find the version's information.
 
-### Command `generate`
+### Command generate
 This command will generate the routers by analyzing the functions in controllers.
 
 
@@ -262,7 +262,7 @@ bee generate appcode [-tables=""] [-driver=mysql] [-conn="root:@tcp(127.0.0.1:33
 ```
 
 
-### Command `migrate`
+### Command migrate
 This command will run database migration scripts.
 
 ```

@@ -9,19 +9,26 @@ Beego uses Go's built-in package `html/template` as the template parser.  Upon s
 
 ## Template Directory
 
-The default template directory for Beego is `views`. Template files can be put into this directory and Beego will parse and cache them automatically. However if the development mode is enabled, Beego parses templates every time without caching. Beego can only have one template directory which can be customized:
+The default template directory for Beego is `views`. Template files can be put into this directory and Beego will parse and cache them automatically. However, if the development mode is enabled, Beego parses templates every time without caching. Beego can only have one template directory which can be customized:
 
-	web.BConfig.WebConfig.ViewsPath = "myviewpath"
+```
+web.BConfig.WebConfig.ViewsPath = "myviewpath"
+```
 
 You can add alternative template directories by calling
 
-	web.AddViewPath("moreViews")
+```
+web.AddViewPath("moreViews")
+```
 
 This will parse and cache template files in this directory and allow you to use them by setting ViewPath on a Controller:
 
-	this.ViewPath = "moreViews"
+```
+this.ViewPath = "moreViews"
+```
 
 Setting a ViewPath to a directory which was not previously registered with AddViewPath() will fail with "Unknown view path"
+
 
 ## Auto Rendering
 
@@ -29,78 +36,105 @@ You don't need to render and output templates manually. Beego will call Render a
 
 In configuration file:
 
-	autorender = false
+```
+autorender = false
+```
 
 In main.go:
 
-	web.BConfig.WebConfig.AutoRender = false
+```
+web.BConfig.WebConfig.AutoRender = false
+```
 
 ## Template Tags
 
-Go uses `{{` and `}}` as the default template tags. In the case that these tags conflict with other template tags as in AngularJS, we can use other tags. To do so,
+Go uses {{ and }} as the default template tags. In the case that these tags conflict with other template tags as in AngularJS, we can use other tags. To do so,
 In configuration file:
 
+```
 	templateleft = <<<
 	templateright = >>>
+```
 
 
 Or, add these to the main.go:
 
+```
 	web.BConfig.WebConfig.TemplateLeft = "<<<"
 	web.BConfig.WebConfig.TemplateRight = ">>>"
+```
 
 ## Template Data
 
-Template gets its data from `this.Data` in Controller. So for example if you need `{{.Content}}` in the template, you need to assign it in the Controller first:
+Template gets its data from `this.Data` in Controller. So for example if you write
+```
+{{.Content}}
+```
+in the template, you need to assign it in the Controller first:
 
-	this.Data["Content"] = "value"
+```
+this.Data["Content"] = "value"
+```
 
 Different rendering types:
 
-- struct
+### struct
 
-  Struct variable:
+Struct variable:
 
+```
   	type A struct{
   		Name string
   		Age  int
   	}
+```
 
-  Assign value in the Controller:
+Assign value in the Controller:
 
-  	this.Data["a"]=&A{Name:"astaxie",Age:25}
+```
+this.Data["a"]=&A{Name:"astaxie",Age:25}
+```
 
-  Render it in the template:
+Render it in the template:
 
+```
   	the username is {{.a.Name}}
   	the age is {{.a.Age}}
+```
+### map
 
-- map
+Assign value in the Controller:
 
-  Assign value in the Controller:
-
+```
   	mp["name"]="astaxie"
   	mp["nickname"] = "haha"
   	this.Data["m"]=mp
+```
 
-  Render it in the template:
+Render it in the template:
 
+```
   	the username is {{.m.name}}
   	the username is {{.m.nickname}}
+```
 
-- slice
+### slice
 
-  Assign value in the Controller:
+Assign value in the Controller:
 
+```
   	ss :=[]string{"a","b","c"}
   	this.Data["s"]=ss
+```
 
-  Render it in the template:
+Render it in the template:
 
+```
   	{{range $key, $val := .s}}
   	{{$key}}
   	{{$val}}
       {{end}}
+```
 
 ## Template Name
 
@@ -139,15 +173,19 @@ this.TplName = "admin/add.tpl"
 
 In `layout.html` you must set a variable like this:
 
-	{{.LayoutContent}}
+```
+{{.LayoutContent}}
+```
 
 Beego will parse the file named `TplName` and assign it to `LayoutContent` then render `layout.html`.
 
 Beego will cache all the template files. You can also implement a layout this way:
 
+```
 	{{template "header.html"}}
 	Logic code
 	{{template "footer.html"}}
+```
 
 ## LayoutSection
 
@@ -205,18 +243,19 @@ Here is the logic in the Controller:
 
 ```go
 type BlogsController struct {
-    web.Controller
+web.Controller
 }
 
 func (this *BlogsController) Get() {
-    this.Layout = "layout_blog.tpl"
-    this.TplName = "blogs/index.tpl"
-    this.LayoutSections = make(map[string]string)
-    this.LayoutSections["HtmlHead"] = "blogs/html_head.tpl"
-    this.LayoutSections["Scripts"] = "blogs/scripts.tpl"
-    this.LayoutSections["Sidebar"] = ""
+this.Layout = "layout_blog.tpl"
+this.TplName = "blogs/index.tpl"
+this.LayoutSections = make(map[string]string)
+this.LayoutSections["HtmlHead"] = "blogs/html_head.tpl"
+this.LayoutSections["Scripts"] = "blogs/scripts.tpl"
+this.LayoutSections["Sidebar"] = ""
 }
 ```
+
 ## Another approach
 
 We can also just specify the template the controller is going to use and let the template system handle the layout:
@@ -233,6 +272,7 @@ this.Data["Title"] = "Add"
 
 template add.tpl:
 
+```
 	{{ template "layout_blog.tpl" . }}
 	{{ define "css" }}
     		<link rel="stylesheet" href="/static/css/current.css">
@@ -247,6 +287,7 @@ template add.tpl:
 	{{ define "js" }}
 		<script src="/static/js/current.js"></script>
 	{{ end}}
+```
 
 
 layout_blog.tpl:
@@ -283,32 +324,31 @@ Define struct:
 
 ```go
 type User struct {
-	Id    int         `form:"-"`
-	Name  interface{} `form:"username"`
-	Age   int         `form:"age,text,age:"`
-	Sex   string
-	Intro string `form:",textarea"`
+Id    int         `form:"-"`
+Name  interface{} `form:"username"`
+Age   int         `form:"age,text,age:"`
+Sex   string
+Intro string `form:",textarea"`
 }
 ```
 
-* StructTag definition uses `form` as tag. It uses the same tags as [Parse Form](../controller/params.md#parse-to-struct). There are three optional params separated by ',':
+- StructTag definition uses `form` as tag. There are three optional params separated by ',':
+    - The first param is `name` attribute of the form field. If empty, it will use `struct field name` as the value.
+    - The second param is the form field type. If empty, it is assumed as `text`.
+    - The third param is the tag of form field. If empty, it will use `struct field name` as the tag name.
 
-  * The first param is `name` attribute of the form field. If empty, it will use `struct field name` as the value.
-  * The second param is the form field type. If empty, it is assumed as `text`.
-  * The third param is the tag of form field. If empty, it will use `struct field name` as the tag name.
+- If the `form` tag only has one value, it is the `name` attribute of the form field. Except last value can be ignore all the other place must be separated by ','. E.g.: `form:",,username:"`
 
-* If the `form` tag only has one value, it is the `name` attribute of the form field. Except last value can be ignore all the other place must be separated by ','. E.g.: `form:",,username:"`
-
-* To ignore a field there are two ways:
-  * The first way is to use lowercase for the field name in the struct.
-  * The second way is to set `-` as the value of `form` tag.
+- To ignore a field there are two ways:
+    - The first way is to use lowercase for the field name in the struct.
+    - The second way is to set `-` as the value of `form` tag.
 
 controller：
 
 ```go
 func (this *AddController) Get() {
-    this.Data["Form"] = &User{}
-    this.TplName = "index.tpl"
+this.Data["Form"] = &User{}
+this.TplName = "index.tpl"
 }
 ```
 
@@ -316,9 +356,11 @@ The param of Form must be a pointer to a struct.
 
 template:
 
+```
 	<form action="" method="post">
 	{{.Form | renderform}}
 	</form>
+```
 
 The code above will generate the form below:
 
