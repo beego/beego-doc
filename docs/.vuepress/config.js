@@ -18,7 +18,7 @@ module.exports = {
     "/": {
       lang: "en-US",
       title: "Beego",
-      description: "The most easy use framework",
+      description: "The easiest to use framework",
     },
     "/zh/": {
       lang: "zh-CN",
