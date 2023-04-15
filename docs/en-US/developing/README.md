@@ -1,9 +1,9 @@
 ---
-title: Quickly Start
+title: Quick Start
 lang: en-US
 ---
 
-# Quickly Start
+# Quick Start
 
 First make sure you have GO installed, version 1.16 or higher, and that you have set the GOPATH environment variable and added GOPATH/bin to the environment variable.
 
@@ -17,7 +17,7 @@ Or you can refer:
 
 [Mac installation](environment/install_go_mac.md)
 
-**Please note that after `Beego` V2 we require the `go mod` feature, make sure that the `go mod` feature is turned on, i.e. `GO111MODULE=on`**. More details refer to [Go module](environment/go_mod.md)
+**Please note that after `Beego` V2 we require the `go mod` feature. Make sure that the `go mod` feature is turned on, i.e. `GO111MODULE=on`**. For more details, please refer to [Go module](environment/go_mod.md).
 
 Or you can specify the GOPROXY:
 
@@ -25,9 +25,9 @@ Or you can specify the GOPROXY:
 GOPROXY=https://goproxy.cn
 ```
 
-Next, let's try to start a `hello world` example. In this example, we will use the `Bee` tool to create the `hello world` project.
+Next, let's try to start a `hello world` example. In this example, we will use the `bee` tool to create the `hello world` project.
 
-More details refer to [Bee](./bee/README.md)
+For more details, please refer to [bee](./bee/README.md)
 
 ## Steps
 
@@ -55,7 +55,7 @@ Using `curl`：
 bash <(curl -s https://raw.githubusercontent.com/beego/beego-doc/main/scripts/quickstart.bat)
 ```
 
-Or `wget`
+Or `wget`:
 
 ```shell
 bash <(wget -qO- https://raw.githubusercontent.com/beego/beego-doc/main/scripts/quickstart.bat)
@@ -63,9 +63,9 @@ bash <(wget -qO- https://raw.githubusercontent.com/beego/beego-doc/main/scripts/
 
 ## Manual Installation
 
-In this section, we will use the `go get` command, so if you are not familiar with it, we suggest that you read [Go get](environment/go_get_command.md)
+In this section, we will use the `go get` command, so if you are not familiar with it, we suggest that you read more about [go get](environment/go_get_command.md).
 
-Always remember, if you experience network problems, or timeout issues, make sure you set up the `GOPROXY` proxy.
+Always remember, if you experience network problems or timeout issues, make sure you set up the `GOPROXY` proxy.
 
 ### Install Bee
 
@@ -75,13 +75,19 @@ Run:
 go get -u github.com/beego/bee/v2@latest
 ```
 
-And then
+For Go 1.18 and newer Go versions run:
+
+```shell
+go install github.com/beego/bee/v2@latest
+```
+
+And then:
 
 ```shell
 bee version
 ```
 
-you can see:
+Now you can see:
 
 ```shell
 | ___ \
@@ -117,7 +123,7 @@ And then:
 ```shell
 bee run
 ```
-you can see:
+Now you can see:
 
 ```shell
 2021/03/31 23:29:19 SUCCESS  ▶ 0004 Built Successfully!

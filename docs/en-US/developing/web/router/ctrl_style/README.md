@@ -38,7 +38,7 @@ func main() {
 
 Accessing URL `http://127.0.0.1:8080/user/helloworld`：
 
-![hello world.png](img/hello_world.png)
+![hello world.png](./img/hello_world.png)
 
 Note that the methods inside the controller that handle `http` requests must be public methods - i.e. **initially capitalized and have no parameters and no return value**. If your method does not meet this requirement, in most cases, a `panic` will occur, e.g. if your method has parameters:
 
@@ -58,7 +58,7 @@ func (u UserController) HelloWorldNoPtr() {
 }
 ```
 
-The general convention is to use a pointer receiver, but this is not mandatory. For a discussion of receivers, see[choose receiver](../../../qa/choose_func_recever_for_web.md)
+The general convention is to use a pointer receiver, but this is not mandatory. For a discussion of receivers, see [choose receiver](../../../qa/choose_func_recever_for_web.md).
 
 ### Controller Name
 
@@ -89,7 +89,7 @@ Where `UserController` it's name is `User` and the method name is `HelloWorld`. 
 
 ## AutoPrefix
 
-`AutoRouter` is internally based on the implementation of `AutoPrefix`, so to speak, the name of the `Controller`, which is the registered prefix (prefix).
+`AutoRouter` is internally based on the implementation of `AutoPrefix`, so to speak, the name of the `Controller`, which is the registered prefix.
 
 Example:
 
@@ -115,7 +115,7 @@ func main() {
 }
 ```
 
-Accessing`http://localhost:8080/api/user/helloworld` and then see "Hello, world"。
+After accessing`http://localhost:8080/api/user/helloworld` we see "Hello, world"。
 
 Similar to `AutoRoute`:
 
@@ -123,13 +123,13 @@ Similar to `AutoRoute`:
 
 - If `RouterCaseSensitive` is `false`, then one route will be registered, `api/user/helloworld/*`.
 
-Here we can summarize the rules of a general nature: **When we use `AutoPrefix`, the registered route matches the pattern `prefix/ctrlName/methodName`. **
+Here we can summarize the rules of a general nature: **When we use `AutoPrefix`, the registered route matches the pattern `prefix/ctrlName/methodName`.**
 
 ## Manual 
 
-If we don't want to use `AutoRoute` or `AutoPrefix` to register routes, because both of them depend on the name of the `Controller` and also on the name of the method. We may expect more flexibility.
+Maybe we don't want to use `AutoRoute` or `AutoPrefix` to register routes, because both of them depend on the name of the `Controller` and also on the name of the method. We may expect more flexibility.
 
-In this scenario, we might consider say, using manual registration to register routes one by one.
+In this scenario, we might consider using manual registration to register routes one by one.
 
 In v2.0.2 we introduced a completely new way of registration:
 
@@ -322,8 +322,10 @@ func main() {
 
 ## Reference
 
-[check routes](../router_tree.md)
+[Print routes](../router_tree.md)
 
-[choose receiver](../../../qa/choose_func_recever_for_web.md)
+[Choose receiver](../../../qa/choose_func_recever_for_web.md)
+
 [Controller API](controller.md)
-[route rules](../router_rule.md)
+
+[Route rules](../router_rule.md)

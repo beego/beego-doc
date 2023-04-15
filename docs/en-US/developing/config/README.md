@@ -8,7 +8,7 @@ Configure module is the core module which provides an abstraction layer for diff
 
 You can find the [examples here](https://github.com/beego/beego-example/tree/master/config)
 
-Currently, Beego support all major configure formats, including **INI(by default)**, XML, JSON, YAML and remote configure center `etcd`.
+Currently, Beego support all major configure formats, including **INI (by default)**, XML, JSON, YAML and remote configure center `etcd`.
 
 [Config API](https://github.com/beego/beego/blob/develop/core/config/config.go)：
 
@@ -49,23 +49,23 @@ type Configer interface {
 
 Notices：
 
-1. All `Default*` methods will return the default value if the key is not exist or got any error;
-2. `DIY` returns the value directly without any conversion；
-3. `GetSection` returns all configuration of the specific `section`, and it depends on the implementation details；
-4. `Unmarshaler` tries to use the configuration value to initiate the `obj`。`prefix` is similar to `section`；
-5. `Sub` is similar to `GetSection` which tries to return all configuration of the specific `section`。The difference is that `GetSection` returns the values as `map` but `Sub` returns the values as `Config` instance；
-6. `OnChange` subscribes the change the configuration. But most of the implementations which is based on file system do not support this methods. In general we prefer to use this for configure center like etcd；
-7. `SaveConfigFile` writes all configuration into file(s)；
-8. Some implementations support the key like `a.b.c` while some DO NOT. Besides, some implementations choose the `.` as separator while some choose other characters. This is a historical problem and we can not make them consistent if we keep backward compatible。
+1. All `Default*` methods will return the default value, if the key does not exist or an error occured.
+2. `DIY` returns the value directly without any conversion.
+3. `GetSection` returns all configuration of the specific `section`, and it depends on the implementation details.
+4. `Unmarshaler` tries to use the configuration value to initiate the `obj`. `prefix` is similar to `section`.
+5. `Sub` is similar to `GetSection`, which tries to return all configuration of the specific `section`. The difference is that `GetSection` returns the values as `map`, but `Sub` returns the values as `Config` instance.
+6. `OnChange` subscribes the change the configuration. But most of the implementations which are based on file system do not support this methods. In general, we prefer to use this for configure center like etcd.
+7. `SaveConfigFile` writes all configuration into file(s).
+8. Some implementations support the key like `a.b.c` while some DO NOT. Besides, some implementations choose the `.` as separator, while some choose other characters. This is a historical problem and we cannot make them consistent, if we keep backward compatible.
 
-Web module re-encapsulate the configuration module, more details refer [Web Module Configuration](./../web/config.md)
+Web module re-encapsulates the configuration module. For more details, please refer to [Web Module Configuration](./../web/config.md)
 
 ## Initiate
 
 There are two major ways to use the configuration module:
 
-- Uses package functions `config.XXXX` which relies on the global instance
-- Initiates `Configer` instances
+- Use package functions `config.XXXX`, which relies on the global instance
+- Initiate `Configer` instances
 
 
 ### Global instance
@@ -90,7 +90,7 @@ Or you can initiate the global instance manually to specify the source:
 config.InitGlobalInstance("etcd", "etcd address")
 ```
 
-### Initiates `Configer` instances
+### Initiate `Configer` instances
 
 If you do not want to use the global instance, you can initiate the `Configer` instances manually:
 
@@ -107,9 +107,9 @@ func main() {
 
 ## Environment variable
 
-The format for this is `${ENVIRONMENTVARIABLE}` within the configuration file which is equivalent to `value = os.Getenv('ENVIRONMENTVARIABLE')`. Beego will only check for environment variables if the value begins with `${` and ends with `}`.
+The format for this is `${ENVIRONMENTVARIABLE}` within the configuration file, which is equivalent to `value = os.Getenv('ENVIRONMENTVARIABLE')`. Beego will only check for environment variables, if the value begins with `${` and ends with `}`.
 
-Additionally, a default value can be configured for the case that there is no environment variable set or the environment variable is empty. This is accomplished by using the format `${ENVVAR||defaultvalue}`:
+Additionally, a default value can be configured in case that there is no environment variable set or the environment variable is empty. This is accomplished by using the format `${ENVVAR||defaultvalue}`:
 
 ```ini
 	runmode  = "${ProRunMode||dev}"
@@ -120,11 +120,11 @@ Additionally, a default value can be configured for the case that there is no en
 
 
 Note that all relative file paths, are calculated from your working directory!
-Second, except for the default INI implementation, all other implementations need to be introduced using anonymous introduction of the corresponding package.
+Secondly, except for the default INI implementation, all other implementations need to be introduced using anonymous introduction of the corresponding package.
 
 ### INI
 
-INI is the default implementation for configuring modules. It also supports loading multiple configuration files using the `include` syntax。
+INI is the default implementation for configuring modules. It also supports loading multiple configuration files using the `include` syntax.
 
 app.ini:
 

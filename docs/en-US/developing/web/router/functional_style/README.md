@@ -50,7 +50,7 @@ Any(rootpath string, f HandleFunc)
 ```
 ## Suggestions
 
-One of the difficulties to face when using a functional registration approach is how to organize these methods.
+One of the difficulties to face, when using a functional registration approach is how to organize these methods.
 
 In the controller style, all methods are naturally split by the controller. For example, in a simple system, we can have a `UserController`, and then all the methods related to `User` can be defined in this `Controller`; all the methods related to orders can be defined in the `OrderController`.
 
@@ -80,6 +80,6 @@ func (ctrl UserController) AddUser(ctx *context.Context) {
 
 ## Reference
 
-[route rules](../router_rule.md)
+[Route rules](../router_rule.md)
 
-[namespace](../namespace.md)
+[Namespace](../namespace.md)

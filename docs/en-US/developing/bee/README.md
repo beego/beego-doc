@@ -12,6 +12,10 @@ Update the bee tool with the following command:
 
 `go get -u github.com/beego/bee/v2@latest`
 
+For Go 1.18 and newer versions install bee with the following command:
+
+`go install github.com/beego/bee/v2@latest`
+
 `bee` is installed into `GOPATH/bin` by default. You need to add `GOPATH/bin` to your PATH, otherwise the `bee` command won't work.
 
 More details in [bee installation](./env.md)
@@ -194,7 +198,7 @@ drwxr-xr-x  3 astaxie  staff      102 11 25 22:31 tests
 
 ### Command bale
 
-This command is currently only available to the developer team. It is used to compress all static files in to a single binary file so that they do not need to carry static files including js, css, images and views when publishing the project. Those files will be self-extracting with non-overwrite when the program starts.
+This command is currently only available to the developer team. It is used to compress all static files into a single binary file, so that they do not need to carry static files including js, css, images and views when publishing the project. Those files will be self-extracting with non-overwrite when the program starts.
 
 ### Command version
 
