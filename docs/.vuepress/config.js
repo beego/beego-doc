@@ -171,9 +171,9 @@ function buildVersionSideBarEn() {
     {
       title: "Q & A",
       collapsable: true,
-      sidebarDepth: 1,
+      sidebarDepth: 0,
       children: [
-        ["qa/", "QA"],
+        ["qa/", "Q&A and FAQ"],
         "qa/failed_to_start_web_server",
         // 'writing-a-theme',
         // 'option-api',
