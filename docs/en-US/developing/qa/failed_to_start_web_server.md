@@ -1,9 +1,9 @@
 ---
-title: hy did the web server fail to start?
+title: Why did the web server fail to start?
 lang: en-US
 ---
 
-## hy did the web server fail to start?
+## Why did the web server fail to start?
 
 The reasons for web server startup can be varied. Generally speaking, it fails because there is a problem with the local environment. web server startup failure generally consists of two parts.
 

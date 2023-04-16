@@ -3,7 +3,7 @@ title: What does CopyRequestBody mean?
 lang: en-US
 ---
 
-# CWhat does CopyRequestBody mean?
+# What does CopyRequestBody mean?
 
 In the Beego web configuration, there is a very confusing parameter called `CopyRequestBody`. It is in the structure `web.Config`.
 

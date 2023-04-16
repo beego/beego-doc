@@ -10,7 +10,7 @@ We have created this demo for pagination. We hope it's useful to you.
 
 ## Controllers
 
-Before you can use the paginator in the view you have to set it in your controller:
+Before you can use the paginator in the view, you have to set it in your controller:
 
     package controllers
 
@@ -29,7 +29,5 @@ Before you can use the paginator in the view you have to set it in your controll
 
 ## Views
 
-Example templates (using Twitter Bootstrap):
-
-https://github.com/beego/wetalk/blob/master/views/base/paginator.html
+[Example Templates (using Twitter Bootstrap)](https://github.com/beego/wetalk/blob/master/views/base/paginator.html)
 

@@ -13,7 +13,7 @@ o = orm.NewOrm() // create Ormer
 // NewOrm will execute orm.BootStrap once which will verify the models' definitions.
 ```
 
-In most cases, you should try to reuse `Orm` instances, as they are designed to be stateless, with one database corresponding to one `Orm` instance
+In most cases, you should try to reuse `Orm` instances, as they are designed to be stateless, with one database corresponding to one `Orm` instance.
 
 
 But when using transactions, we return instances of `TxOrm`, which is itself stateful, with one transaction corresponding to one instance of `TxOrm`. When using `TxOrm`, any derived queries are within that transaction.
@@ -112,8 +112,8 @@ ReadWithCtx(ctx context.Context, md interface{}, cols ...string) error
 
 Notice:
 
-- The returned rows will be used to initiate `md`;
-- It only fetches the columns specified by `cols`;
+- The returned rows will be used to initiate `md`.
+- It only fetches the columns specified by `cols`.
 
 Example:
 
@@ -162,7 +162,7 @@ Note that the "find-judge-insert" action is not atomic or thread-safe. Therefore
 
 Beego does not support all SQL syntax features, so in some special cases, you need to use raw queries.
 
-They return `RawSeter`, and more details refer [RawSeter](./raw_seter.md)。
+Raw queries return `RawSeter`. For more details, please refer to [RawSeter](./raw_seter.md).
 
 ## LoadRelated And LoadRelatedWithCtx
 
@@ -186,7 +186,7 @@ for _,tag := range post.Tags{
 
 Notice that the last parameter of both methods is passed in the KV values, which are currently defined inside the `hints` package, with:
 
-- `hints.DefaultRelDepth`: Set the resolution depth of the associated table to the default value of 2；
+- `hints.DefaultRelDepth`: Set the resolution depth of the associated table, default value is 2.
 - `hints.RelDepth`
 - `hints.Limit`
 - `hints.Offset`
@@ -205,4 +205,4 @@ API:
 
 `QueryM2MWithCtx` was deprecated, as the `ctx` parameter has no effect.
 
-More details refer [QueryM2Mer](./query_m2m.md#)
+For more details, please refer to [QueryM2Mer](./query_m2m.md#).

@@ -5,7 +5,7 @@ lang: en-US
 
 # Transaction
 
-More API refer [Orm 增删改查](./orm.md)
+For More information about the API, please refer to [Orm CRUD](./orm.md).
 
 There are two ways to handle transaction in Beego. One is closure:
 
@@ -30,7 +30,7 @@ In this way, the first parameter is `task`, all DB operation should be inside th
 
 If the task return error, Beego rollback the transaction.
 
-We recommend you to use this way.
+We recommend using transaction with closure this way.
 
 Another way is that users handle transaction manually:
 

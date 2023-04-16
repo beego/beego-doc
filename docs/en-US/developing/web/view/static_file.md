@@ -9,8 +9,8 @@ Go already has the built-in `http.ServeFile` package to serve static files. Beeg
 
 	web.SetStaticPath("/static","public")
 
-- The first parameter is the url path
-- The second parameter is the static file directory path. (relative to the application directory)
+- The first parameter is the url path.
+- The second parameter is the static file directory path (relative to the application directory).
 
 Beego supports multiple static file directories:
 
@@ -20,4 +20,4 @@ Beego supports multiple static file directories:
 
 With the above settings, request `/images/login/login.png` will find `application_path/images/login/login.png` and request `/static/img/logo.png` will find `public/img/logo.png` file.
 
-By default Beego will check if the file exists, if not it will return a 404 page.  If the request is for `index.html`, because `http.ServeFile` will redirect and doesn't display this page by default, you can set `web.BConfig.WebConfig.DirectoryIndex = true` to show `index.html` page. If this is enabled, users can see the file list while visit the directory.
+By default Beego will check if the file exists, if not it will return a 404 page.  If the request is for `index.html`, package `http.ServeFile` will redirect and doesn't display this page by default. You can set `web.BConfig.WebConfig.DirectoryIndex = true` to show `index.html` page. If this is enabled, users can see the file list while visiting the directory.

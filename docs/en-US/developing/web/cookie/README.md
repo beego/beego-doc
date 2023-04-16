@@ -60,7 +60,7 @@ type MainController struct {
 }
 
 func (ctrl *MainController) PutSecureCookie() {
-	// put something into cookie,set Expires time
+	// put something into cookie, set Expires time
 	ctrl.Ctx.SetSecureCookie("my-secret", "name", "web cookie")
 
 	// web-example/views/hello_world.html

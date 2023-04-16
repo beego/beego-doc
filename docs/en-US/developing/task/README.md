@@ -82,10 +82,10 @@ Use the code below to test if the TaskFunc is working correctly.
 
 ## Debug module (Already moved to utils module)
 
-We always use print for debugging. But the default output is not good enough for debugging. Beego provides this debug module
+We always use print for debugging. But the default output is not good enough for debugging. Beego provides this debug module:
 
-- Display() print result to console
-- GetDisplayString() return the string
+- `Display()` - print result to console.
+- `GetDisplayString()` - return the string.
 
 It print key/value pairs. The following code:
 
@@ -118,7 +118,7 @@ For pointer type:
 
 	Display("v1", v1, "v2", v2)
 
-The output result
+The output result:
 
 	2013/12/16 23:48:41 [Debug] at TestPrintPoint() [/Users/astaxie/github/beego/task/debug_test.go:26]
 

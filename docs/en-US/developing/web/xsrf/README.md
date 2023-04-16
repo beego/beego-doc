@@ -7,7 +7,7 @@ lang: en-US
 
 [XSRF(Cross-site request forgery)](http://en.wikipedia.org/wiki/Cross-site_request_forgery), is a common security problem in web applications. The previous link also describes in detail how XSRF attacks are implemented.
 
-A common approach to preventing XSRF today is to record an unpredictable cookie for each user and then require that all submitted requests (POST/PUT/DELETE) must have this cookie data. If this data does not match , then the request may be forged.
+A common approach to preventing XSRF today is to record an unpredictable cookie for each user and then require that all submitted requests (POST/PUT/DELETE) must have this cookie data. If this data does not match, then the request may be forged.
 
 Beego has a built-in XSRF prevention mechanism. To use this mechanism, you need to add the `enablexsrf` setting to the application configuration file:
 
@@ -25,19 +25,19 @@ Or:
   web.XSRFExpire = 3600  //过期时间，默认1小时
 ```
 
-If XSRF is enabled, then Beego's web application will set a cookie value of `_xsrf` for all users (expires 1 hour by default), and if the `POST PUT DELET` request does not have this cookie value, then the request will be rejected outright.
+If XSRF is enabled, then Beego's web application will set a cookie value of `_xsrf` for all users (expires 1 hour by default). If the `POST PUT DELETE` request does not have this cookie value, then the request will be outright rejected.
 
-Beego uses the `Secure` and `HTTP-ONLY` options to save cookies, so in most cases this means you will need to use the HTTPS protocol and will not be able to access the cookie values inside JS.
+Beego uses the `Secure` and `HTTP-ONLY` options to save cookies, so in most cases this means you will need to use the HTTPS protocol and you will not be able to access the cookie values inside JS.
 
 - [secure](https://en.wikipedia.org/wiki/Secure_cookie)
 - [http-only](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies)
 
-> In the early days when these two options were not available, attackers could easily get hold of the cookie values we set, thus causing security problems. However, even if these two options are added, it does not mean that they are foolproof. For example, an attacker can try to overwrite the cookie set by the HTTP protocol with the HTTP protocol, as described in the `secure` option above.
+> In the early days when these two options were not available, attackers could easily get hold of the cookie values we set, thus causing security problems. However, even if these two options are added, it does not mean that this solution is foolproof. For example, an attacker can try to overwrite the cookie set by the HTTP protocol with the HTTP protocol, as described in the `secure` option above.
 
-Because Beego needs to get the Token to compare with the value in the cookie, Beego requires the user to carry the XSRF Token in their request, and you can do this in two ways.
+Because Beego needs to get the Token to compare with the value in the cookie, Beego requires the user to carry the XSRF Token in their request. You can provide the Token in two ways.
 
 - Carry a field called `_xsrf` in the form, which contains the XSRF Token;
-- Set `X-Xsrftoken` or `X-Csrftoken` in the HTTP HEADER of the submitted request, the value is the Token;
+- Set `X-Xsrftoken` or `X-Csrftoken` in the HTTP HEADER of the submitted request, the value is the Token.
 
 ### Form With Token
 
@@ -61,13 +61,13 @@ And `xsrf.html`:
 </form>
 ```
 
-`.xsrfdata` is `mc.Data["xsrfdata"]` and more details refer to [Template Engine](../view/README.md)
+`.xsrfdata` is `mc.Data["xsrfdata"]`. For more details, please refer to [Template Engine](../view/README.md).
 
 ### Page Meta
 
 It is simpler to add the XSRF HEADER to each request by extending Ajax
 
-Requires you to save a `_xsrf` value in the HTML
+Requires you to save a `_xsrf` value in the HTML:
 
 ```go
 func (this *HomeController) Get(){
@@ -83,7 +83,7 @@ And use it:
 </head>
 ```
 
-Extend the ajax method to add the `_xsrf` value to the header to support jquery post/get and other methods that use ajax internally:
+Extend the ajax method to add the `_xsrf` value to the header to support jQuery post/get and other methods that use ajax internally:
 
 ```js
 var ajax = $.ajax;
@@ -110,7 +110,7 @@ $.extend({
 });
 ```
 
-Note that here you can replace `ajax` or `JQuery` with your own front-end framework, as the core lies in setting the header `headers, {'X-Xsrftoken':xsrftoken}`.
+Note that here you can replace `ajax` or `jQuery` with your own front-end framework, as the core lies in setting the header `headers, {'X-Xsrftoken':xsrftoken}`.
 
 The `xsrftoken` can be inside an HTML tag, or it can be read directly from the previous response and brought in when the form is submitted. For example:
 
@@ -126,7 +126,7 @@ func (mc *MainController) XsrfJSON() {
 
 ## Controller Skips XSRF 
 
-XSRF was previously a globally set parameter, if set then all API requests will be validated, but there are times when the API logic does not need to be validated, so now supports setting the mask at the Controller level:
+XSRF was previously a globally set parameter. If set then all API requests will be validated, but there are times when the API logic does not need to be validated. Beego now supports setting the mask at the Controller level:
 
 ```go
 type AdminController struct{

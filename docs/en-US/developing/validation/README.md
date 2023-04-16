@@ -56,7 +56,7 @@ func init() {
 }
 ```
 
-## Examples:
+## Examples
 
 Direct use:
 
@@ -96,7 +96,7 @@ func main() {
     valid.Min(u.Age, minAge, "age").Message("%d+", minAge)
 }
 ```
-Use through StructTag
+Use through StructTag:
 
 ```go
 import (
@@ -111,7 +111,7 @@ import (
 // Wrap parameters with "()" and separate parameter with ",". Spaces accept after ","
 // Wrap regex match with "//"
 // 
-// 各个函数的结果的key值为字段名.验证函数名
+// The key value of the result of each function is the field name. Verify the function name
 type user struct {
     Id     int
     Name   string `valid:"Required;Match(/^Bee.*/)"` // Name can't be empty or start with Bee
@@ -148,7 +148,7 @@ func main() {
 ```
 Available validation functions in StrucTag:
 
-* `Required` not empty. :TODO 不为空，即各个类型要求不为其零值
+* `Required` not empty. Initial value must be set explicitly (non-zero value).
 * `Min(min int)` minimum value. Valid type is `int`, all other types are invalid.
 * `Max(max int)` maximum value. Valid type is `int`, all other types are invalid.
 * `Range(min, max int)` Value range. Valid type is `int`, all other types are invalid.
@@ -158,7 +158,7 @@ Available validation functions in StrucTag:
 * `Alpha` alpha characters. Valid type is `string`, all other types are invalid.
 * `Numeric` numerics. Valid type is `string`, all other types are invalid.
 * `AlphaNumeric` alpha characters or numerics. Valid type is `string`, all other types are invalid.
-* `Match(pattern string)` regex matching. Valid type is `string`, all other types will be cast to string then match. (fmt.Sprintf("%v", obj).Match)
+* `Match(pattern string)` regex matching. Valid type is `string`, all other types will be cast to string then match. `(fmt.Sprintf("%v", obj).Match)`
 * `AlphaDash` alpha characters or numerics or `-_`. Valid type is `string`, all other types are invalid.
 * `Email` Email address. Valid type is `string`, all other types are invalid.
 * `IP`  IP address，Only support IPv4 address. Valid type is `string`, all other types are invalid.
@@ -170,4 +170,4 @@ Available validation functions in StrucTag:
 
 ### API doc
 
-Please see [Go Walker](http://gowalker.org/github.com/beego/beego/v2/core/validation)
+For more information, please refer to [Go Walker](http://gowalker.org/github.com/beego/beego/v2/core/validation).

@@ -5,7 +5,7 @@ lang: en-US
 
 # Template Functions
 
-Beego supports custom template functions but it must be set as below before `web.Run()`:
+Beego supports custom template functions, but it must be set as below before `web.Run()`:
 ```
 	func hello(in string)(out string){
 		out = in + "world"
@@ -24,15 +24,15 @@ Here are Beego's built-in template functions:
   ```
   {{dateformat .Time "2006-01-02T15:04:05Z07:00"}}
   ```
-- date: This is similar to date function in PHP. It can easily return time by string
+- date: This is similar to date function in PHP. It can easily return time by string.
   ```
   {{date .T "Y-m-d H:i:s"}}
   ```
-- compare: Compare two objects. If they are the same return true otherwise return false.
+- compare: Compare two objects. If they are the same return true, otherwise return false.
   ```
   {{compare .A .B}}
   ```
-- substr: Return sub string. supports UTF-8 string.
+- substr: Return sub string, supports UTF-8 string.
   ```
   {{substr .Str 0 30}}
   ```
@@ -64,11 +64,11 @@ Here are Beego's built-in template functions:
   ```
   {{assets_css src}}
   ```
-- config: Get the value of AppConfig and the type must be String, Bool, Int, Int64, Float, or DIY
+- config: Get the value of AppConfig and the type must be String, Bool, Int, Int64, Float, or DIY.
   ```
   {{config configType configKey defaultValue}}
   ```
-- map_get: Get value of `map` by key
+- map_get: Get value of `map` by key.
   ```
               // In controller
               Data["m"] = map[string]interface{} {
@@ -82,7 +82,7 @@ Here are Beego's built-in template functions:
               {{ map_get m "a" }} // return 1
               {{ map_get m 1 "c" }} // return 4
   ```
-- urlfor: Get the URL of a controller method
+- urlfor: Get the URL of a controller method.
   ```
     {{urlfor "TestController.List"}}
   ```

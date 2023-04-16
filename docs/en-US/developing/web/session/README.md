@@ -5,11 +5,11 @@ lang: en-US
 
 # Session
 
-`beego` has a built-in `session` module. Currently, the backend engines supported by the `session` module include `memory`, `cookie`, `file`, `mysql`, `redis`, `couchbase`, `memcache`, `postgres`, and users can also implement their own engines according to the corresponding interfaces.
+`beego` has a built-in `session` module. Currently, the backend engines supported by the `session` module include `memory`, `cookie`, `file`, `mysql`, `redis`, `couchbase`, `memcache`, `postgres`. Users can also implement their own engines according to the corresponding interfaces.
 
 ## Web Session 
 
-Example
+Set in main file:
 
 ```go
 web.BConfig.WebConfig.Session.SessionOn = true
@@ -64,21 +64,21 @@ But we still recommend you to use `SetSession, GetSession, DelSession` three met
 
 Some parameters:
 
-- `web.BConfig.WebConfig.Session.SessionOn`: Set whether to open `Session`, the default is `false`, the corresponding parameter name of the configuration file: `sessionon`
+- `web.BConfig.WebConfig.Session.SessionOn`: Set whether to open `Session`, the default is `false`. The corresponding parameter name of the configuration file: `sessionon`
 
-- `web.BConfig.WebConfig.Session.SessionProvider`: Set the engine of `Session`, the default is `memory`, currently there are `file`, `mysql`, `redis`, etc., the configuration file corresponds to the parameter name: `sessionprovider`.
+- `web.BConfig.WebConfig.Session.SessionProvider`: Set the engine of `Session`, the default is `memory`. Currently there are `file`, `mysql`, `redis`, etc. The configuration file corresponds to the parameter name: `sessionprovider`.
 
-- `web.BConfig.WebConfig.Session.SessionName`: Set the name of `cookies`, `Session` is saved in the user's browser `cookies` by default, the default name is `beegosessionID`, the corresponding parameter name of the configuration file is: `sessionname`.
+- `web.BConfig.WebConfig.Session.SessionName`: Set the name of `cookies`. `Session` is saved in the user's browser `cookies` by default, the default name is `beegosessionID`. The corresponding parameter name of the configuration file is: `sessionname`.
 
-- `web.BConfig.WebConfig.Session.SessionGCMaxLifetime`: Set the `Session` expiration time, the default value is `3600` seconds, the corresponding parameter of the configuration file: `sessiongcmaxlifetime`.
+- `web.BConfig.WebConfig.Session.SessionGCMaxLifetime`: Set the `Session` expiration time. The default value is `3600` seconds. The corresponding parameter of the configuration file: `sessiongcmaxlifetime`.
 
-- `web.BConfig.WebConfig.Session.SessionProviderConfig`: Set the save path or address of the corresponding `file`, `mysql`, `redis` engines, the default value is empty, and the corresponding parameter of the configuration file: `sessionproviderconfig`.
+- `web.BConfig.WebConfig.Session.SessionProviderConfig`: Set the save path or address of the corresponding `file`, `mysql`, `redis` engines. The default value is empty, and the corresponding parameter of the configuration file: `sessionproviderconfig`.
 
-- `web.BConfig.WebConfig.Session.SessionHashFunc`: Default value is `sha1`, using `sha1` encryption algorithm to produce `sessionid`
+- `web.BConfig.WebConfig.Session.SessionHashFunc`: Set encryption algorithm to produce `sessionid`. Default value is `sha1`.
 
 - `web.BConfig.WebConfig.Session.SessionCookieLifeTime`: Set the expiration time for `cookie`, which is used to store data stored on the client.
 
-When using a particular engine, you need to anonymously introduce the package corresponding to that engine to complete the initialization work:
+When using a particular engine, you need to anonymously introduce the package corresponding to that engine to complete the initialization work:. Example for `mysql`:
 
 ```go
 import _ "github.com/beego/beego/v2/server/web/session/mysql"
@@ -88,7 +88,7 @@ import _ "github.com/beego/beego/v2/server/web/session/mysql"
 
 #### File
 
-When `SessionProvider` is `file` `SessionProviderConfig` is the directory where the file is saved, as follows:
+When `SessionProvider` is `file`, `SessionProviderConfig` is the directory where the file is saved, as follows:
 
 ```go
 web.BConfig.WebConfig.Session.SessionProvider="file"
@@ -117,7 +117,7 @@ CREATE TABLE `session` (
 
 #### Redis
 
-When `SessionProvider` is `redis` `, SessionProviderConfig` is the address of `redis`, using [redigo](https://github.com/garyburd/redigo), as follows:
+When `SessionProvider` is `redis`, `SessionProviderConfig` is the address of `redis`, using [redigo](https://github.com/garyburd/redigo), as follows:
 
 ```go
 web.BConfig.WebConfig.Session.SessionProvider = "redis"
@@ -126,16 +126,16 @@ web.BConfig.WebConfig.Session.SessionProviderConfig = "127.0.0.1:6379"
 
 #### memcache
 
-When `SessionProvider` is `memcache``, SessionProviderConfig` is the address of `memcache`, using [memcache](https://github.com/beego/memcache), as follows:
+When `SessionProvider` is `memcache`, `SessionProviderConfig` is the address of `memcache`, using [memcache](https://github.com/beego/memcache), as follows:
 
 ```go
 web.BConfig.WebConfig.Session.SessionProvider = "memcache"
 web.BConfig.WebConfig.Session.SessionProviderConfig = "127.0.0.1:7080"
 ```
 
-#### Postgress
+#### Postgres
 
-When `SessionProvider` is `postgres` `, SessionProviderConfig` is the address of `postgres`, using [postgres](https://github.com/lib/pq), as follows:
+When `SessionProvider` is `postgres`, `SessionProviderConfig` is the address of `postgres`, using [postgres](https://github.com/lib/pq), as follows:
 
 ```go
 web.BConfig.WebConfig.Session.SessionProvider = "postgresql"
@@ -144,7 +144,7 @@ web.BConfig.WebConfig.Session.SessionProviderConfig = "postgres://pqgotest:passw
 
 #### Couchbase
 
-When `SessionProvider` is `couchbase` `, SessionProviderConfig` is the **address** of `couchbase`, using [couchbase](https://github.com/couchbaselabs/go- couchbase), as follows:
+When `SessionProvider` is `couchbase`, `SessionProviderConfig` is the **address** of `couchbase`, using [couchbase](https://github.com/couchbaselabs/go-couchbase), as follows:
 
 ```go
 web.BConfig.WebConfig.Session.SessionProvider = "couchbase"
@@ -153,7 +153,7 @@ web.BConfig.WebConfig.Session.SessionProviderConfig = "http://bucketname:bucketp
 
 ### Notices
 
-Because `session` uses `gob` to register stored objects, such as `struct`, if you use a non-`memory` engine, please register these structures in `init` of `main.go` yourself, otherwise it will cause an unresolvable error after application restart
+Because `session` uses `gob` to register stored objects, such as `struct`, if you use a non-`memory` engine, please register these structures in `init` of `main.go` yourself, otherwise it will cause an unresolvable error after application restart.
 
 ## Using Session Without Web Module
 
@@ -191,7 +191,7 @@ func init() {
 
 Parameters of NewManager:
 
-1. Saving provider name: memory, file, mysql, redis
+1. Saving provider name: memory, file, mysql, redis.
 2. A JSON string that contains the config information.
     1. cookieName: Cookie name of session id saved on the client
     2. enableSetCookie, omitempty: Whether to enable SetCookie, omitempty
