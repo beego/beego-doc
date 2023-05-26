@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "prettier": "2.5.1",
-    "vuepress": "^1.8.2",
+    "vuepress": "^1.9.9",
     "vuepress-plugin-auto-sidebar": "^2.3.0"
   }
 }
