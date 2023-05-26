@@ -63,7 +63,7 @@ module.exports = {
             text: "Version",
             ariaLabel: "Version",
             items: [
-              {text: 'developing', link: '/developing/'},
+              {text: 'developing', link: '/en-US/developing/'},
               { text: "v2.0.x", link: "/en-US/v2.0.x/" }
             ],
           },
@@ -86,7 +86,7 @@ module.exports = {
         ],
         sidebar: {
           "/zh/developing/": buildVersionSideBar("developing"),
-          "/zh/v2.0.2/": buildVersionSideBar("v2.0.x"),
+          "/zh/v2.0.x/": buildVersionSideBar("v2.0.x"),
         },
       },
     },
@@ -150,6 +150,14 @@ function buildVersionSideBarEn() {
         "orm/query_seter.md",
         "orm/raw_seter.md",
         "orm/query_m2m.md",
+      ],
+    },
+    {
+      title: "Cache",
+      collapsable: true,
+      sidebarDepth: 0,
+      children: [
+          "cache/cache_pattern.md"
       ],
     },
     "logs/",
@@ -230,6 +238,14 @@ function buildVersionSideBar() {
         "orm/query_seter.md",
         "orm/raw_seter.md",
         "orm/query_m2m.md",
+      ],
+    },
+    {
+      title: "缓存",
+      collapsable: true,
+      sidebarDepth: 0,
+      children: [
+        "cache/cache_pattern.md"
       ],
     },
     "logs/",
