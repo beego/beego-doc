@@ -249,6 +249,7 @@ function buildVersionSideBar() {
       collapsable: true,
       sidebarDepth: 0,
       children: [
+        "cache/",
         "cache/cache_pattern.md"
       ],
     },

@@ -5,8 +5,6 @@ lang: zh
 
 # 缓存模块
 
-- [缓存模式](./cache_pattern.md)
-
 beego 的 cache 模块是用来做数据缓存的，设计思路来自于 `database/sql`，目前支持 file、memcache、memory 和 redis 四种引擎，安装方式如下：
 
 	go get github.com/beego/beego-cache

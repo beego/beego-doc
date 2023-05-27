@@ -1,6 +1,6 @@
 ---
 title: Cache
-lang: zh
+lang: en-US
 ---
 
 WIP.

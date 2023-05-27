@@ -3,7 +3,7 @@ title: Cache Pattern
 lang: en-US
 ---
 
-We provide support for some cache pattern in cache module, to solve or alleviate the problems of cache hotspot nvalid, penetration, and avalanche. 
+We provide support for some cache pattern in cache module, to solve or alleviate the problems of cache hotspot invalid, penetration, and avalanche. 
 
 These cache pattern are implemented using decorator design pattern.
 
