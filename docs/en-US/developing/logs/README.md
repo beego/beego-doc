@@ -27,7 +27,10 @@ Then add the output provider (it supports outputting to multiple providers at th
 	log.SetLogger("console")
 
 The second parameter is a provider-specific configuration string (see below for details).
+
+```
 logs.SetLogger(logs.AdapterFile,`{"filename":"project.log","level":7,"maxlines":0,"maxsize":0,"daily":true,"maxdays":10,"color":true}`)
+```
 
 
 Then we can use it in our code:
@@ -55,20 +58,20 @@ Then we can use it in our code:
 
 ### Another Way
 
-beego/logs supports to declare a single logger to use
+`beego/logs` supports to declare a single logger to use:
 
 
-        package main
-        
-        import (
-        	"github.com/beego/beego/v2/core/logs"
-        )
-        
-        func main() {
-        	log := logs.NewLogger()
-        	log.SetLogger(logs.AdapterConsole)
-        	log.Debug("this is a debug message")
-        }
+    package main
+    
+    import (
+      "github.com/beego/beego/v2/core/logs"
+    )
+    
+    func main() {
+      log := logs.NewLogger()
+      log.SetLogger(logs.AdapterConsole)
+      log.Debug("this is a debug message")
+    }
 
 ## Logging caller information (file name & line number)
 
@@ -88,40 +91,31 @@ You can set logger to asynchronous logging to improve performance:
 
     logs.Async()
 
-Add a parameter to set the length of buffer channel
+Add a parameter to set the length of buffer channel:
+
+```
 logs.Async(1e3)
+```
 
 ## Provider configuration
 
-Each provider supports a set of configuration options.
+Each provider supports a set of configuration options:
 
-- console
+* Console
 
-  Can set output level or use default. Uses `os.Stdout` by default.
+User can set output level or use default. Uses `os.Stdout` by default.
 
-  	logs.SetLogger(logs.AdapterConsole, `{"level":1}`)
+```
+logs.SetLogger(logs.AdapterConsole, `{"level":1}`)
+```
 
-- file
+* File
 
-  E.g.:
+E.g.:
 
-  	logs.SetLogger(logs.AdapterFile, `{"filename":"test.log"}`)
-
-  Parameters:
-  - filename: Save to filename.
-  - maxlines: Maximum lines for each log file, 1000000 by default.
-  - maxsize: Maximum size of each log file, 1 << 28 or 256M by default.
-  - daily: If log rotates by day, true by default.
-  - maxdays: Maximum number of days log files will be kept, 7 by default.
-  - rotate: Enable logrotate or not, true by default.
-  - level: Log level, Trace by default.
-  - perm: Log file permission
-
-- multifile
-
-  E.g.:
-
-  	logs.SetLogger(logs.AdapterMultiFile, ``{"filename":"test.log","separate":["emergency", "alert", "critical", "error", "warning", "notice", "info", "debug"]}``)
+```
+logs.SetLogger(logs.AdapterFile, `{"filename":"test.log"}`)
+```
 
   Parameters:
   - filename: Save to filename.
@@ -131,14 +125,34 @@ Each provider supports a set of configuration options.
   - maxdays: Maximum number of days log files will be kept, 7 by default.
   - rotate: Enable logrotate or not, true by default.
   - level: Log level, Trace by default.
-  - perm: Log file permission
-  - separate: Log file will separate to test.error.log/test.debug.log as the log level set in the json array
+  - perm: Log file permission.
 
-- conn
+* Multifile
 
-  Net output:
+E.g.:
 
-  	logs.SetLogger(logs.AdapterConn, `{"net":"tcp","addr":":7020"}`)
+```
+logs.SetLogger(logs.AdapterMultiFile, `{"filename":"test.log","separate":["emergency", "alert", "critical", "error", "warning", "notice", "info", "debug"]}`)
+```
+
+  Parameters:
+  - filename: Save to filename.
+  - maxlines: Maximum lines for each log file, 1000000 by default.
+  - maxsize: Maximum size of each log file, 1 << 28 or 256M by default.
+  - daily: If log rotates by day, true by default.
+  - maxdays: Maximum number of days log files will be kept, 7 by default.
+  - rotate: Enable logrotate or not, true by default.
+  - level: Log level, Trace by default.
+  - perm: Log file permission.
+  - separate: Log file will separate to `test.error.log/test.debug.log` as the log level set in the json array.
+
+* Conn
+
+Log to net connection:
+
+```
+logs.SetLogger(logs.AdapterConn, `{"net":"tcp","addr":":7020"}`)
+```
 
   Parameters:
   - reconnectOnMsg: If true: reopen and close connection every time a message is sent. False by default.
@@ -147,11 +161,13 @@ Each provider supports a set of configuration options.
   - addr: net connection address.
   - level: Log level, Trace by default.
 
-- smtp
+* SMTP
 
-  Log by email:
+Log to email:
 
-  	logs.SetLogger(logs.AdapterMail, `{"username":"beegotest@gmail.com","password":"xxxxxxxx","host":"smtp.gmail.com:587","sendTos":["xiemengjun@gmail.com"]}`)
+```
+logs.SetLogger(logs.AdapterMail, `{"username":"beegotest@gmail.com","password":"xxxxxxxx","host":"smtp.gmail.com:587","sendTos":["xiemengjun@gmail.com"]}`)
+```
 
   Parameters:
   - username: smtp username.
@@ -162,23 +178,29 @@ Each provider supports a set of configuration options.
   - level: Log level, Trace by default.
 
 
-- ElasticSearch
+* ElasticSearch
 
-  Log to ElasticSearch:
+Log to ElasticSearch:
 
-   		logs.SetLogger(logs.AdapterEs, `{"dsn":"http://localhost:9200/","level":1}`)
+```
+logs.SetLogger(logs.AdapterEs, `{"dsn":"http://localhost:9200/","level":1}`)
+```
 
-- JianLiao
+* JianLiao
 
-  Log to JianLiao
+Log to JianLiao
 
-        logs.SetLogger(logs.AdapterJianLiao, `{"authorname":"xxx","title":"beego", "webhookurl":"https://jianliao.com/xxx", "redirecturl":"https://jianliao.com/xxx","imageurl":"https://jianliao.com/xxx","level":1}`)
+```
+logs.SetLogger(logs.AdapterJianLiao, `{"authorname":"xxx","title":"beego", "webhookurl":"https://jianliao.com/xxx", "redirecturl":"https://jianliao.com/xxx","imageurl":"https://jianliao.com/xxx","level":1}`)
+```
 
-- Slack
+* Slack
 
-  Log to Slack
+Log to Slack
 
-   		logs.SetLogger(logs.AdapterSlack, `{"webhookurl":"https://slack.com/xxx","level":1}`)
+```
+logs.SetLogger(logs.AdapterSlack, `{"webhookurl":"https://slack.com/xxx","level":1}`)
+```
 
 ## Custom format logging
 
@@ -222,13 +244,13 @@ func main() {
 }
 ```
 ## Global formatter
-With the global formatter you can override and *default* logging formatters. This means that setting a global formatter will override any `logs.SetLogger()` adapters but will not override and `logs.SetLoggerWithOpts()` adapters. Default logging formatters are any adapters set using the following syntax:
+With the global formatter you can override *default* logging formatters. This means that setting a global formatter will override any `logs.SetLogger()` adapters, but will not override `logs.SetLoggerWithOpts()` adapters. Default logging formatters are any adapters set using the following syntax:
 ```go
 logs.SetLogger("adapterName", '{"key":"value"}')
 ```
 
 ## Adapter Specific formatters
-Apapter specific formatters can be set and will override any default or global formatter that has been set for a given adapter. Adapter specific logging formatters can be set using the following syntax:
+Adapter specific formatters can be set and will override any default or global formatter that has been set for a given adapter. Adapter specific logging formatters can be set using the following syntax:
 ```go
 logs.SetLoggerWithOpts("adapterName", []string{'{"key":"value"}'}, utils.KV{Key:"formatter", Value: formatterFunc})
 ```

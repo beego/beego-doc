@@ -1,7 +1,6 @@
 ---
 title: Q & A
 lang: en-US
-sidebar: auto
 ---
 
 # Q & A
@@ -10,7 +9,7 @@ We use a lot of commands when answering these questions. In case you find that y
 
 For Windows platforms, we strongly recommend using WSL.
 
-## Web Module
+## FAQ - Frequently Asked Questions
 
 - [Why did the web server fail to start?](failed_to_start_web_server.md)
 - [What to choose as the receiver for the Controller methods](./choose_func_recever_for_web.md)

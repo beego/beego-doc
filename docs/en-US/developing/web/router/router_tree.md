@@ -60,4 +60,4 @@ It means that the POST method accesses the path of the pattern `/user/helloworld
 
 ## Reference
 
-- [admin service](../admin/README.md)
+- [Admin service](../admin/README.md)

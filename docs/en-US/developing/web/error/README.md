@@ -5,7 +5,7 @@ lang: en-US
 
 # Error Handling
 
-When we do web development, we often need page jumping and error handling, and Beego has taken this into account, using the `Redirect` method for redirecting:
+When we do web development, we often need page jumping and error handling. Beego has taken this into account, providing the `Redirect` method for redirecting:
 
 ```go
 func (this *AddController) Get() {
@@ -30,11 +30,11 @@ func (this *MainController) Get() {
 }
 ```
 
-So that the code after `this.Abort("401")` will not be executed and the following page will be displayed to the user by default:
+The code after `this.Abort("401")` will not be executed and the following page will be displayed to the user by default:
 
 ![](./img/401.png)
 
-The web framework supports 401, 403, 404, 500, 503 error handling by default. Users can customize the corresponding error handling, for example, the following redefines the 404 page:
+The web framework supports 401, 403, 404, 500, 503 error handling by default. Users can customize the corresponding error handling. For example, the following code redefines the 404 page:
 
 ```go
 func page_not_found(rw http.ResponseWriter, r *http.Request){
@@ -73,7 +73,7 @@ func main() {
 Once you register this error handling code in the entry, then you can call `this.Abort("dbError")` for exception page handling whenever you encounter a database error in your logic.
 
 ## Controller define Error
-Beego version 1.4.3 added support for Controller defined Error handlers, so we can use the `web.Controller` and `template.Render` context functions
+Beego version 1.4.3 added support for Controller defined Error handlers, so we can use the `web.Controller` and `template.Render` context functions:
 
 ```go
 
@@ -102,9 +102,9 @@ func (c *ErrorController) ErrorDb() {
 	c.TplName = "dberror.tpl"
 }
 ```
-From the example we can see that all the error handling functions have the prefix `Error`，the other string is the name of `Abort`，like `Error404` match `Abort("404")`
+From the example above we can see that all the error handling functions have the prefix `Error`，the other string is the name of `Abort`，like `Error404` match `Abort("404")`.
 
-Use `web.ErrorController` to register the error controller before `web.Run`
+Use `web.ErrorController` to register the error controller before `web.Run`:
 
 ```go
 package main
@@ -146,4 +146,4 @@ Always be careful: you always need to detect the result of `recover` and put the
 
 ## Reference
 
--[Controller API - Interrupt](../router/ctrl_style/controller.md)
+- [Controller API - Interrupt](../router/ctrl_style/controller.md)

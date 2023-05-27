@@ -72,7 +72,7 @@ func main() {
 		web.NSCtrlGet("/home", (*MainController).Home),
 		web.NSRouter("/user", uc),
 		web.NSGet("/health", Health),
-		// 嵌套 namespace
+		// nested namespace
 		web.NSNamespace("/admin",
 			web.NSRouter("/user", uc),
 		),
@@ -83,7 +83,7 @@ func main() {
 }
 ```
 
-Start the service, and access `GET http://localhost:8080/v1/admin/user`, you can see the output.
+Start the service and after accessing `GET http://localhost:8080/v1/admin/user`, you can see the output.
 
 ## Conditional Namespace Routes
 
@@ -94,7 +94,7 @@ For example, we want the user's request to have an `x-trace-id` in the header of
 ```go
 func main() {
 	uc := &UserController{}
-	// 初始化 namespace
+	// initiate namespace
 	ns := web.NewNamespace("/v1",
 		web.NSCond(func(b *context.Context) bool {
 			return b.Request.Header["x-trace-id"][0] != ""
@@ -102,18 +102,18 @@ func main() {
 		web.NSCtrlGet("/home", (*MainController).Home),
 		web.NSRouter("/user", uc),
 		web.NSGet("/health", Health),
-		// 嵌套 namespace
+		// nested namespace
 		web.NSNamespace("/admin",
 			web.NSRouter("/user", uc),
 		),
 	)
-	//注册 namespace
+	//regsister namespace
 	web.AddNamespace(ns)
 	web.Run()
 }
 ```
 
-In general, we don't recommend using this feature now either, because its functionality overlaps with `filter`. We recommend that you should consider implementing a `filter` normally yourself if you need to, the code will be more understandable. This feature will be considered to be replaced by a `filter` in a future version, and the method will be removed later.
+In general, we don't recommend using this feature now either, because its functionality overlaps with `filter`. We recommend, that you should consider implementing a `filter` normally yourself if you need to, the code will be more understandable. This feature will be considered to be replaced by a `filter` in a future version, and the method will be removed later.
 
 ## Filter
 
@@ -155,11 +155,11 @@ func main() {
 
 Currently, `namespace` has limited support for `filter`, only `before` and `after`.
 
-More details refer to [Filter](../filter/README.md)
+For more details, please refer to [Filter](../filter/README.md).
 
 ## NSInclude
 
-Next we discuss something a bit strange, the `web.NSInclude` method. This method is a companion method to [annotate/commente routes](./ctrl_style/README.md) companion method.
+Next we discuss something a bit strange, the `web.NSInclude` method. This method is a companion method to [annotate/comment routes](./ctrl_style/README.md) companion method.
 
 It only works for annotate/comment routes.
 
@@ -178,11 +178,14 @@ func init() {
 }
 ```
 
-Notice that our `GoodsController` here is necessarily a `Controller` that annotates routes and has been generated using the [`bee` command](./bee/README.md) to generate the annotated routes.
+Notice that our `GoodsController` here is necessarily a `Controller` that annotates routes and has been generated using the [`bee` command](../../bee/README.md/#bee-tool-commands) to generate the annotated routes.
 
 ## Reference
 
-[functional style](./functional_style/README.md)
-[controller style](./ctrl_style/README.md)
-[filter](../filter/README.md)
-[annotate/comment routes](./ctrl_style/README.md)
+[Functional Style](./functional_style/README.md)
+
+[Controller Style](./ctrl_style/README.md)
+
+[Filter](../filter/README.md)
+
+[Annotate/Comment routes](./ctrl_style/README.md)

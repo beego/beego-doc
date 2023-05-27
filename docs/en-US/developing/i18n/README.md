@@ -5,7 +5,7 @@ lang: en-US
 
 # i18n
 
-This module is mainly used for i18n of sites and applications, which provides multiple-language options to users, improve user experience.
+This module is mainly used for i18n of sites and applications, which provides multiple-language options for users to improve user experience.
 
 You can use the following command to install this module:
 
@@ -43,7 +43,7 @@ bye = 再见
 
 ### Use in controller
 
-For every request, Beego uses individual goroutines to handle the request; therefore, you can embed an `i18n.Locale` as an anonymous field to process locale operations of the current request. This requires that you understand the idea of `baseController` and `Prepare` method. See source file `routers/router.go` of beego.vip for more details.
+For every request, Beego uses individual goroutines to handle the request. Therefore, you can embed an `i18n.Locale` as an anonymous field to process locale operations of the current request. This requires that you understand the idea of `baseController` and `Prepare` method. See source file `routers/router.go` of beego.vip for more details.
 
 After accepting the request, use the `Prepare` method of `baseController` to do language operations, which you only need to write the same code once and use it in all the upper level controllers.
 
@@ -72,11 +72,14 @@ for _, lang := range langs {
 }
 ```
 
-In this piece of code, we get languages that we want to support in the configuration file, in this case, we have `en-US` and `zh-CN`. Then we initialize a slice for users to change language option(not discussed here). Finally, we call the `i18n.SetMessage` function in a loop to load all the locale files. Here you can see why we recommend the you use the naming conventions of beego.vip for locale files.
+In this piece of code, we get languages that we want to support in the configuration file, in this case, we have `en-US` and `zh-CN`. Then we initialize a slice for users to change language option (not discussed here). Finally, we call the `i18n.SetMessage` function in a loop to load all the locale files. Here you can see why we recommend the you use the naming conventions of beego.vip for locale files.
 
 #### Initialize controller language
 
-The following code is from the beego.vip source file `routers/router.go`, which decides on which user language option to use in the following order: 1: URL specified 2: Cookies and 3: browser `Accept-Language`.
+The following code is from the beego.vip source file `routers/router.go`, which decides on which user language option to use in the following order: 
+1. URL specified.
+2. Cookies.
+3. Browser `Accept-Language`.
 
 ```go
 // setLangVer sets site language version.
@@ -149,7 +152,7 @@ func (this *baseRouter) setLangVer() bool {
 
 The variable `isNeedRedir` indicates whether user uses URL to specify the language option. To keep the URL clean, beego.vip automatically sets the value in cookies and redirect.
 
-The line `this.Data["Lang"] = curLang.Lang` sets user language option to template variable  `Lang` so that we can handle language in template files.
+The line `this.Data["Lang"] = curLang.Lang` sets user language option to template variable `Lang`, so that we can handle language in template files.
 
 Following two lines:
 

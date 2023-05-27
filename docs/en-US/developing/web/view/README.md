@@ -9,13 +9,13 @@ Beego uses Go's built-in package `html/template` as the template parser.  Upon s
 
 ## Template Directory
 
-The default template directory for Beego is `views`. Template files can be put into this directory and Beego will parse and cache them automatically. However, if the development mode is enabled, Beego parses templates every time without caching. Beego can only have one template directory which can be customized:
+The default template directory for Beego is `views`. Template files can be put into this directory and Beego will parse and cache them automatically. However, if the development mode is enabled, Beego parses templates every time without caching. Beego can only have one template directory, which can be customized:
 
 ```
 web.BConfig.WebConfig.ViewsPath = "myviewpath"
 ```
 
-You can add alternative template directories by calling
+You can add alternative template directories by calling:
 
 ```
 web.AddViewPath("moreViews")
@@ -27,12 +27,12 @@ This will parse and cache template files in this directory and allow you to use 
 this.ViewPath = "moreViews"
 ```
 
-Setting a ViewPath to a directory which was not previously registered with AddViewPath() will fail with "Unknown view path"
+Setting a ViewPath to a directory which was not previously registered with `AddViewPath()` will fail with `"Unknown view path"`.
 
 
 ## Auto Rendering
 
-You don't need to render and output templates manually. Beego will call Render automatically after finishing the method. You can disable auto rendering in the configuration file or in `main.go` if you don't need it.
+You don't need to render and output templates manually. Beego will call `Render` automatically after finishing the method. You can disable auto rendering in the configuration file or in `main.go` if you don't need it.
 
 In configuration file:
 
@@ -57,7 +57,7 @@ In configuration file:
 ```
 
 
-Or, add these to the main.go:
+Or add these to the main.go:
 
 ```
 	web.BConfig.WebConfig.TemplateLeft = "<<<"
@@ -66,7 +66,7 @@ Or, add these to the main.go:
 
 ## Template Data
 
-Template gets its data from `this.Data` in Controller. So for example if you write
+Template gets its data from `this.Data` in Controller. So for example, if you write:
 ```
 {{.Content}}
 ```
@@ -76,7 +76,7 @@ in the template, you need to assign it in the Controller first:
 this.Data["Content"] = "value"
 ```
 
-Different rendering types:
+### Different rendering types
 
 ### struct
 
@@ -160,7 +160,7 @@ If `TplName` is not set in the Controller while `autorender` is enabled, Beego w
 c.TplName = strings.ToLower(c.controllerName) + "/" + strings.ToLower(c.actionName) + "." + c.TplExt
 ```
 
-It is Controller name + "/" + request method name + "." + template extension. So if the Controller name is `AddController`, request method is `POST` and the default template extension is `tpl`, Beego will render `/viewpath/addcontroller/post.tpl` template file.
+It is `Controller name + "/" + request method name + "." + template extension`. So if the Controller name is `AddController`, request method is `POST` and the default template extension is `tpl`, Beego will render `/viewpath/addcontroller/post.tpl` template file.
 
 ## Layout Design
 
@@ -260,8 +260,6 @@ this.LayoutSections["Sidebar"] = ""
 
 We can also just specify the template the controller is going to use and let the template system handle the layout:
 
-for example:
-
 controller:
 
 ```go
@@ -315,7 +313,7 @@ layout_blog.tpl:
 </html>
 ```
 
-Using `block` action instead of `template` allows us to have default block content and skipping blocks that we don't need in every template (for example, if we don't need css block in `add.tpl` template - we will not define it and that won't raise an error)
+Using `block` action instead of `template` allows us to have default block content and skipping blocks that we don't need in every template (for example, if we don't need css block in `add.tpl` template - we will not define it and that won't raise an error).
 
 
 ## renderform
@@ -332,12 +330,12 @@ Intro string `form:",textarea"`
 }
 ```
 
-- StructTag definition uses `form` as tag. There are three optional params separated by ',':
+- StructTag definition uses `form` as tag. There are three optional params separated by `,`:
     - The first param is `name` attribute of the form field. If empty, it will use `struct field name` as the value.
     - The second param is the form field type. If empty, it is assumed as `text`.
     - The third param is the tag of form field. If empty, it will use `struct field name` as the tag name.
 
-- If the `form` tag only has one value, it is the `name` attribute of the form field. Except last value can be ignore all the other place must be separated by ','. E.g.: `form:",,username:"`
+- If the `form` tag only has one value, it is the `name` attribute of the form field. Except last value, other values can be ignored. All the other values must be separated by `,`. E.g.: `form:",,username:"`.
 
 - To ignore a field there are two ways:
     - The first way is to use lowercase for the field name in the struct.

@@ -72,7 +72,7 @@ func main() {
 		web.NSCtrlGet("/home", (*MainController).Home),
 		web.NSRouter("/user", uc),
 		web.NSGet("/health", Health),
-		// 嵌套 namespace
+		// nested namespace
 		web.NSNamespace("/admin",
 			web.NSRouter("/user", uc),
 		),

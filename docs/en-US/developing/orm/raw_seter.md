@@ -7,9 +7,9 @@ lang: en-US
 
 Most of the time, you should not use raw queries. Raw queries should only be considered when there is no other choice.
 
-* Using Raw SQL to query doesn't require an ORM definition
+* Using Raw query doesn't require an ORM definition.
 * Multiple databases support `?` as placeholders and auto convert.
-* The params of query support Model Struct, Slice and Array
+* The params of query support Model Struct, Slice and Array.
 
 Example:
 
@@ -22,7 +22,7 @@ r = o.Raw("SELECT name FROM user WHERE id IN (?, ?, ?)", ids)
 
 ## Exec
 
-Run sql query and return [sql.Result](http://gowalker.org/database/sql#Result) object
+Run sql query and return [sql.Result](http://gowalker.org/database/sql#Result) object.
 
 ```go
 res, err := o.Raw("UPDATE user SET name = ?", "your").Exec()
@@ -41,7 +41,7 @@ QueryRow(containers ...interface{}) error
 QueryRows(containers ...interface{}) (int64, error)
 ```
 
-They will use the returned values to initiate `container`。
+They will use the returned values to initiate `container`.
 
 Example:
 
@@ -64,7 +64,7 @@ query = "SELECT 'id','name' FROM `user`"
 num, err = dORM.Raw(query).QueryRows(&ids,&names)
 ```
 
-Similarly, `QueryRows` is also returned by column, so you can notice that in the example we have declared two slices corresponding to the columns `id` and `name` respectively。
+Similarly, `QueryRows` is also returned by column, so you can notice that in the example we have declared two slices corresponding to the columns `id` and `name` respectively.
 
 ## SetArgs
 
@@ -101,7 +101,7 @@ res, err := r.SetArgs("arg1", "arg2").Exec()
 	ValuesFlat(container *ParamsList, cols ...string) (int64, error)
 ```
 
-More details refer：
+For more details, please refer to：
 
 - [Values](./query_seter.md#values)
 - [ValuesList](./query_seter.md#valueslist)
@@ -120,7 +120,7 @@ SQL query results
 | total | 100 |
 | found | 200 |
 
-map rows results to map
+Map rows results to map:
 
 ```go
 res := make(orm.Params)
@@ -144,7 +144,7 @@ SQL query results
 | total | 100 |
 | found | 200 |
 
-map rows results to struct
+Map rows results to struct:
 
 ```go
 type Options struct {
@@ -158,7 +158,9 @@ fmt.Println(res.Total) // 100
 fmt.Println(res.Found) // 200
 ```
 
-> support name conversion: snake -> camel, eg: SELECT user_name ... to your struct field UserName.
+> Supported name conversion: **snake** -> **camel**, eg:
+>
+> SELECT **user_name** ... to your struct field **UserName**.
 
 ## Prepare
 

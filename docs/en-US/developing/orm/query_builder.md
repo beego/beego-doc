@@ -3,7 +3,7 @@ title: QueryBuilder
 lang: en-US
 ---
 
-# QueryBuilder Constructs Complicate Query
+# QueryBuilder
 
 **QueryBuilder** provides an API for convenient and fluent construction of SQL queries. It consists of a set of methods enabling developers to easily construct SQL queries without compromising readability.
 

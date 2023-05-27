@@ -7,14 +7,14 @@ lang: en-US
 
 [ORM examples](https://github.com/beego/beego-example/tree/master/orm)
 
-Beego's ORM is designed as two:
+There are two types of Beego's ORM:
 
-- Normal `Orm` instances: These instances are stateless, so you should keep a database with only one instance if possible. Of course, even if you create a new instance every time, it's not a big deal, it's just not necessary;
-- `TxOrm`: This is the `Orm` object obtained after starting a transaction, it can only be used within the transaction, and will be discarded after commit or rollback, and cannot be reused. A new instance needs to be created for each transaction.
+- Normal `Orm` instances: These instances are stateless, so you should keep a database with only one instance if possible. Of course, even if you create a new instance every time, it's not a big deal, it's just not necessary.
+- `TxOrm`: This is the `Orm` object obtained after starting a transaction. It can only be used within the transaction and will be discarded after commit or rollback and cannot be reused. A new instance needs to be created for each transaction.
 
 ## Quickly Start
 
-Exmaple:
+Example:
 
 ```go
 import (
@@ -56,17 +56,17 @@ func main() {
 
 In general, it can be divided into the following steps:
 
-- Define and register models, refer [model](./model.md)
-- Register databases, refer [database](./db.md)
-- Create `Orm` instances
-- Execute queries, Beego provides query API, refer:
+- Define and register models. For details, please refer to [model](./model.md).
+- Register databases. For details, please refer to [database](./db.md).
+- Create `Orm` instances.
+- Execute queries, Beego provides query API. For details, please refer to:
   - [Orm CRUD](orm.md)
   - [QueryBuilder](./query_builder.md)
   - [QuerySeter](./query_seter.md)
   - [RawSeter](./raw_seter.md)
   - [QueryM2Mer](./query_m2m.md)
 
-It is important to note that you must introduce the driver anonymously according to the database you are using. i.e. `"github.com/go-sql-driver/mysql"`
+It is important to note that you must introduce the driver anonymously according to the database you are using. i.e. `"github.com/go-sql-driver/mysql"`.
 
 ## Debug log
 

@@ -5,9 +5,9 @@ lang: en-US
 
 # ORM Model
 
-Beego's ORM module requires that the model be registered before it can be used, and Beego performs certain checks to assist in checking the model and the constraints between the models。The definition of models has impact on [creating table automatically](./cmd.md)
+Beego's ORM module requires that the model is registered before it can be used. Beego performs certain checks to assist in checking the model and the constraints between the models. The definition of models has impact on [creating table automatically](./cmd.md).
 
-Beego's model definition, which mostly relies on Go tag features, can set multiple features, separated by `;`. Different values of the same feature are separated by `,`。
+Beego's model definition, which mostly relies on Go tag features, can set multiple features, separated by `;`. Different values of the same feature are separated by `,`.
 
 Example:
 
@@ -20,8 +20,8 @@ orm:"null;rel(fk)"
 There are three ways to register a model:
 
 - `RegisterModel(models ...interface{})`
-- `RegisterModelWithPrefix(prefix string, models ...interface{})`: This method prefixes the table name with，i.e. `RegisterModelWithPrefix("tab_", &User{})` => `tab_user`；
-- `RegisterModelWithSuffix(suffix string, models ...interface{})`: This method adds a suffix to the table name, i.e.`RegisterModelWithSuffix("_tab", &User{})` => `user_tab`
+- `RegisterModelWithPrefix(prefix string, models ...interface{})`: This method prefixes the table name with，i.e. `RegisterModelWithPrefix("tab_", &User{})` => `tab_user`.
+- `RegisterModelWithSuffix(suffix string, models ...interface{})`: This method adds a suffix to the table name, i.e.`RegisterModelWithSuffix("_tab", &User{})` => `user_tab`.
 
 ## Basic Usage
 
@@ -48,7 +48,7 @@ func (u *User) TableName() string {
 }
 ```
 
-Also, you can add a prefix or suffix to the table name when registering the model. More details refer to the section **Registering the Model**。
+Also, you can add a prefix or suffix to the table name when registering the model. For more details, please refer to the section **Registering the Model**.
 
 ### Column
 
@@ -60,7 +60,7 @@ Name string `orm:"column(user_name)"`
 
 ### Ignore Fields
 
-Using tag "-" to ignore some fields:
+Using tag `"-"` to ignore some fields:
 
 ```go
 type User struct {
@@ -112,27 +112,27 @@ func (u *User) TableUnique() [][]string {
 
 ### Primary Key
 
-You can specify a field as a auto-incrementing primary key using the `auto` tag，and the type of the specific fields must be int, int32, int64, uint, uint32, or uint64。
+You can specify a field as a auto-incrementing primary key using the `auto` tag. The type of the specific fields must be int, int32, int64, uint, uint32 or uint64.
 
 ```go
 MyId int32 `orm:"auto"`
 ```
 
-If a model does not have a primary key defined, then a field of the above type with the name `Id` will be treated as a auto-incrementing primary key。
+If a model does not have a primary key defined, then a field of the above type with the name `Id` will be treated as a auto-incrementing primary key.
 
-If you don't want to use a auto-incrementing primary key, then you can use `pk` tag to specify the primary key。
+If you don't want to use a auto-incrementing primary key, then you can use `pk` tag to specify the primary key.
 
 ```go
 Name string `orm:"pk"`
 ```
 
-> Note that Beego's non-auto-incrementing primary keys and union primary keys are not particularly well supported now. It is recommended to use self-incrementing primary keys in general
+> Note that Beego's non-auto-incrementing primary keys and union primary keys are not particularly well supported now. It is recommended to use self-incrementing primary keys in general.
 
-Given go's current design, even though uint64 is used, you can't store it to its maximum value. It will still be treated as int64。 More details refer issue [6113](http://code.google.com/p/go/issues/detail?id=6113)
+Given go's current design, even though uint64 is used, you can't store it to its maximum value. It will still be treated as int64. For more details, please refer to issue [6113](http://code.google.com/p/go/issues/detail?id=6113).
 
 ### Default Value
 
-you could use it like:
+You could use default value like that:
 
 ```go
 import (
@@ -158,9 +158,9 @@ func XXX() {
 }
 ```
 
-`NewDefaultValueFilterChainBuilder`will create an instance of `DefaultValueFilterChainBuilder`
-In beego v1.x, the default value config looks like `orm:default(xxxx)`
-But the default value in 2.x is `default:xxx`, so if you want to be compatible with v1.x, please pass true as `compatibleWithOldStyle`
+`NewDefaultValueFilterChainBuilder` will create an instance of `DefaultValueFilterChainBuilder`.
+In beego v1.x, the default value config looks like `orm:default(xxxx)`.
+But the default value in 2.x is `default:xxx`, so if you want to be compatible with v1.x, please pass true as `compatibleWithOldStyle`.
 
 ### auto_now / auto_now_add
 
@@ -176,7 +176,7 @@ This setting won't affect massive `update`.
 
 ### engine
 
-Only supports MySQL database
+Only supports MySQL database.
 
 The default engine is the default engine of the current database engine of your mysql settings.
 
@@ -262,7 +262,7 @@ You should never use quoter as the value of description.
 
 ## Types Mapping
 
-Model fields mapping with database type
+### Model fields mapping with database type
 
 Here is the recommended database type mapping. It's also the standard for table generation.
 
@@ -428,7 +428,7 @@ This setting is for `orm:"rel(m2m)"` field:
                   For example: `app/models.PostTagRel` PostTagRel table needs to have a relationship to Post table and Tag table.
 
 
-If rel_table is set, rel_through is ignored.
+If `rel_table` is set, `rel_through` is ignored.
 
 You can set these as follows:
 
@@ -460,7 +460,7 @@ type Profile struct {
 // Set User.Profile to NULL while deleting Profile
 ```
 
-#### Exmaple 
+#### Example 
 
 ```go
 type User struct {
@@ -475,15 +475,15 @@ type Post struct {
 }
 ```
 
-Assume Post -> User is ManyToOne relationship by foreign key.
+Assume `Post -> User` is ManyToOne relationship by foreign key.
 
 ```
 o.Filter("Id", 1).Delete()
 ```
 
-This will delete User with Id 1 and all his Posts.
+This will delete `User` with `Id 1` and all his `Posts`.
 
-If you don't want to delete the Posts, you need to set `set_null`
+If you don't want to delete the `Posts`, you need to set `set_null`
 
 ```go
 type Post struct {
@@ -493,9 +493,9 @@ type Post struct {
 }
 ```
 
-In this case, only set related Post.user_id to NULL while deleting.
+In this case, only set related `Post.user_id` to `NULL` while deleting.
 
-Usually for performance purposes, it doesn't matter to have redundant data. The massive deletion is the real problem
+Usually for performance purposes, it doesn't matter to have redundant data. The massive deletion is the real problem.
 
 ```go
 type Post struct {
@@ -505,4 +505,4 @@ type Post struct {
 }
 ```
 
-So just don't change Post (ignore it) while deleting User.
+So just don't change `Post` (ignore it) while deleting `User`.

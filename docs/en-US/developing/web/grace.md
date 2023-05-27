@@ -3,11 +3,11 @@ title: Web Hot Upgrade
 lang: en-US
 ---
 
-# 热升级
+# Web Hot Upgrade
 
 What is a hot upgrade? If you know about nginx, you know that it supports hot upgrades, where you can use old processes to serve previously linked links and new processes to serve new links, i.e., you can upgrade the system and modify the operating parameters without stopping the service.
 
-The main idea of Beego comes from: http://grisha.org/blog/2014/06/03/graceful-restart-in-golang/
+The main idea of Beego comes from this [Blog Post](http://grisha.org/blog/2014/06/03/graceful-restart-in-golang/):
 
 ```go
  import(
@@ -39,7 +39,7 @@ The main idea of Beego comes from: http://grisha.org/blog/2014/06/03/graceful-re
 
 Open two terminals:
 
-One input: `ps -ef|grep 应用名`
+One input: `ps -ef|grep appname`
 
 One input: `curl "http://127.0.0.1:8080/hello"`
 

@@ -9,16 +9,16 @@ In general, processing input relies heavily on the methods provided by the `Cont
 
 - Path variable: refer to [router](../router/router_rule.md)
 - Query parameter
-- Body: To read data from the request body, int most cases setting `BConfig.CopyRequestBody` to `true` is enough. If you create more than one `web.Server`, then you must set `CopyRequestBody` to `true` in each `Server` instance
+- Body: To read data from the request body, for most cases setting `BConfig.CopyRequestBody` to `true` is enough. If you create more than one `web.Server`, then you must set `CopyRequestBody` to `true` in each `Server` instance
 
 And the methods of obtaining parameters can be divided into two main categories:
 
-- The first category is methods prefixed with Get: this is a large category of methods that try to get the value of a particular parameter
-- The second category is methods prefixed with Bind: this is a large category of methods that attempt to convert input into a structure
+- Methods prefixed with Get: this is a large category of methods that try to get the value of a particular parameter
+- Methods prefixed with Bind: this is a large category of methods that attempt to convert input into a structure
 
 ## Get
 
-For this type of method, Beego reads from two main places: the query parameters and the form, and if there are parameters with the same name in both places, then Beego returns the data inside the form. For example:
+For this type of method, Beego reads from two main places: the query parameters and the form. If there are parameters with the same name in both places, then Beego returns the data inside the form. For example:
 
 ```go
 type MainController struct {
@@ -37,9 +37,9 @@ func (ctrl *MainController) Post() {
 
 When we access.
 
-- Path `localhost:8080?name=a`: it will output `Hello, a`
-- path `localhost:8080`, and then the form is submitted with `name=b`, then the output will be `b`
-- path `localhost:8080?name=a`, and the form is submitted with `name=b`, then `b` will be output
+- Path `localhost:8080?name=a`, it will output `Hello, a`
+- Path `localhost:8080` and the form is submitted with `name=b`, then the output will be `b`
+- Path `localhost:8080?name=a` and the form is submitted with `name=b`, then `b` will be output
 
 Methods in this category also allow default values to be passed in:
 
@@ -88,7 +88,7 @@ This part of the method is defined directly on the `Context` structure, so the u
 
 ```go
 
-// 要设置 web.BConfig.CopyRequestBody = true
+// set web.BConfig.CopyRequestBody = true
 
 type MainController struct {
 	web.Controller
@@ -127,7 +127,7 @@ In the early days, Beego also had a method similar to `BindForm`: `ParseForm(obj
 
 ## Path Variable
 
-Refer [Path Variable Router ](../router/router_rule.md)
+Refer to [Path Variable Router ](../router/router_rule.md)
 
 ## Historical Bind methods
 

@@ -26,12 +26,10 @@ qs = o.QueryTable(user) // return QuerySeter
 
 The methods of `QuerySeter` can be roughly divided into two categories:
 
-- Intermediate methods: used to construct the query
-- Terminate methods: used to execute the query and encapsulate the result
-
-* Each api call that returns a QuerySeter creates a new QuerySeter, without affecting the previously created.
-
-* Advanced queries use Filter and Exclude to do common conditional queries. 
+- Intermediate methods: used to construct the query.
+- Terminate methods: used to execute the query and encapsulate the result.
+- Each api call that returns a QuerySeter creates a new QuerySeter, without affecting the previously created.
+- Advanced queries use Filter and Exclude to do common conditional queries. 
 
 ## Query Expression
 
@@ -58,16 +56,16 @@ qs.Filter("profile__age__in", 18, 20).Exclude("profile__lt", 1000)
 
 For example, if the User table has a foreign key for Profile, then if the User table is queried for the corresponding Profile.Age, then `Profile__Age` is used. Note that the field separators use the double underscore `__` for the field separator.
 
-Operators can be added to the end of an expression to perform the corresponding sql operation. For example, `Profile__Age__gt` represents a conditional query for Profile.Age > 18. If no operator is specified, `=` will be used as the operator.
+Operators can be added to the end of an expression to perform the corresponding sql operation. For example, `Profile__Age__gt` represents a conditional query for `Profile.Age > 18`. If no operator is specified, `=` will be used as the operator.
 
 The supported operators:
 
-* [exact](#exact) / [iexact](#iexact) equal to
-* [contains](#contains) / [icontains](#icontains) contains
-* [gt / gte](#gt / gte) greater than / greater than or equal to
-* [lt / lte](#lt / lte) less than / less than or equal to
-* [startswith](#startswith) / [istartswith](#istartswith) starts with
-* [endswith](#endswith) / [iendswith](#iendswith) ends with
+* [exact](#exact) / [iexact](#iexact) - equal to
+* [contains](#contains) / [icontains](#icontains) - contains
+* [gt / gte](#gt-gte) - greater than / greater than or equal to
+* [lt / lte](#lt-lte) - less than / less than or equal to
+* [startswith](#startswith) / [istartswith](#istartswith) - starts with
+* [endswith](#endswith) / [iendswith](#iendswith) - ends with
 * [in](#in)
 * [isnull](#isnull)
 
@@ -199,7 +197,7 @@ FilterRaw(string, string) QuerySeter
 
 This method treats the input directly as a query condition, so if there is an error in the input, then the resulting spliced SQL will not work. Beego itself does not perform any checks.
 
-例如：
+For example：
 
 ```go
 qs.FilterRaw("user_id IN (SELECT id FROM profile WHERE age>=18)")
@@ -256,7 +254,7 @@ It returns all conditions:
 
 ### Limit
 
-Limit maximum returned lines. The second param can set `Offset`
+Limit maximum returned lines. The second param can set `Offset`.
 
 ```go
 var DefaultRowsLimit = 1000 // The default limit of ORM is 1000
@@ -302,8 +300,8 @@ OrderBy(exprs ...string) QuerySeter
 
 Cases:
 
-- If the column names are passed in, then it means sort by column name ASC；
-- If the column names with symbol `-` are passed in, then it means sort by column name DESC；
+- If the column names are passed in, then it means sort ascending by column name.
+- If the column names with symbol `-` are passed in, then it means sort descending by column name.
 
 Example:
 
@@ -347,7 +345,7 @@ qs.UseIndex(`idx_name1`,`idx_name2`)
 
 ### IgnoreIndex
 
-Make DB ignore the index
+Make DB ignore the index.
 
 You need to check your DB whether it support this feature.
 
@@ -363,7 +361,7 @@ RelatedSel(params ...interface{}) QuerySeter
 
 Loads the data of the associated table. If no parameters are passed, then Beego loads the data of all related tables. If parameters are passed, then only the specific table data is loaded.
 
-When loading, if the corresponding field is available as NULL, then LEFT JOIN is used, otherwise JOIN is used.
+When loading, if the corresponding field is available as NULL, then LEFT JOIN is used. Otherwise JOIN is used.
 
 Example:
 
@@ -445,7 +443,7 @@ o.QueryTable("dept_info").Aggregate("dept_name,sum(salary) as total").GroupBy("d
 Count() (int64, error)
 ```
 
-Return line count based on the current query
+Return line count based on the current query.
 
 ### Exist
 
@@ -453,11 +451,11 @@ Return line count based on the current query
 Exist() bool
 ```
 
-Determines if the query returns data. Equivalent to `Count()` to return a value greater than 0。
+Determines if the query returns data. Equivalent to `Count()` to return a value greater than 0.
 
 ### Update
 
-Execute batch updating based on the current query
+Execute batch updating based on the current query:
 
 ```go
 num, err := o.QueryTable("user").Filter("name", "slene").Update(orm.Params{
@@ -496,9 +494,9 @@ Execute batch deletion based on the current query.
 
 ### All
 
-Return the related ResultSet
+Return the related ResultSet.
 
-Param of `All` supports *[]Type and *[]*Type
+Param of `All` supports `*[]Type` and `*[]*Type`.
 
 ```go
 var users []*User
@@ -527,7 +525,7 @@ The other fields of the object are set to the default value of the field's type.
 
 ### One
 
-Try to return one record
+Try to return one record:
 
 ```go
 var user User
@@ -553,7 +551,7 @@ o.QueryTable("post").Filter("Content__istartswith", "prefix string").One(&post, 
 The other fields of the object are set to the default value of the fields' type.
 ### Values
 
-Return key => value of result set
+Return key => value of result set.
 
 key is Field name in Model. value type if string.
 
@@ -588,7 +586,7 @@ fmt.Println(m["Id"], m["Name"], m["Profile"], m["Profile__Age"])
 
 ### ValuesList
 
-The result set will be stored as a slice
+The result set will be stored as a slice.
 
 The order of the result is same as the Fields order in the Model definition.
 
@@ -631,6 +629,6 @@ if err == nil {
 }
 ```
 
-### RowsToMap 和 RowsToStruct
+### RowsToMap and RowsToStruct
 
-Not implement.
+Not implemented.
