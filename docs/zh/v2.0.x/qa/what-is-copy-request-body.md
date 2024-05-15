@@ -42,7 +42,7 @@ func (m *MainController) ReadDataFromBody() {
 ```
 
 当我们访问`localhost:8080`并且传入参数之后，我们能够得到响应:
-![CopyRequestBody=true](../../../img/qa/copy_request_body_true.png)
+![CopyRequestBody=true](./img/qa/copy_request_body_true.png)
 
 如果我们将`CopyRequestBody`设置为`false`：
 
@@ -71,7 +71,7 @@ func (m *MainController) ReadDataFromBody() {
 ```
 
 那么我们会发现，我们无法从请求体里面读到数据了：
-![CopyRequestBody=false](../../../img/qa/copy_request_body_false.png)
+![CopyRequestBody=false](./img/qa/copy_request_body_false.png)
 
 所以，要注意的是，如果你打算依赖于 Beego 来处理请求，那么应该把`CopyRequestBody`设置为`true`。
 

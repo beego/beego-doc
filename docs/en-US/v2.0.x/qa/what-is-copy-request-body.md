@@ -3,7 +3,7 @@ title: What does CopyRequestBody mean?
 lang: en-US
 ---
 
-# CWhat does CopyRequestBody mean?
+# What does CopyRequestBody mean?
 
 In the Beego web configuration, there is a very confusing parameter called `CopyRequestBody`. It is in the structure `web.Config`.
 
@@ -39,7 +39,7 @@ func (m *MainController) ReadDataFromBody() {
 ```
 
 When we access `localhost:8080` and pass in the parameters, we can get the response:
-![CopyRequestBody=true](../../../img/qa/copy_request_body_true.png)
+![CopyRequestBody=true](./img/qa/copy_request_body_true.png)
 
 If we set `CopyRequestBody` to `false`:
 
@@ -68,7 +68,7 @@ func (m *MainController) ReadDataFromBody() {
 ```
 
 Then we will find that we cannot read the data from inside the request body:
-![CopyRequestBody=false](../../../img/qa/copy_request_body_false.png)
+![CopyRequestBody=false](./img/qa/copy_request_body_false.png)
 
 So, be aware that you should set `CopyRequestBody` to `true` if you intend to rely on Beego to process the request.
 
