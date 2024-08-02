@@ -133,7 +133,7 @@ web.BConfig.WebConfig.Session.SessionProvider = "memcache"
 web.BConfig.WebConfig.Session.SessionProviderConfig = "127.0.0.1:7080"
 ```
 
-#### Postgress
+#### Postgres
 
 When `SessionProvider` is `postgres` `, SessionProviderConfig` is the address of `postgres`, using [postgres](https://github.com/lib/pq), as follows:
 
@@ -235,6 +235,10 @@ The returned session object is an Interface. Here are the methods:
 - `SessionRelease(ctx context.Context, w http.ResponseWriter)`
 - `SessionReleaseIfPresent(ctx context.Context, w http.ResponseWriter)`
 - `Flush(ctx context.Context) error`
+
+Please note that `SessionRelease` and `SessionReleaseIfPresent` are used to release session resources. 
+`SessionReleaseIfPresent` releases session resources only if the session exists. Not all engines support this feature, so you need to check if the specific implementation supports it. 
+`SessionRelease` releases session resources regardless of whether the session exists, except for the `mysql`, `postgres`, and `mem` engines. The `mysql` and `postgres` engines release session resources only if the session exists, while the `mem` engine automatically releases session resources when `Set`, `Delete`, or `Flush` is called.
 
 ## Engines setting
 

@@ -135,7 +135,7 @@ web.BConfig.WebConfig.Session.SessionProvider = "memcache"
 web.BConfig.WebConfig.Session.SessionProviderConfig = "127.0.0.1:7080"
 ```
 
-#### Postgress
+#### Postgres
 
 当 `SessionProvider` 为 `postgres` `时，SessionProviderConfig` 是 `postgres` 的链接地址，采用了 [postgres](https://github.com/lib/pq)，如下所示：
 
@@ -180,13 +180,13 @@ var globalSessions *session.Manager
 ```go
 func init() {
 	sessionConfig := &session.ManagerConfig{
-	CookieName:"gosessionid",
-	EnableSetCookie: true,
-	Gclifetime:3600,
-	Maxlifetime: 3600,
-	Secure: false,
-	CookieLifeTime: 3600,
-	ProviderConfig: "./tmp",
+        CookieName:"gosessionid",
+        EnableSetCookie: true,
+        Gclifetime:3600,
+        Maxlifetime: 3600,
+        Secure: false,
+        CookieLifeTime: 3600,
+        ProviderConfig: "./tmp",
 	}
 	globalSessions, _ = session.NewManager("memory",sessionConfig)
 	go globalSessions.GC()
@@ -241,6 +241,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 - `SessionRelease(ctx context.Context, w http.ResponseWriter)`
 - `SessionReleaseIfPresent(ctx context.Context, w http.ResponseWriter)`
 - `Flush(ctx context.Context) error`
+
+需要特别注意的是，`SessionRelease` 和 `SessionReleaseIfPresent` 是用来释放会话资源的，`SessionReleaseIfPresent` 是在 `session` 存在的时候，释放会话资源，并不是所有的引擎都支持这个特性，你需要检查具体的实现是否支持这个特性。`SessionRelease` 是在除`mysql`, `postgres`, `mem` 以外的引擎中，无论 `session` 是否存在都会释放会话资源，`mysql`, `postgres` 引擎会在 `session` 存在的时候，释放会话资源，`mem` 引擎会在 `session`
+在 `Set`，`Delete` 和 `Flush` 的时候，自动释放会话资源。
 
 ### 引擎设置
 
