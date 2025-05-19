@@ -55,19 +55,81 @@ func InsertFilter(pattern string, pos int, filter FilterFunc, opts ...FilterOpt)
 ```
 
 - `pattern`: string or regex to match against router rules. Use `/*` to match all.
+
 - `pos`: the place to execute the Filter. There are five fixed parameters representing different execution processes.
     - web.BeforeStatic: Before finding the static file.
     - web.BeforeRouter: Before finding router.
     - web.BeforeExec: After finding router and before executing the matched Controller.
     - web.AfterExec: After executing Controller.
     - web.FinishRouter: After finishing router.
+    
 - `filter`: filter function type FilterFunc func(*context.Context)
+
 - `opts`:
-  - `web.WithReturnOnOutput`: sets the value of `returnOnOutput` (default `true`), if there is already output before this filter is performed, whether to not continue to execute this filter, the default setting is that if there is already output before (parameter `true`), then this filter will not be executed.
+
+  - `web.WithReturnOnOutput`: sets the value of `returnOnOutput` (default `true`), if there is already output before this filter is performed, whether to not continue to execute this filter, the default setting is that if there is already output before (parameter `true`), then this filter will not be executed. 
+
+    (**Note: When using the AfterExec or FinishRouter positions, you must set WithReturnOnOutput to false, otherwise the filter will not take effect. See the example below for details.**);
+  
   - `web.WithResetParams`: Whether to reset the `filter` parameter, the default is `false`, because in case of conflict between the `pattern` of the `filter` and the `pattern` of the route itself, you can reset the `filter` parameter, so as to ensure that the correct parameter is obtained in the subsequent logic, for example, if the filter of `/api/*` is set, and the router of `/api/docs/*` is set at the same time, then when the router of `/api/docs/*` is executed, then the correct parameter is obtained in the subsequent logic. For example, if you set the filter of `/api/*` and also set the router of `/api/docs/*`, then when you access `/api/docs/swagger/abc.js`, set `:splat` parameter to `docs/swagger/abc.js` when executing `filter`, but if the option is `false`, it will keep `docs/swagger/abc.js` when executing the routing logic, and reset the `:splat` parameter if `true` is set.
+  
   - `web.WithCaseSensitive`: case sensitive；
 
 If it is not clear how to use these options, the best way is to write a few tests yourself to experiment with their effects.
+
+For example, here is an example of the InsertFilter method in the current beego project:
+
+```go
+// ExampleInsertFilter is an example of how to use InsertFilter
+func ExampleInsertFilter() {
+
+	app := NewHttpServerWithCfg(newBConfig())
+	app.Cfg.CopyRequestBody = true
+	path := "/api/hello"
+	app.Get(path, func(ctx *context.Context) {
+		s := "hello world"
+		fmt.Println(s)
+		_ = ctx.Resp(s)
+	})
+
+	app.InsertFilter("*", BeforeStatic, func(ctx *context.Context) {
+		fmt.Println("BeforeStatic filter process")
+	})
+
+	app.InsertFilter("*", BeforeRouter, func(ctx *context.Context) {
+		fmt.Println("BeforeRouter filter process")
+	})
+
+	app.InsertFilter("*", BeforeExec, func(ctx *context.Context) {
+		fmt.Println("BeforeExec filter process")
+	})
+
+	// need to set the WithReturnOnOutput false
+	app.InsertFilter("*", AfterExec, func(ctx *context.Context) {
+		fmt.Println("AfterExec filter process")
+	}, WithReturnOnOutput(false))
+
+	// need to set the WithReturnOnOutput false
+	app.InsertFilter("*", FinishRouter, func(ctx *context.Context) {
+		fmt.Println("FinishRouter filter process")
+	}, WithReturnOnOutput(false))
+
+	reader := strings.NewReader("")
+	req := httptest.NewRequest("GET", path, reader)
+	req.Header.Set("Accept", "*/*")
+
+	w := httptest.NewRecorder()
+	app.Handlers.ServeHTTP(w, req)
+
+	// Output:
+	// BeforeStatic filter process
+	// BeforeRouter filter process
+	// BeforeExec filter process
+	// hello world
+	// AfterExec filter process
+	// FinishRouter filter process
+}
+```
 
 Here is an example to authenticate if the user is logged in for all requests:
 

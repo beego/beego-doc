@@ -76,14 +76,71 @@ func InsertFilter(pattern string, pos int, filter FilterFunc, opts ...FilterOpt)
 
 而 `opts` 对应三个选项：
 
-- `web.WithReturnOnOutput`: 设置 `returnOnOutput` 的值(默认`true`), 如果在进行到此过滤之前已经有输出，是否不再继续执行此过滤器,默认设置为如果前面已有输出(参数为`true`)，则不再执行此过滤器；
--
+- `web.WithReturnOnOutput`: 设置 `returnOnOutput` 的值(默认`true`), 如果在进行到此过滤之前已经有输出，是否不再继续执行此过滤器,默认设置为如果前面已有输出(参数为`true`)，则不再执行此过滤器。
+  
+  (**特别注意:在使用 AfterExec、FinishRouter 这2个pos位置路由时,需要设置WithReturnOnOutput为false,不然不会生效,详见下面案例**)；
+  
 - `web.WithResetParams`: 是否重置`filter`的参数，默认是`false`，因为在`filter`的`pattern`和本身的路由的`pattern`冲突的时候，可以把`filter`的参数重置，这样可以保证在后续的逻辑中获取到正确的参数，例如设置了`/api/*` 的 filter，同时又设置了 `/api/docs/*` 的 router，那么在访问 `/api/docs/swagger/abc.js` 的时候，在执行`filter`的时候设置 `:splat` 参数为 `docs/swagger/abc.js`，但是如果该选项为 `false`，就会在执行路由逻辑的时候保持 `docs/swagger/abc.js`，如果设置了`true`，就会重置 `:splat` 参数；
+
 - `web.WithCaseSensitive`: 是否大小写敏感；
 
 如果不清楚如何使用这些选项，最好的方法是自己写几个测试来试验一下它们的效果。
 
-我们在看一个验证登录态的例子。该例子是假设启用了 Beego 的`session`模块：
+比如，目前beego项目里面的InsertFilter方法的Example：
+
+```go
+// ExampleInsertFilter is an example of how to use InsertFilter
+func ExampleInsertFilter() {
+
+	app := NewHttpServerWithCfg(newBConfig())
+	app.Cfg.CopyRequestBody = true
+	path := "/api/hello"
+	app.Get(path, func(ctx *context.Context) {
+		s := "hello world"
+		fmt.Println(s)
+		_ = ctx.Resp(s)
+	})
+
+	app.InsertFilter("*", BeforeStatic, func(ctx *context.Context) {
+		fmt.Println("BeforeStatic filter process")
+	})
+
+	app.InsertFilter("*", BeforeRouter, func(ctx *context.Context) {
+		fmt.Println("BeforeRouter filter process")
+	})
+
+	app.InsertFilter("*", BeforeExec, func(ctx *context.Context) {
+		fmt.Println("BeforeExec filter process")
+	})
+
+	// need to set the WithReturnOnOutput false
+	app.InsertFilter("*", AfterExec, func(ctx *context.Context) {
+		fmt.Println("AfterExec filter process")
+	}, WithReturnOnOutput(false))
+
+	// need to set the WithReturnOnOutput false
+	app.InsertFilter("*", FinishRouter, func(ctx *context.Context) {
+		fmt.Println("FinishRouter filter process")
+	}, WithReturnOnOutput(false))
+
+	reader := strings.NewReader("")
+	req := httptest.NewRequest("GET", path, reader)
+	req.Header.Set("Accept", "*/*")
+
+	w := httptest.NewRecorder()
+	app.Handlers.ServeHTTP(w, req)
+
+	// Output:
+	// BeforeStatic filter process
+	// BeforeRouter filter process
+	// BeforeExec filter process
+	// hello world
+	// AfterExec filter process
+	// FinishRouter filter process
+}
+```
+
+我们再看一个验证登录态的例子。该例子是假设启用了 Beego 的`session`模块：
 
 ```go
 var FilterUser = func(ctx *context.Context) {
