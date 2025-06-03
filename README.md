@@ -8,7 +8,7 @@ If you are looking for old Beego doc, please check [beego.vip](http://beego.vip/
 
 ## deploy the docs
 
-You must install the node.js on your computer.
+You must install [node.js](https://nodejs.org/) v16 on your computer. Then you can run:
 
 ```go
 npm run "docs:dev"
